@@ -1,21 +1,23 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Assets.Scripts.Workplace;
 
-public class FetchResourcesOrder : ActorBehaviour
+namespace Assets.Scripts.Behaviour
 {
-    public FetchResourcesOrder(ResourceType ResourceType, int amount)
+    public class FetchResourcesOrder : ActorBehaviour
     {
+        public FetchResourcesOrder(ResourceType ResourceType, int amount)
+        {
 
-    }
+        }
 
-    protected override IEnumerator UpdateRoutine()
-    {
-        //Wait until resource available
-        //Reserve resource so that others can't grab it
-        //Go to stockpile
-        //Take the resource
-        //Go back to workplace
-        yield return null;
+        protected override IEnumerator UpdateRoutine()
+        {
+            //Wait until resource available
+            //Reserve resource so that others can't grab it
+            //Go to stockpile
+            //Take the resource
+            //Go back to workplace
+            yield return null;
+        }
     }
 }

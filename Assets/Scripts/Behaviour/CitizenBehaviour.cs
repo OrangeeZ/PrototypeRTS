@@ -1,14 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class CitizenBehaviour : ActorBehaviour
+namespace Assets.Scripts.Behaviour
 {
-    protected override IEnumerator UpdateRoutine()
+    public class CitizenBehaviour : ActorBehaviour
     {
-        while (true)
+        protected override IEnumerator UpdateRoutine()
         {
-            yield return null;
+            while (true)
+            {
+                yield return null;
+            }
         }
     }
 }

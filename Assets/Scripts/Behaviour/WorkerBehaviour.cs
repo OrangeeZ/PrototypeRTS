@@ -1,49 +1,51 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkerBehaviour : ActorBehaviour
+namespace Assets.Scripts.Behaviour
 {
-    protected override IEnumerator UpdateRoutine()
+    public class WorkerBehaviour : ActorBehaviour
     {
-        Debug.Log("Started working behaviour");
-
-        while (true)
+        protected override IEnumerator UpdateRoutine()
         {
-            var navAgent = Actor.NavAgent;
+            Debug.Log("Started working behaviour");
 
-            if (!Actor.Workplace.HasResources)
+            while (true)
             {
-                // navAgent.SetDestination(Actor.World.GetClosestStockpileWithResource(Actor.Workplace.ResourceType));
-                // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
-                // {
-                //     yield return null;
-                // }
+                var navAgent = Actor.NavAgent;
 
-                navAgent.SetDestination(Actor.Workplace.Position);
+                if (!Actor.Workplace.HasResources)
+                {
+                    // navAgent.SetDestination(Actor.World.GetClosestStockpileWithResource(Actor.Workplace.ResourceType));
+                    // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+                    // {
+                    //     yield return null;
+                    // }
+
+                    navAgent.SetDestination(Actor.Workplace.Position);
+                    while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+                    {
+                        yield return null;
+                    }
+                }
+
+                var duration = Actor.Workplace.BeginProduction();
+                while (duration > 0f)
+                {
+                    duration -= _deltaTime;
+
+                    yield return null;
+                }
+
+                Actor.Workplace.EndProduction();
+
+                navAgent.SetDestination(Actor.World.GetClosestStockpile(Actor.Position).transform.position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
                     yield return null;
                 }
+
+                Actor.World.GetClosestStockpile(Actor.Position).AddResource(Actor.Workplace.ResourceType, Actor.Workplace.ProductionRate);
             }
-
-            var duration = Actor.Workplace.BeginProduction();
-            while (duration > 0f)
-            {
-                duration -= DeltaTime;
-
-                yield return null;
-            }
-
-            Actor.Workplace.EndProduction();
-
-            navAgent.SetDestination(Actor.World.GetClosestStockpile(Actor.Position).transform.position);
-            while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
-            {
-                yield return null;
-            }
-
-            Actor.World.GetClosestStockpile(Actor.Position).AddResource(Actor.Workplace.ResourceType, Actor.Workplace.ProductionRate);
         }
     }
 }

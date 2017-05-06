@@ -1,31 +1,34 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Assets.Scripts.Actors;
 
-public abstract class ActorBehaviour
+namespace Assets.Scripts.Behaviour
 {
-    protected Actor Actor;
-
-    private IEnumerator _routine;
-
-    protected float DeltaTime;
-
-    public void SetActor(Actor actor)
+    public abstract class ActorBehaviour
     {
-        Actor = actor;
-    }
+        protected Actor Actor;
 
-    public bool Update(float deltaTime)
-    {
-        DeltaTime = deltaTime;
+        protected float _deltaTime;
 
-        _routine = _routine ?? UpdateRoutine();
+        private IEnumerator _routine;
+        
 
-        return _routine.MoveNext();
-    }
+        public void SetActor(Actor actor)
+        {
+            Actor = actor;
+        }
 
-    protected virtual IEnumerator UpdateRoutine()
-    {
-        yield return null;
+        public bool Update(float deltaTime)
+        {
+            _deltaTime = deltaTime;
+
+            _routine = _routine ?? UpdateRoutine();
+
+            return _routine.MoveNext();
+        }
+
+        protected virtual IEnumerator UpdateRoutine()
+        {
+            yield return null;
+        }
     }
 }

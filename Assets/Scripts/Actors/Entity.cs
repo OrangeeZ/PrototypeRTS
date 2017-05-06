@@ -1,30 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.World;
 using UnityEngine;
 
-public abstract class Entity
+namespace Assets.Scripts.Actors
 {
-    public Vector3 Position { get; protected set; }
-
-    public TestWorld World { get; private set; }
-
-    protected ActorView ActorView;
-
-    public abstract void Update(float deltaTime);
-
-    public Entity(TestWorld world)
+    public abstract class Entity : IEntity
     {
-        World = world;
-    }
+        public Vector3 Position { get; protected set; }
 
-    public void SetView(ActorView actorView)
-    {
-        ActorView = actorView;
-    }
+        public TestWorld World { get; private set; }
 
-    public virtual void SetPosition(Vector3 position)
-    {
-        Position = position;
-        ActorView.transform.position = position;
+        protected ActorView ActorView;
+
+        public abstract void Update(float deltaTime);
+
+        public Entity(TestWorld world)
+        {
+            World = world;
+        }
+
+        public void SetView(ActorView actorView)
+        {
+            ActorView = actorView;
+        }
+
+        public virtual void SetPosition(Vector3 position)
+        {
+            Position = position;
+            ActorView.transform.position = position;
+        }
     }
 }

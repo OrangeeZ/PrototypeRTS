@@ -1,15 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class ActorView : MonoBehaviour
+namespace Assets.Scripts.Actors
 {
-    [SerializeField]
-    private NavMeshAgent _navMeshAgent;
-
-    public NavMeshAgent GetNavMeshAgent()
+    public class ActorView : MonoBehaviour
     {
-        return _navMeshAgent;
+        [SerializeField]
+        private NavMeshAgent _navMeshAgent;
+
+        public NavMeshAgent GetNavMeshAgent()
+        {
+            return _navMeshAgent;
+        }
     }
 }
