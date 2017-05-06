@@ -67,12 +67,12 @@ public class TestWorld : MonoBehaviour
 
         return null;
     }
-
-    void Update()
+    
+    public void UpdateStep(float deltaTime)
     {
         foreach (var each in _entities)
         {
-            each.Update(Time.deltaTime);
+            each.Update(deltaTime);
         }
     }
 
