@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeliverResourcesOrder : Order
+public class DeliverResourcesOrder : ActorBehaviour
 {
     public DeliverResourcesOrder(ResourceType ResourceType, int amount)
     {

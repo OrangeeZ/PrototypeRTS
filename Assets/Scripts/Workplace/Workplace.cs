@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,30 +17,59 @@ public enum ResourceType
     Wood,
 }
 
-public abstract class Workplace
+public class Workplace : Entity
 {
-    protected IntelligentAgent Worker;
+    public bool HasResources { get; private set; }
+
+    public ResourceType ResourceType { get; private set; }
+
+    public int ProductionRate { get; private set; }
+
+    protected Actor Worker;
 
     private WorkplaceState _currentWorkplaceState = WorkplaceState.WaitingForNewWorker;
-    private ResourceType _resourceType;
 
-    public void SetWorker(IntelligentAgent actor)
+    public Workplace(TestWorld world) : base(world)
+    {
+    }
+
+    public void SetWorker(Actor actor)
     {
         Worker = actor;
+        Worker.SetWorkplace(this);
+        Worker.SetBehaviour(new WorkerBehaviour());
+
+        ProductionRate = 1;
     }
 
     public void SetResourceType(ResourceType resourceType)
     {
-        _resourceType = resourceType;
+        ResourceType = resourceType;
     }
 
-    public void Update(float deltaTime)
+    public float BeginProduction()
     {
-        if (Worker == null || !Worker.IsOrderCompleted)
+        HasResources = true;
+
+        return 2f;
+    }
+
+    public void EndProduction()
+    {
+        HasResources = false;
+    }
+
+    public override void Update(float deltaTime)
+    {
+        if (Worker != null)
         {
             return;
         }
 
-        Worker.SetOrder(new DeliverResourcesOrder(_resourceType, 1));
+		var freeCitizen = World.GetFreeCitizen();
+		if (freeCitizen != null)
+		{
+			SetWorker(freeCitizen);
+		}
     }
 }
