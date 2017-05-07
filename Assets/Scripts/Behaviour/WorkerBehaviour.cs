@@ -5,6 +5,13 @@ namespace Assets.Scripts.Behaviour
 {
     public class WorkerBehaviour : ActorBehaviour
     {
+		private Workplace.Workplace _workplace;
+
+		public WorkerBehaviour(Workplace.Workplace workplace) : base()
+		{
+			_workplace = workplace;
+		}
+
         protected override IEnumerator UpdateRoutine()
         {
             Debug.Log("Started working behaviour");
@@ -13,22 +20,22 @@ namespace Assets.Scripts.Behaviour
             {
                 var navAgent = Actor.NavAgent;
 
-                if (!Actor.Workplace.HasResources)
+                if (!_workplace.HasResources)
                 {
-                    // navAgent.SetDestination(Actor.World.GetClosestStockpileWithResource(Actor.Workplace.ResourceType));
+                    // navAgent.SetDestination(Actor.World.GetClosestStockpileWithResource(_workspace.ResourceType));
                     // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                     // {
                     //     yield return null;
                     // }
 
-                    navAgent.SetDestination(Actor.Workplace.Position);
+                    navAgent.SetDestination(_workplace.Position);
                     while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                     {
                         yield return null;
                     }
                 }
 
-                var duration = Actor.Workplace.BeginProduction();
+                var duration = _workplace.BeginProduction();
                 while (duration > 0f)
                 {
                     duration -= _deltaTime;
@@ -36,7 +43,7 @@ namespace Assets.Scripts.Behaviour
                     yield return null;
                 }
 
-                Actor.Workplace.EndProduction();
+                _workplace.EndProduction();
 
                 navAgent.SetDestination(Actor.World.GetClosestStockpile(Actor.Position).transform.position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
@@ -44,7 +51,7 @@ namespace Assets.Scripts.Behaviour
                     yield return null;
                 }
 
-                Actor.World.GetClosestStockpile(Actor.Position).AddResource(Actor.Workplace.ResourceType, Actor.Workplace.ProductionRate);
+                Actor.World.GetClosestStockpile(Actor.Position).AddResource(_workplace.ResourceType, _workplace.ProductionRate);
             }
         }
     }

@@ -37,8 +37,7 @@ namespace Assets.Scripts.Workplace
         public void SetWorker(Actor actor)
         {
             Worker = actor;
-            Worker.SetWorkplace(this);
-            Worker.SetBehaviour(new WorkerBehaviour());
+            Worker.SetBehaviour(new WorkerBehaviour(this));
             ProductionRate = 1;
         }
 

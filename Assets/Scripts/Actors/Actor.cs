@@ -7,8 +7,6 @@ namespace Assets.Scripts.Actors
 {
     public class Actor : Entity
     {
-        public Workplace.Workplace Workplace { get; private set; }
-
         public bool IsOrderCompleted { get; private set; }
 
         public NavMeshAgent NavAgent { get { return ActorView.GetNavMeshAgent(); } }
@@ -26,11 +24,6 @@ namespace Assets.Scripts.Actors
             _behaviour.SetActor(this);
 
             IsOrderCompleted = false;
-        }
-
-        public void SetWorkplace(Workplace.Workplace workplace)
-        {
-            Workplace = workplace;
         }
 
         public override void Update(float deltaTime)
