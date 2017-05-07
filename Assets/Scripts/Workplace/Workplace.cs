@@ -4,14 +4,6 @@ using Assets.Scripts.World;
 
 namespace Assets.Scripts.Workplace
 {
-    public enum WorkplaceState
-    {
-        WaitingForNewWorker,
-        FetchingResources,
-        Producing,
-        DeliveringResources
-    }
-
     public enum ResourceType
     {
         Bread,
@@ -27,8 +19,6 @@ namespace Assets.Scripts.Workplace
         public int ProductionRate { get; private set; }
 
         protected Actor Worker;
-
-        private WorkplaceState _currentWorkplaceState = WorkplaceState.WaitingForNewWorker;
 
         public Workplace(TestWorld world) : base(world)
         {
