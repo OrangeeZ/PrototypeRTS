@@ -7,9 +7,8 @@ namespace Assets.Scripts.Actors
 {
     public class Actor : Entity
     {
-        public bool IsOrderCompleted { get; private set; }
-
         public NavMeshAgent NavAgent { get { return ActorView.GetNavMeshAgent(); } }
+
 
         private ActorBehaviour _behaviour;
 
@@ -22,23 +21,23 @@ namespace Assets.Scripts.Actors
         {
             _behaviour = order;
             _behaviour.SetActor(this);
-
-            IsOrderCompleted = false;
         }
 
         public override void Update(float deltaTime)
         {
-            if (_behaviour == null || IsOrderCompleted)
+            if (NavAgent != null)
+            {
+                Position = NavAgent.transform.position;
+            }
+
+            if (_behaviour == null)
             {
                 return;
             }
 
             if (!_behaviour.Update(deltaTime))
             {
-                IsOrderCompleted = true;
             }
-
-            Position = NavAgent.transform.position;
         }
 
         public override void SetPosition(Vector3 position)
@@ -46,6 +45,16 @@ namespace Assets.Scripts.Actors
             base.SetPosition(position);
 
             NavAgent.transform.position = position;
+        }
+
+        public override void DealDamage(int amount)
+        {
+            base.DealDamage(amount);
+
+            if (Health <= 0)
+            {
+                _behaviour = null;
+            }
         }
     }
 }

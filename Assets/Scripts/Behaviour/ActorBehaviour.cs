@@ -7,10 +7,9 @@ namespace Assets.Scripts.Behaviour
     {
         protected Actor Actor;
 
-        protected float _deltaTime;
+        protected float DeltaTime;
 
         private IEnumerator _routine;
-        
 
         public void SetActor(Actor actor)
         {
@@ -19,7 +18,7 @@ namespace Assets.Scripts.Behaviour
 
         public bool Update(float deltaTime)
         {
-            _deltaTime = deltaTime;
+            DeltaTime = deltaTime;
 
             _routine = _routine ?? UpdateRoutine();
 

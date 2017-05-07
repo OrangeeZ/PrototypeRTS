@@ -38,7 +38,7 @@ namespace Assets.Scripts.Behaviour
                 var duration = _workplace.BeginProduction();
                 while (duration > 0f)
                 {
-                    duration -= _deltaTime;
+                    duration -= DeltaTime;
 
                     yield return null;
                 }
