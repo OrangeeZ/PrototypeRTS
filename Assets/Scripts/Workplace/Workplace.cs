@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Actors;
+﻿using System;
+using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.World;
 
@@ -14,9 +15,7 @@ namespace Assets.Scripts.Workplace
     {
         public bool HasResources { get; private set; }
 
-        public ResourceType ResourceType { get; private set; }
-
-        public int ProductionRate { get; private set; }
+        public BuildingInfo Info { get; private set; }
 
         protected Actor Worker;
 
@@ -28,18 +27,12 @@ namespace Assets.Scripts.Workplace
         {
             Worker = actor;
             Worker.SetBehaviour(new WorkerBehaviour(this));
-            ProductionRate = 1;
-        }
-
-        public void SetResourceType(ResourceType resourceType)
-        {
-            ResourceType = resourceType;
         }
 
         public float BeginProduction()
         {
             HasResources = true;
-        
+
             return 2f;
         }
 
@@ -60,6 +53,11 @@ namespace Assets.Scripts.Workplace
             {
                 SetWorker(freeCitizen);
             }
+        }
+
+        public void SetInfo(BuildingInfo info)
+        {
+            Info = info;
         }
     }
 }

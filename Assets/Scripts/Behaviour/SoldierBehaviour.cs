@@ -37,10 +37,9 @@ public class SoldierBehaviour : ActorBehaviour
             navAgent.isStopped = false;
 
             navAgent.SetDestination(_target.Position);
-            while (navAgent != null && (!navAgent.hasPath || navAgent.remainingDistance > 1f))
+			navAgent.stoppingDistance = Actor.Info.AttackRange - 0.5f;
+            while (navAgent != null && (!navAgent.hasPath || navAgent.remainingDistance > Actor.Info.AttackRange))
             {
-                yield return null;
-                yield return null;
                 yield return null;
 
                 navAgent.SetDestination(_target.Position);
@@ -58,11 +57,11 @@ public class SoldierBehaviour : ActorBehaviour
                 yield break;
             }
 
-            if (Vector3.Distance(_target.Position, Actor.Position) < 1f)
+            if (Vector3.Distance(_target.Position, Actor.Position) < Actor.Info.AttackRange)
             {
-                _target.DealDamage(1);
+                _target.DealDamage(Actor.Info.AttackStrength);
 
-                var delay = 1f;
+                var delay = (float)Actor.Info.AttackSpeed;
                 while (delay > 0)
                 {
                     delay -= DeltaTime;

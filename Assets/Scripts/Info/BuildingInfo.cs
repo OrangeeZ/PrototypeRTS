@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Actors;
 using csv;
 using UnityEngine;
 
@@ -27,7 +28,10 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     [RemoteProperty("OutputResourceQuantity")]
     public int OutputResourceQuantity;
 
+    public ActorView Prefab;
+
     public void Configure(Values values)
     {
+        Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
     }
 }

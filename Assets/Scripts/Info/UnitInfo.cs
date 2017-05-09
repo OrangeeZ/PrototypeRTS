@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using csv;
 using UnityEngine;
+using Assets.Scripts.Actors;
 
 public class UnitInfo : ScriptableObject, ICsvConfigurable
 {
@@ -21,7 +22,13 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
     [RemoteProperty("AttackSpeed")]
     public int AttackSpeed;
 
+    [RemoteProperty("BehaviourId")]
+    public string BehaviourId;
+
+    public ActorView Prefab;
+
     public void Configure(Values values)
     {
+        Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
     }
 }

@@ -5,27 +5,27 @@ using UnityEngine;
 
 public class Stockpile : MonoBehaviour
 {
-    private Dictionary<ResourceType, int> _resources = new Dictionary<ResourceType, int>();
+    private Dictionary<string, int> _resources = new Dictionary<string, int>();
 
-    public bool HasResource(ResourceType resouceType)
+    public bool HasResource(string resource)
     {
-        return _resources.ContainsKey(resouceType) && _resources[resouceType] > 0;
+        return _resources.ContainsKey(resource) && _resources[resource] > 0;
     }
 
-    public void AddResource(ResourceType resourceType, int amount)
+    public void AddResource(string resource, int amount)
     {
-		if (!_resources.ContainsKey(resourceType))
+		if (!_resources.ContainsKey(resource))
 		{
-			_resources.Add(resourceType, 0);
+			_resources.Add(resource, 0);
 		}
 
-        _resources[resourceType] += amount;
+        _resources[resource] += amount;
 
-		Debug.LogFormat("Added {0}, amount {1}", resourceType, amount);
+		Debug.LogFormat("Added {0}, amount {1}", resource, amount);
     }
 
-    public void RemoveResource(ResourceType resourceType, int amount)
+    public void RemoveResource(string resource, int amount)
     {
-        _resources[resourceType] -= amount;
+        _resources[resource] -= amount;
     }
 }

@@ -18,3 +18,4 @@ MonoBehaviour:
   ProductionDuration: 2
   OutputResource: Wood
   OutputResourceQuantity: 10
+  Prefab: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067, type: 2}

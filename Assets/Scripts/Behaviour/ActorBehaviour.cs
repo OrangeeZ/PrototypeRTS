@@ -11,6 +11,16 @@ namespace Assets.Scripts.Behaviour
 
         private IEnumerator _routine;
 
+        public virtual void Initialize()
+        {
+
+        }
+
+        public virtual void Dispose()
+        {
+
+        }
+
         public void SetActor(Actor actor)
         {
             Actor = actor;

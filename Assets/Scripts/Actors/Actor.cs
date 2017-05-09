@@ -9,6 +9,7 @@ namespace Assets.Scripts.Actors
     {
         public NavMeshAgent NavAgent { get { return ActorView.GetNavMeshAgent(); } }
 
+        public UnitInfo Info { get; private set; }
 
         private ActorBehaviour _behaviour;
 
@@ -17,10 +18,16 @@ namespace Assets.Scripts.Actors
 
         }
 
+        public void SetInfo(UnitInfo info)
+        {
+            Info = info;
+        }
+
         public void SetBehaviour(ActorBehaviour order)
         {
             _behaviour = order;
             _behaviour.SetActor(this);
+            _behaviour.Initialize();
         }
 
         public override void Update(float deltaTime)
@@ -51,8 +58,9 @@ namespace Assets.Scripts.Actors
         {
             base.DealDamage(amount);
 
-            if (Health <= 0)
+            if (Health <= 0 && _behaviour != null)
             {
+                _behaviour.Dispose();
                 _behaviour = null;
             }
         }

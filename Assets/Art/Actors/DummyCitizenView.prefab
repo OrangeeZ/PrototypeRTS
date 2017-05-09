@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114423853591967152}
   - component: {fileID: 195988392772221848}
   m_Layer: 0
-  m_Name: DummyCitizen
+  m_Name: DummyCitizenView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,8 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8312aa3668d4cb945bfcf01170df8c81, type: 3}
   m_Name: peasant
   m_EditorClassIdentifier: 
-  Name: 
-  Hp: 0
+  Name: Peasant
+  Hp: 1
   AttackRange: 0
   AttackStrength: 0
   AttackSpeed: 0
+  BehaviourId: CitizenBehaviour
+  Prefab: {fileID: 114423853591967152, guid: 21e9d21e60fccf9488ca8104d58b78ce, type: 2}
