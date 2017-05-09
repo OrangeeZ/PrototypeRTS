@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Actors
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity
     {
         public Vector3 Position { get; protected set; }
 
