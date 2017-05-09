@@ -4,12 +4,15 @@ using System.Linq;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.Workplace;
+using Packages.EventSystem;
 using UnityEngine;
 
 namespace Assets.Scripts.World
 {
     public class TestWorld : MonoBehaviour
     {
+		public readonly EventSystem EventSystem = new EventSystem();
+
         private List<Entity> _entities = new List<Entity>();
         private List<Entity> _entitiesToRemove = new List<Entity>();
 
