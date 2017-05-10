@@ -37,6 +37,8 @@ public class Stockpile : MonoBehaviour
 
     public void RemoveResource(string resource, int amount)
     {
+        if(!_resources.ContainsKey(resource))
+            return;
         _resources[resource] -= amount;
     }
 }
