@@ -5,9 +5,10 @@ public class Player
 
     #region constructor
 
-    public Player(PlayerInfo playerInfo)
+    public Player(PlayerInfo playerInfo, ICity city)
     {
         _playerInfo = playerInfo;
+        City = city;
         Popularity = _playerInfo.MaxPopularity;
     }
 
@@ -16,6 +17,8 @@ public class Player
     #region public properties
 
     public int Popularity { get; protected set; }
+
+    public ICity City { get; protected set; }
 
     #endregion
 

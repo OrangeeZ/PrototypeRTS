@@ -9,7 +9,7 @@ namespace Assets.Scripts.Actors
 
         public int Health { get; protected set; }
 
-        public TestWorld World { get; private set; }
+        public GameWorld World { get; private set; }
 
         public bool IsEnemy { get; private set; }
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Actors
 
         public abstract void Update(float deltaTime);
 
-        public Entity(TestWorld world)
+        public Entity(GameWorld world)
         {
             World = world;
         }
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Actors
 
             if (Health <= 0)
             {
-                World.RemoveEntity(this);
+                World.EntitiesBehaviour.RemoveEntity(this);
 
                 if (ActorView != null)
                 {

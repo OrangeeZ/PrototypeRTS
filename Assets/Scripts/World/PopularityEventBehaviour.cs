@@ -10,10 +10,11 @@ public class PopularityEventBehaviour : WorldEventBehaviour
     private int _popularityStep = 2;
     private float _lastUpdateTime;
     private string _testFood = "Bread";
+
     #region constructors
 
-    public PopularityEventBehaviour(TestWorld testWorld,Player player,TestUnitFactory unitFactory) : 
-        base(testWorld)
+    public PopularityEventBehaviour(GameWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
+        base(gameWorld)
     {
         _player = player;
         _unitFactory = unitFactory;
@@ -37,8 +38,9 @@ public class PopularityEventBehaviour : WorldEventBehaviour
 
     private void UpdatePopularity()
     {
-        var stockpile = _testWorld.GetClosestStockpile(Vector3.zero);
-        var citizensCount = _testWorld.FreeCitizensCount;
+        var city = _player.City;
+        var stockpile = city.GetClosestStockpile(Vector3.zero);
+        var citizensCount = city.FreeCitizensCount;
         var foodAmount = stockpile[_testFood];
         if (foodAmount < citizensCount)
         {
@@ -50,19 +52,19 @@ public class PopularityEventBehaviour : WorldEventBehaviour
         }
         if (_player.Popularity == 0)
         {
-            RemoveCitizen();
+            RemoveCitizen(city);
         }
-        else if (_player.Popularity>50 && _testWorld.FreeCitizensCount < 10)
+        else if (_player.Popularity>50 && city.FreeCitizensCount < 10)
         {
             _unitFactory.CreateUnit(_unitFactory.UnitInfos.FirstOrDefault(x => x.Name == "Peasant"));
         }
         stockpile.RemoveResource(_testFood,Mathf.Min(foodAmount,citizensCount));
     }
 
-    private void RemoveCitizen()
+    private void RemoveCitizen(ICity city)
     {
-        var citizen = _testWorld.GetFreeCitizen();
+        var citizen = city.GetFreeCitizen();
         if(citizen==null)return;
-        _testWorld.RemoveEntity(citizen);
+        _gameWorld.EntitiesBehaviour.RemoveEntity(citizen);
     }
 }

@@ -7,12 +7,9 @@ using UnityEngine;
 
 namespace Assets.Scripts.World
 {
-    public class TestWorld : MonoBehaviour
+    public class TestWorld : MonoBehaviour, ICity
     {
         public readonly EventSystem EventSystem = new EventSystem();
-        private List<Entity> _entities = new List<Entity>();
-        private List<Entity> _entitiesToRemove = new List<Entity>();
-        private List<WorldEventBehaviour> _worldEventBehaviours = new List<WorldEventBehaviour>();
         private Queue<Actor> _freeCitizens = new Queue<Actor>();
 
         [SerializeField]
@@ -41,12 +38,7 @@ namespace Assets.Scripts.World
 
         public Actor GetFreeCitizen()
         {
-            if (_freeCitizens.Any())
-            {
-                return _freeCitizens.Dequeue();
-            }
-
-            return null;
+            return _freeCitizens.Any() ? _freeCitizens.Dequeue() : null;
         }
 
         public Transform GetFireplace()
@@ -54,59 +46,9 @@ namespace Assets.Scripts.World
             return _fireplace;
         }
 
-        public void UpdateStep(float deltaTime)
-        {
-            UpdateWorldEvents(deltaTime);
-            UpdateEntityes(deltaTime);
-        }
-
-        public IList<Entity> GetEntities()
-        {
-            return _entities;//.OfType<Actor>();
-        }
-
-        public void AddWorldBehaviour(WorldEventBehaviour eventBehaviour)
-        {
-            _worldEventBehaviours.Add(eventBehaviour);
-        }
-
-        public void AddEntity(Entity entity)
-        {
-            _entities.Add(entity);
-        }
-
-        public void RemoveEntity(Entity entity)
-        {
-            _entitiesToRemove.Add(entity);
-        }
-
         #endregion
 
-        private void UpdateWorldEvents(float deltaTime)
-        {
-            for (int i = 0; i < _worldEventBehaviours.Count; i++)
-            {
-                var behaviour = _worldEventBehaviours[i];
-                behaviour.Update(deltaTime);
-            }
-        }
 
-        private void UpdateEntityes(float deltaTime)
-        {
-            for (var i = 0; i < _entities.Count; i++)
-            {
-                var each = _entities[i];
-                each.Update(deltaTime);
-            }
-
-            for (var i = 0; i < _entitiesToRemove.Count; i++)
-            {
-                var each = _entitiesToRemove[i];
-                _entities.Remove(each);
-            }
-
-            _entitiesToRemove.Clear();
-        }
         
     }
 }

@@ -6,7 +6,7 @@ namespace Assets.Scripts.Behaviour
     {
 		public override void Initialize()
 		{
-			Actor.World.RegisterFreeCitizen(Actor);
+			Actor.World.ActivePlayer.City.RegisterFreeCitizen(Actor);
 		}
 
 		public override void Dispose()

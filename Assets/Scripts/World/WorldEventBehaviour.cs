@@ -2,11 +2,11 @@
 
 public class WorldEventBehaviour {
 
-    protected readonly TestWorld _testWorld;
+    protected readonly GameWorld _gameWorld;
 
-    public WorldEventBehaviour(TestWorld testWorld)
+    public WorldEventBehaviour(GameWorld gameWorld)
     {
-        _testWorld = testWorld;
+        _gameWorld = gameWorld;
     }
 
     public virtual void Update(float deltaTime)

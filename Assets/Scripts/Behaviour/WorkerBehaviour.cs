@@ -22,7 +22,7 @@ namespace Assets.Scripts.Behaviour
 
                 if (!_workplace.HasResources)
                 {
-                    // navAgent.SetDestination(Actor.World.GetClosestStockpileWithResource(_workspace.ResourceType));
+                    // navAgent.SetDestination(Actor.GameWorld.GetClosestStockpileWithResource(_workspace.ResourceType));
                     // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                     // {
                     //     yield return null;
@@ -44,14 +44,14 @@ namespace Assets.Scripts.Behaviour
                 }
 
                 _workplace.EndProduction();
-
-                navAgent.SetDestination(Actor.World.GetClosestStockpile(Actor.Position).transform.position);
+                var city = Actor.World.ActivePlayer.City;
+                navAgent.SetDestination(city.GetClosestStockpile(Actor.Position).transform.position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
                     yield return null;
                 }
 
-                Actor.World.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
+                city.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
             }
         }
     }

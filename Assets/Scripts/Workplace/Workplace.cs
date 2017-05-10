@@ -19,7 +19,7 @@ namespace Assets.Scripts.Workplace
 
         protected Actor Worker;
 
-        public Workplace(TestWorld world) : base(world)
+        public Workplace(GameWorld world) : base(world)
         {
         }
 
@@ -47,8 +47,8 @@ namespace Assets.Scripts.Workplace
             {
                 return;
             }
-
-            var freeCitizen = World.GetFreeCitizen();
+            var city = World.ActivePlayer.City;
+            var freeCitizen = city.GetFreeCitizen();
             if (freeCitizen != null)
             {
                 SetWorker(freeCitizen);

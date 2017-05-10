@@ -5,7 +5,6 @@ using System.Reflection;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.Workplace;
-using Assets.Scripts.World;
 using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
@@ -15,7 +14,7 @@ public class TestUnitFactory : MonoBehaviour
     [SerializeField]
     private BuildingInfo[] _buildingInfos;
 
-    private TestWorld _world;
+    private GameWorld _world;
     private bool _isEnemy = false;
     private Dictionary<string, Type> _behaviourMap;
 
@@ -44,7 +43,7 @@ public class TestUnitFactory : MonoBehaviour
         BuildTypeMap();
     }
 
-    public void SetWorld(TestWorld world)
+    public void SetWorld(GameWorld world)
     {
         _world = world;
     }
@@ -52,33 +51,34 @@ public class TestUnitFactory : MonoBehaviour
     public void CreateUnit(UnitInfo unitInfo)
     {
         var unit = new Actor(_world);
+        var city = _world.ActivePlayer.City;
         var unitView = Instantiate(unitInfo.Prefab);
         unitView.SetIsEnemy(_isEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
-        unit.SetPosition(_world.GetFireplace().position + randomPosition);
+        unit.SetPosition(city.GetFireplace().position + randomPosition);
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
         unit.SetIsEnemy(_isEnemy);
-        _world.AddEntity(unit);
+        _world.EntitiesBehaviour.AddEntity(unit);
     }
 
     public void CreateBuilding(BuildingInfo buildingInfo)
     {
         var building = new Workplace(_world);
-
+        var city = _world.ActivePlayer.City;
         building.SetView(Instantiate(buildingInfo.Prefab));
 		building.SetInfo(buildingInfo);
 
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
 
-        building.SetPosition(_world.GetFireplace().position + randomPosition);
+        building.SetPosition(city.GetFireplace().position + randomPosition);
         building.SetHealth(10);
 
-        _world.AddEntity(building);
+        _world.EntitiesBehaviour.AddEntity(building);
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)

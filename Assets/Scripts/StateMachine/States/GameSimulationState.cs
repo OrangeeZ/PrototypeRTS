@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.World;
 using UnityEngine;
 
@@ -9,15 +10,15 @@ namespace Assets.Scripts.StateMachine.States
 
         #region private properties
 
-        private readonly IFactory<TestWorld> _testWorld;
+        private readonly IFactory<TestWorld> _city;
 
         #endregion
 
         public GameSimulationState(IStateController<GameState> stateController,
-            IFactory<TestWorld> testWorld) : 
+            IFactory<TestWorld> city) : 
             base(stateController)
         {
-            _testWorld = testWorld;
+            _city = city;
         }
 
         public override IEnumerator Execute()
@@ -30,13 +31,14 @@ namespace Assets.Scripts.StateMachine.States
             }
         }
 
-        private TestWorld InitializeSimulationWorld()
+        private GameWorld InitializeSimulationWorld()
         {
-            var world = _testWorld.Create();
-            var unitFactory = world.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(world);
+            var city = _city.Create();
             var playerInfo = new PlayerInfo();
-            var player = new Player(playerInfo);
+            var player = new Player(playerInfo, city);
+            var world = new GameWorld(new EntitiesBehaviour(),new List<Player>(){player},player);
+            var unitFactory = city.GetComponent<TestUnitFactory>();
+            unitFactory.SetWorld(world);
             var popularityEventsBehaviour = new PopularityEventBehaviour(world, player,unitFactory);
             world.AddWorldBehaviour(popularityEventsBehaviour);
             return world;
