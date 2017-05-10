@@ -5,6 +5,8 @@ namespace Assets.Scripts.StateMachine
 {
     public class GameStatesFactory : IStateFactory<GameState>
     {
+        private WorldFactory _worldFactory = new WorldFactory();
+
         #region public methods
 
         public IState Create(IStateController<GameState> stateController,GameState gameState)
@@ -12,7 +14,7 @@ namespace Assets.Scripts.StateMachine
             switch (gameState)
             {
                 case GameState.Simulate:
-                    return new GameSimulationState(stateController);
+                    return new GameSimulationState(stateController, _worldFactory);
                 case GameState.Initialize:
                     return new GameInitializeState(stateController);
                 default:

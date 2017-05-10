@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,15 +12,32 @@ public class TestUnitFactory : MonoBehaviour
 {
     [SerializeField]
     private UnitInfo[] _unitInfos;
-
     [SerializeField]
     private BuildingInfo[] _buildingInfos;
 
     private TestWorld _world;
-
     private bool _isEnemy = false;
-
     private Dictionary<string, Type> _behaviourMap;
+
+    #region public properties
+
+    public bool IsEnemy
+    {
+        get
+        {
+            return _isEnemy;
+        }
+        set
+        {
+            _isEnemy = value;
+        }
+    }
+
+    public UnitInfo[] UnitInfos { get { return _unitInfos; } }
+
+    public BuildingInfo[] BuildingInfos{get { return _buildingInfos; }}
+
+    #endregion
 
     void Awake()
     {
@@ -32,51 +48,20 @@ public class TestUnitFactory : MonoBehaviour
     {
         _world = world;
     }
-
-    public void DrawMenu()
-    {
-        GUILayout.Space(10);
-
-        _isEnemy = GUILayout.Toggle(_isEnemy, "Is Enemy");
-
-        foreach (var each in _unitInfos)
-        {
-            if (GUILayout.Button("Create " + each.Name))
-            {
-                CreateUnit(each);
-            }
-        }
-
-        GUILayout.Space(10);
-
-        foreach (var each in _buildingInfos)
-        {
-            if (GUILayout.Button("Create " + each.Name))
-            {
-                CreateBuilding(each);
-            }
-        }
-    }
-
+    
     public void CreateUnit(UnitInfo unitInfo)
     {
         var unit = new Actor(_world);
-
         var unitView = Instantiate(unitInfo.Prefab);
         unitView.SetIsEnemy(_isEnemy);
         unit.SetView(unitView);
-
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
-
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
-
         unit.SetPosition(_world.GetFireplace().position + randomPosition);
         unit.SetInfo(unitInfo);
-
         unit.SetHealth(unitInfo.Hp);
         unit.SetIsEnemy(_isEnemy);
-
         _world.AddEntity(unit);
     }
 

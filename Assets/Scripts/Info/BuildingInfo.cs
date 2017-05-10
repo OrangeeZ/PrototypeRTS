@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Actors;
+﻿using Assets.Scripts.Actors;
 using csv;
 using UnityEngine;
 

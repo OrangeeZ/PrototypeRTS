@@ -1,11 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Workplace;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Stockpile : MonoBehaviour
 {
     private Dictionary<string, int> _resources = new Dictionary<string, int>();
+
+    /// <summary>
+    /// amount of target resource
+    /// </summary>
+    public int this[string resource]
+    {
+        get
+        {
+            if (_resources.ContainsKey(resource))
+                return _resources[resource];
+            return -1;
+        }
+    }
 
     public bool HasResource(string resource)
     {
