@@ -43,6 +43,19 @@ namespace Assets.Scripts.Actors
             Health = amount;
         }
 
+        public Bounds GetBounds()
+        {
+            if (ActorView == null)
+            {
+                return new Bounds();
+            }
+
+            var result = ActorView.GetComponentInChildren<Renderer>().bounds;
+            result.center = ActorView.transform.position;
+
+            return result;
+        }
+
         public virtual void DealDamage(int amount)
         {
             Debug.Log("Recieved damage " + amount);

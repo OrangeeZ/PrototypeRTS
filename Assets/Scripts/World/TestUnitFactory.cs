@@ -12,6 +12,7 @@ public class TestUnitFactory : MonoBehaviour
 {
     [SerializeField]
     private UnitInfo[] _unitInfos;
+    
     [SerializeField]
     private BuildingInfo[] _buildingInfos;
 

@@ -32,7 +32,8 @@ namespace Assets.Scripts.World
         void Awake()
         {
             UnitFactory = GetComponent<TestUnitFactory>();
-            
+
+            _constructionModule.SetWorld(this);
             _constructionModule.SetUnitFactory(UnitFactory);
         }
 

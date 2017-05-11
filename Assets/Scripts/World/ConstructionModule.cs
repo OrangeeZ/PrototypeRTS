@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Workplace;
 using Assets.Scripts.World;
 using UnityEngine;
 
 public class ConstructionModule
 {
+    private TestWorld _world;
+
     private TestUnitFactory _unitFactory;
 
     private GameObject _selectedBuilding;
@@ -13,6 +17,13 @@ public class ConstructionModule
 
     private bool _isPlacingBuilding = false;
 
+    private bool _isRemovingBuildings = false;
+
+    public void SetWorld(TestWorld world)
+    {
+        _world = world;
+    }
+
     public void SetUnitFactory(TestUnitFactory unitFactory)
     {
         _unitFactory = unitFactory;
@@ -20,10 +31,11 @@ public class ConstructionModule
 
     public void Update(float deltaTime)
     {
+        var camera = Camera.main;
+        var ray = camera.ScreenPointToRay(Input.mousePosition);
+
         if (_selectedBuilding != null)
         {
-            var camera = Camera.main;
-            var ray = camera.ScreenPointToRay(Input.mousePosition);
             var plane = new Plane(Vector3.up, Vector3.zero);
 
             var distance = 0f;
@@ -44,6 +56,19 @@ public class ConstructionModule
                 entity.SetPosition(_selectedBuilding.transform.position);
             }
         }
+
+        if (_isRemovingBuildings && Input.GetMouseButtonDown(0))
+        {
+            var entities = _world.GetEntities().Where(_ => _ is Workplace);
+
+            foreach (var each in entities)
+            {
+                if (each.GetBounds().IntersectRay(ray))
+                {
+                    each.DealDamage(each.Health); //Will later be changed into a disband command if for some reason we want this to work with soldiers
+                }
+            }
+        }
     }
 
     public void OnGUI()
@@ -51,7 +76,7 @@ public class ConstructionModule
         GUILayout.BeginArea(new Rect(0, Screen.height - 100, Screen.width, 100));
         GUILayout.Label("Construction module");
 
-		GUILayout.BeginHorizontal();
+        GUILayout.BeginHorizontal();
 
         if (!_isPlacingBuilding)
         {
@@ -66,18 +91,22 @@ public class ConstructionModule
                     break;
                 }
             }
-        }
-        else
-        {
-            if (Event.current.keyCode == KeyCode.Escape)
-            {
-                Object.Destroy(_selectedBuilding);
 
-                _isPlacingBuilding = false;
+            if (GUILayout.Button(_isRemovingBuildings ? "Stop removing buildings" : "Start removing buildings", GUILayout.ExpandWidth(false)))
+            {
+                _isRemovingBuildings = !_isRemovingBuildings;
             }
         }
 
-		GUILayout.EndVertical();
+        if (Event.current.keyCode == KeyCode.Escape)
+        {
+            Object.Destroy(_selectedBuilding);
+
+            _isPlacingBuilding = false;
+            _isRemovingBuildings = false;
+        }
+
+        GUILayout.EndVertical();
 
         GUILayout.EndArea();
     }
