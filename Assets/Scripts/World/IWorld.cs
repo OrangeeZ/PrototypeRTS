@@ -7,17 +7,15 @@ public interface IWorld : IWorldUpdateBehaviour
 {
     #region public properties
 
-    int FreeCitizensCount { get; }
+    int FreeCitizensCount { get;}
 
-    EntitiesController EntitiesController { get;}
+    List<Entity> Entities { get;}
 
-    WorldEventsController WorldEventsController { get; }
+    List<WorldEvent> Events { get;}
 
-    Player Player { get; set; }
+    List<IWorld> Childs { get;}
 
-    IList<IWorld> Childs { get; }
-
-    IWorld Parent { get; set; }
+    IWorld Parent { get; set;}
 
     #endregion
 

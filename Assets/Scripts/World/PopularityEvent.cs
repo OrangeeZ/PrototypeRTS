@@ -1,8 +1,7 @@
 ﻿using System.Linq;
-using Assets.Scripts.World;
 using UnityEngine;
 
-public class PopularityEventBehaviour : WorldEventBehaviour
+public class PopularityEvent : WorldEvent
 {
     private readonly Player _player;
     private readonly TestUnitFactory _unitFactory;
@@ -13,7 +12,7 @@ public class PopularityEventBehaviour : WorldEventBehaviour
 
     #region constructors
 
-    public PopularityEventBehaviour(IWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
+    public PopularityEvent(IWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
         base(gameWorld)
     {
         _player = player;
@@ -65,6 +64,6 @@ public class PopularityEventBehaviour : WorldEventBehaviour
     {
         var citizen = world.HireCitizen();
         if(citizen==null)return;
-        _gameWorld.EntitiesController.RemoveItem(citizen);
+        _gameWorld.Entities.Remove(citizen);
     }
 }

@@ -17,9 +17,10 @@ public class BaseWorld : IWorld
         _freeCitizens = new Queue<Actor>();
         _stockpiles = stockpiles;
         _firePlace = firePlace;
+        Entities = new List<Entity>();
+        Events = new List<WorldEvent>();
         Childs =  new List<IWorld>();
-        EntitiesController = new EntitiesController();
-        WorldEventsController = new WorldEventsController();
+
     }
 
     #endregion
@@ -32,18 +33,17 @@ public class BaseWorld : IWorld
         }
     }
 
-    public EntitiesController EntitiesController { get; private set; }
-    public WorldEventsController WorldEventsController { get; private set; }
-    public Player Player { get; set; }
-    public IList<IWorld> Childs { get; private set; }
+    public List<Entity> Entities { get; private set; }
+    public List<WorldEvent> Events { get; private set; }
+    public List<IWorld> Childs { get; private set; }
     public IWorld Parent { get; set; }
 
     #region public methods
 
     public void Update(float deltaTime)
     {
-        WorldEventsController.Update(deltaTime);
-        EntitiesController.Update(deltaTime);
+        UpdateEvents(deltaTime);
+        UpdateEntities(deltaTime);
         UpdateChildWorlds(deltaTime);
     }
 
@@ -76,12 +76,30 @@ public class BaseWorld : IWorld
 
     #region private methods
 
-    protected void UpdateChildWorlds(float deltaTime)
+    protected virtual void UpdateChildWorlds(float deltaTime)
     {
         for (int i = 0; i < Childs.Count; i++)
         {
             var world = Childs[i];
             world.Update(deltaTime);
+        }
+    }
+
+    protected virtual void UpdateEntities(float deltaTime)
+    {
+        for (int i = 0; i < Entities.Count; i++)
+        {
+            var item = Entities[i];
+            item.Update(deltaTime);
+        }
+    }
+
+    protected virtual void UpdateEvents(float deltaTime)
+    {
+        for (int i = 0; i < Events.Count; i++)
+        {
+            var item = Events[i];
+            item.Update(deltaTime);
         }
     }
 

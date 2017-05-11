@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.World;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Actors
 {
@@ -51,7 +50,7 @@ namespace Assets.Scripts.Actors
 
             if (Health <= 0)
             {
-                World.EntitiesController.RemoveItem(this);
+                World.Entities.Remove(this);
 
                 if (ActorView != null)
                 {

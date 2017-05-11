@@ -62,7 +62,7 @@ public class TestUnitFactory : MonoBehaviour
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
         unit.SetIsEnemy(_isEnemy);
-        _world.EntitiesController.AddItem(unit);
+        _world.Entities.Add(unit);
     }
 
     public void CreateBuilding(BuildingInfo buildingInfo)
@@ -78,7 +78,7 @@ public class TestUnitFactory : MonoBehaviour
         building.SetPosition(city.GetFireplace() + randomPosition);
         building.SetHealth(10);
 
-        _world.EntitiesController.AddItem(building);
+        _world.Entities.Add(building);
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)
