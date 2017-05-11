@@ -35,7 +35,7 @@ public class TestUnitFactory : MonoBehaviour
 
     public UnitInfo[] UnitInfos { get { return _unitInfos; } }
 
-    public BuildingInfo[] BuildingInfos{get { return _buildingInfos; }}
+    public BuildingInfo[] BuildingInfos { get { return _buildingInfos; } }
 
     #endregion
 
@@ -48,29 +48,35 @@ public class TestUnitFactory : MonoBehaviour
     {
         _world = world;
     }
-    
-    public void CreateUnit(UnitInfo unitInfo)
+
+    public Entity CreateUnit(UnitInfo unitInfo)
     {
         var unit = new Actor(_world);
         var unitView = Instantiate(unitInfo.Prefab);
+        
         unitView.SetIsEnemy(_isEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
+        
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
+        
         unit.SetPosition(_world.GetFireplace().position + randomPosition);
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
         unit.SetIsEnemy(_isEnemy);
+
         _world.AddEntity(unit);
+
+        return unit;
     }
 
-    public void CreateBuilding(BuildingInfo buildingInfo)
+    public Entity CreateBuilding(BuildingInfo buildingInfo)
     {
         var building = new Workplace(_world);
 
         building.SetView(Instantiate(buildingInfo.Prefab));
-		building.SetInfo(buildingInfo);
+        building.SetInfo(buildingInfo);
 
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
@@ -79,12 +85,12 @@ public class TestUnitFactory : MonoBehaviour
         building.SetHealth(10);
 
         _world.AddEntity(building);
+
+        return building;
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)
     {
-        Debug.Log(_behaviourMap[behaviourId]);
-
         return System.Activator.CreateInstance(_behaviourMap[behaviourId]) as ActorBehaviour;
     }
 

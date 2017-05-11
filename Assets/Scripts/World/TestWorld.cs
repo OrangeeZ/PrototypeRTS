@@ -9,20 +9,32 @@ namespace Assets.Scripts.World
 {
     public class TestWorld : MonoBehaviour
     {
+        public TestUnitFactory UnitFactory { get; private set; }
+
         public readonly EventSystem EventSystem = new EventSystem();
         private List<Entity> _entities = new List<Entity>();
         private List<Entity> _entitiesToRemove = new List<Entity>();
         private List<WorldEventBehaviour> _worldEventBehaviours = new List<WorldEventBehaviour>();
         private Queue<Actor> _freeCitizens = new Queue<Actor>();
 
+        private ConstructionModule _constructionModule = new ConstructionModule();
+
         [SerializeField]
         private List<Stockpile> _stockpiles = new List<Stockpile>();
+
         [SerializeField]
         private Transform _fireplace;
 
         #region public methods
 
         public int FreeCitizensCount { get { return _freeCitizens.Count; } }
+
+        void Awake()
+        {
+            UnitFactory = GetComponent<TestUnitFactory>();
+            
+            _constructionModule.SetUnitFactory(UnitFactory);
+        }
 
         public void RegisterFreeCitizen(Actor actor)
         {
@@ -57,7 +69,9 @@ namespace Assets.Scripts.World
         public void UpdateStep(float deltaTime)
         {
             UpdateWorldEvents(deltaTime);
-            UpdateEntityes(deltaTime);
+            UpdateEntities(deltaTime);
+
+            _constructionModule.Update(deltaTime);
         }
 
         public IList<Entity> GetEntities()
@@ -91,7 +105,7 @@ namespace Assets.Scripts.World
             }
         }
 
-        private void UpdateEntityes(float deltaTime)
+        private void UpdateEntities(float deltaTime)
         {
             for (var i = 0; i < _entities.Count; i++)
             {
@@ -107,6 +121,11 @@ namespace Assets.Scripts.World
 
             _entitiesToRemove.Clear();
         }
-        
+
+        void OnGUI()
+        {
+            _constructionModule.OnGUI();
+        }
+
     }
 }
