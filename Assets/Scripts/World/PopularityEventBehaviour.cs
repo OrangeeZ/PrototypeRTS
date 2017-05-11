@@ -13,7 +13,7 @@ public class PopularityEventBehaviour : WorldEventBehaviour
 
     #region constructors
 
-    public PopularityEventBehaviour(GameWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
+    public PopularityEventBehaviour(IWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
         base(gameWorld)
     {
         _player = player;
@@ -38,7 +38,7 @@ public class PopularityEventBehaviour : WorldEventBehaviour
 
     private void UpdatePopularity()
     {
-        var city = _player.City;
+        var city = _gameWorld;
         var stockpile = city.GetClosestStockpile(Vector3.zero);
         var citizensCount = city.FreeCitizensCount;
         var foodAmount = stockpile[_testFood];
@@ -61,10 +61,10 @@ public class PopularityEventBehaviour : WorldEventBehaviour
         stockpile.RemoveResource(_testFood,Mathf.Min(foodAmount,citizensCount));
     }
 
-    private void RemoveCitizen(ICity city)
+    private void RemoveCitizen(IWorld world)
     {
-        var citizen = city.GetFreeCitizen();
+        var citizen = world.HireCitizen();
         if(citizen==null)return;
-        _gameWorld.EntitiesBehaviour.RemoveEntity(citizen);
+        _gameWorld.EntitiesController.RemoveItem(citizen);
     }
 }

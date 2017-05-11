@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Assets.Scripts.Actors
 {
-    public abstract class Entity
+    public abstract class Entity : IWorldUpdateBehaviour
     {
         public Vector3 Position { get; protected set; }
 
         public int Health { get; protected set; }
 
-        public GameWorld World { get; private set; }
+        public IWorld World { get; private set; }
 
         public bool IsEnemy { get; private set; }
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Actors
 
         public abstract void Update(float deltaTime);
 
-        public Entity(GameWorld world)
+        public Entity(IWorld world)
         {
             World = world;
         }
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Actors
 
             if (Health <= 0)
             {
-                World.EntitiesBehaviour.RemoveEntity(this);
+                World.EntitiesController.RemoveItem(this);
 
                 if (ActorView != null)
                 {

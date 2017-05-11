@@ -5,12 +5,12 @@ namespace Assets.Scripts.World
     public class TestUnitOnGui : MonoBehaviour
     {
         private TestUnitFactory _testUnitFactory;
-        private TestWorld _testWorld;
+        private TestWorldData _testWorldData;
 
         private void Awake()
         {
             _testUnitFactory = GetComponent<TestUnitFactory>();
-            _testWorld = GetComponent<TestWorld>();
+            _testWorldData = GetComponent<TestWorldData>();
         }
 
         public void DrawMenu()
@@ -42,9 +42,9 @@ namespace Assets.Scripts.World
 
         private void DrawResource()
         {
-            var resourceContainer = _testWorld.GetClosestStockpile(Vector3.down);
-            var food = resourceContainer["Bread"];
-            GUILayout.Label("Bread Count :" + food);
+            //var resourceContainer = _testWorldData.GetClosestStockpile(Vector3.down);
+            //var food = resourceContainer["Bread"];
+            //GUILayout.Label("Bread Count :" + food);
 
         }
 

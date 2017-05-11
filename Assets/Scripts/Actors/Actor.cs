@@ -13,7 +13,7 @@ namespace Assets.Scripts.Actors
 
         private ActorBehaviour _behaviour;
 
-        public Actor(GameWorld world) : base(world)
+        public Actor(IWorld world) : base(world)
         {
 
         }

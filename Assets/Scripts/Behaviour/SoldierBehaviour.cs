@@ -77,7 +77,7 @@ public class SoldierBehaviour : ActorBehaviour
     private Entity GetAnyEnemy()
     {
         var world = Actor.World;
-        var entities = world.EntitiesBehaviour.GetEntities();
+        var entities = world.EntitiesController.GetItems();
 
         return entities.FirstOrDefault(_ => _.IsEnemy != Actor.IsEnemy && _ != Actor);
     }

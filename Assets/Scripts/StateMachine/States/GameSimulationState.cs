@@ -10,12 +10,12 @@ namespace Assets.Scripts.StateMachine.States
 
         #region private properties
 
-        private readonly IFactory<TestWorld> _city;
+        private readonly IFactory<TestWorldData> _city;
 
         #endregion
 
         public GameSimulationState(IStateController<GameState> stateController,
-            IFactory<TestWorld> city) : 
+            IFactory<TestWorldData> city) : 
             base(stateController)
         {
             _city = city;
@@ -26,21 +26,26 @@ namespace Assets.Scripts.StateMachine.States
             var world = InitializeSimulationWorld();
             while (true)
             {
-                world.UpdateStep(Time.unscaledDeltaTime);
+                world.Update(Time.unscaledDeltaTime);
                 yield return null;
             }
         }
 
-        private GameWorld InitializeSimulationWorld()
+        private IWorld InitializeSimulationWorld()
         {
-            var city = _city.Create();
+            var testWorldData = _city.Create();
             var playerInfo = new PlayerInfo();
-            var player = new Player(playerInfo, city);
-            var world = new GameWorld(new EntitiesBehaviour(),new List<Player>(){player},player);
-            var unitFactory = city.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(world);
-            var popularityEventsBehaviour = new PopularityEventBehaviour(world, player,unitFactory);
-            world.AddWorldBehaviour(popularityEventsBehaviour);
+            var player = new Player(playerInfo);
+            var playerWorld = new BaseWorld(testWorldData.Stockpiles,
+                testWorldData.Fireplace.position);
+            playerWorld.Player = player;
+            var unitFactory = testWorldData.GetComponent<TestUnitFactory>();
+            unitFactory.SetWorld(playerWorld);
+            var popularityEventsBehaviour = new PopularityEventBehaviour(playerWorld, player, unitFactory);
+            playerWorld.WorldEventsController.AddItem(popularityEventsBehaviour);
+
+            var world = new BaseWorld(new List<Stockpile>(),Vector3.zero);
+            world.Childs.Add(playerWorld);
             return world;
         }
     }

@@ -1,10 +1,11 @@
 ﻿using Assets.Scripts.World;
 
-public class WorldEventBehaviour {
+public class WorldEventBehaviour : IWorldUpdateBehaviour
+{
 
-    protected readonly GameWorld _gameWorld;
+    protected readonly IWorld _gameWorld;
 
-    public WorldEventBehaviour(GameWorld gameWorld)
+    public WorldEventBehaviour(IWorld gameWorld)
     {
         _gameWorld = gameWorld;
     }

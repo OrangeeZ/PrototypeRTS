@@ -22,7 +22,7 @@ namespace Assets.Scripts.Behaviour
 
                 if (!_workplace.HasResources)
                 {
-                    // navAgent.SetDestination(Actor.GameWorld.GetClosestStockpileWithResource(_workspace.ResourceType));
+                    // navAgent.SetDestination(Actor.BaseWorld.GetClosestStockpileWithResource(_workspace.ResourceType));
                     // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                     // {
                     //     yield return null;
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Behaviour
                 }
 
                 _workplace.EndProduction();
-                var city = Actor.World.ActivePlayer.City;
+                var city = Actor.World;
                 navAgent.SetDestination(city.GetClosestStockpile(Actor.Position).transform.position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
