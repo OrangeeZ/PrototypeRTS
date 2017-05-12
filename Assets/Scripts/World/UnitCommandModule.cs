@@ -7,8 +7,6 @@ using UnityEngine;
 
 public class UnitCommandModule
 {
-    private Actor _selectedActor;
-
     private List<Actor> _selectedActors = new List<Actor>();
 
     private TestWorld _world;
@@ -37,69 +35,9 @@ public class UnitCommandModule
 
     public void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            var actors = _world.GetEntities().OfType<Actor>();
-
-            var camera = Camera.main;
-            var ray = camera.ScreenPointToRay(Input.mousePosition);
-            var didGiveOrder = false;
-
-            foreach (var each in actors)
-            {
-                var isClicked = each.GetBounds().IntersectRay(ray);
-                if (isClicked)
-                {
-                    Debug.Log("Clicked " + each.Info);
-
-                    if (_selectedActor != null)
-                    {
-                        SetAttackTarget(_selectedActor.Behaviour as SoldierBehaviour, each);
-                    }
-                    else if (_selectedActors.Any())
-                    {
-                        foreach (var eachActor in _selectedActors)
-                        {
-                            SetAttackTarget(eachActor.Behaviour as SoldierBehaviour, each);
-                        }
-                    }
-                    else
-                    {
-
-                        if (each.Behaviour is SoldierBehaviour && !each.IsEnemy)
-                        {
-                            _selectedActor = each;
-                        }
-                    }
-
-                    didGiveOrder = true;
-                }
-            }
-
-            if (!didGiveOrder)
-            {
-                var distance = 0f;
-                if (new Plane(Vector3.up, Vector3.zero).Raycast(ray, out distance))
-                {
-                    var destination = ray.GetPoint(distance);
-                    if (_selectedActor != null)
-                    {
-                        SetDestination(_selectedActor.Behaviour as SoldierBehaviour, destination);
-                    }
-                    else if (_selectedActors.Any())
-                    {
-                        foreach (var eachActor in _selectedActors)
-                        {
-                            SetDestination(eachActor.Behaviour as SoldierBehaviour, destination);
-                        }
-                    }
-                }
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            _selectedActor = null;
+            _selectedActors.Clear();
         }
     }
 
@@ -107,7 +45,7 @@ public class UnitCommandModule
     {
         if (Event.current.type == EventType.MouseDown)
         {
-            if (_selectedActor == null)
+            if (_selectedActors.IsEmpty())
             {
                 _isSelectingWithRectangle = true;
                 _selectionStartingPoint = Event.current.mousePosition;
@@ -116,14 +54,22 @@ public class UnitCommandModule
 
         if (Event.current.type == EventType.MouseDrag)
         {
-            if (_isSelectingWithRectangle)
+            if (!_isSelectingWithRectangle)
             {
-                FindSelectedUnits(_selectionStartingPoint, Event.current.mousePosition);
+                _selectionStartingPoint = Event.current.mousePosition;
+                _isSelectingWithRectangle = true;
             }
+
+            FindSelectedUnits(_selectionStartingPoint, Event.current.mousePosition);
         }
 
         if (Event.current.type == EventType.MouseUp)
         {
+            if (!_isSelectingWithRectangle)
+            {
+                CheckSelectionAndOrders();
+            }
+
             _isSelectingWithRectangle = false;
         }
 
@@ -159,9 +105,61 @@ public class UnitCommandModule
             }
 
             var screenPosition = camera.WorldToScreenPoint(each.Position);
+            screenPosition.y = Screen.height - screenPosition.y;
+
             if (selectionRect.Contains(screenPosition))
             {
                 _selectedActors.Add(each);
+            }
+        }
+    }
+
+    private void CheckSelectionAndOrders()
+    {
+        var actors = _world.GetEntities().OfType<Actor>();
+
+        var camera = Camera.main;
+        var ray = camera.ScreenPointToRay(Input.mousePosition);
+        var didGiveOrder = false;
+
+        foreach (var each in actors)
+        {
+            var isClicked = each.GetBounds().IntersectRay(ray);
+            if (isClicked)
+            {
+                Debug.Log("Clicked " + each.Info);
+
+                if (_selectedActors.Any())
+                {
+                    foreach (var eachActor in _selectedActors)
+                    {
+                        SetAttackTarget(eachActor.Behaviour as SoldierBehaviour, each);
+                    }
+                }
+                else
+                {
+                    if (each.Behaviour is SoldierBehaviour && !each.IsEnemy)
+                    {
+                        _selectedActors.Clear();
+                        _selectedActors.Add(each);
+                    }
+                }
+
+                didGiveOrder = true;
+            }
+        }
+
+        if (!didGiveOrder)
+        {
+            var distance = 0f;
+            if (new Plane(Vector3.up, Vector3.zero).Raycast(ray, out distance))
+            {
+                var destination = ray.GetPoint(distance);
+
+                foreach (var eachActor in _selectedActors)
+                {
+                    SetDestination(eachActor.Behaviour as SoldierBehaviour, destination);
+                }
             }
         }
     }
