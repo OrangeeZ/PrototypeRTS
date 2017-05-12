@@ -27,8 +27,11 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
 
     public ActorView Prefab;
 
+    public EntityDisplayPanel DisplayPanelPrefab;
+
     public void Configure(Values values)
     {
         Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
+        DisplayPanelPrefab = values.GetPrefabWithComponent<EntityDisplayPanel>("DisplayPanelPrefab", false);
     }
 }

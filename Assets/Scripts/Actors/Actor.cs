@@ -5,6 +5,45 @@ using UnityEngine.AI;
 
 namespace Assets.Scripts.Actors
 {
+    public class ActorSelectionEventHandler : SelectionEventHandler
+    {
+        private readonly Actor _actor;
+
+        public ActorSelectionEventHandler(Actor actor)
+        {
+            _actor = actor;
+        }
+
+        public override bool HandleDestinationClick(Vector3 destination)
+        {
+            if (_actor.Behaviour is SoldierBehaviour)
+            {
+                (_actor.Behaviour as SoldierBehaviour).SetDestination(destination);
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public override bool HandleEntityClick(Entity entity)
+        {
+            if (!entity.IsEnemy)
+            {
+                return false;
+            }
+
+            if (_actor.Behaviour is SoldierBehaviour)
+            {
+                (_actor.Behaviour as SoldierBehaviour).SetAttackTarget(entity);
+
+                return true;
+            }
+
+            return false;
+        }
+    }
+
     public class Actor : Entity
     {
         public NavMeshAgent NavAgent { get { return ActorView.GetNavMeshAgent(); } }
@@ -13,9 +52,11 @@ namespace Assets.Scripts.Actors
 
         public ActorBehaviour Behaviour { get; private set; }
 
+        private SelectionEventHandler _selectionEventHandler;
+
         public Actor(TestWorld world) : base(world)
         {
-
+            _selectionEventHandler = new ActorSelectionEventHandler(this);
         }
 
         public void SetInfo(UnitInfo info)
@@ -63,6 +104,16 @@ namespace Assets.Scripts.Actors
                 Behaviour.Dispose();
                 Behaviour = null;
             }
+        }
+
+        public override SelectionEventHandler GetSelectionEventHandler()
+        {
+            return _selectionEventHandler;
+        }
+
+        public override EntityDisplayPanel GetDisplayPanelPrefab()
+        {
+            return Info.DisplayPanelPrefab;
         }
     }
 }

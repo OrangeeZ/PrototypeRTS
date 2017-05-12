@@ -10,6 +10,8 @@ namespace Assets.Scripts.World
     public class TestWorld : MonoBehaviour
     {
         public TestUnitFactory UnitFactory { get; private set; }
+        public ImUiController UiController { get; private set; }
+        public SelectionManager SelectionManager { get; private set; }
 
         public readonly EventSystem EventSystem = new EventSystem();
         private List<Entity> _entities = new List<Entity>();
@@ -18,7 +20,6 @@ namespace Assets.Scripts.World
         private Queue<Actor> _freeCitizens = new Queue<Actor>();
 
         private ConstructionModule _constructionModule = new ConstructionModule();
-        private UnitCommandModule _unitCommandModule = new UnitCommandModule();
 
         [SerializeField]
         private List<Stockpile> _stockpiles = new List<Stockpile>();
@@ -33,11 +34,15 @@ namespace Assets.Scripts.World
         void Awake()
         {
             UnitFactory = GetComponent<TestUnitFactory>();
+            UiController = new ImUiController();
+
+            SelectionManager = new SelectionManager();
+            SelectionManager.SetWorld(this);
+
+            UiController.SetWorld(this);
 
             _constructionModule.SetWorld(this);
             _constructionModule.SetUnitFactory(UnitFactory);
-
-            _unitCommandModule.SetWorld(this);
         }
 
         public void RegisterFreeCitizen(Actor actor)
@@ -76,7 +81,6 @@ namespace Assets.Scripts.World
             UpdateEntities(deltaTime);
 
             _constructionModule.Update(deltaTime);
-            _unitCommandModule.Update();
         }
 
         public IList<Entity> GetEntities()
@@ -130,7 +134,9 @@ namespace Assets.Scripts.World
         void OnGUI()
         {
             _constructionModule.OnGUI();
-            _unitCommandModule.OnGUI();
+
+            UiController.OnGUI();
+            SelectionManager.OnGUI();
         }
 
     }

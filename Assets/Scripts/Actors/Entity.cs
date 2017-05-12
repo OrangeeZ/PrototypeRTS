@@ -71,5 +71,15 @@ namespace Assets.Scripts.Actors
                 }
             }
         }
+
+        public virtual SelectionEventHandler GetSelectionEventHandler()
+        {
+            return new NullSelectionEventHandler();
+        }
+
+        public virtual EntityDisplayPanel GetDisplayPanelPrefab()
+        {
+            return null;
+        }
     }
 }

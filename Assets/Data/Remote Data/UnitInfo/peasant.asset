@@ -18,3 +18,5 @@ MonoBehaviour:
   AttackSpeed: 0
   BehaviourId: CitizenBehaviour
   Prefab: {fileID: 114423853591967152, guid: 21e9d21e60fccf9488ca8104d58b78ce, type: 2}
+  DisplayPanelPrefab: {fileID: 114087819250214324, guid: 25a9fb34e8ff0df44977403982d0c930,
+    type: 2}

@@ -49,7 +49,7 @@ namespace Assets.Scripts.Behaviour
                     yield return null;
                 }
 
-                Actor.World.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
+                Actor.World.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.OutputResourceQuantity);
             }
         }
     }

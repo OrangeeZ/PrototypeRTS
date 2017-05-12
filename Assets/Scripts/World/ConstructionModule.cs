@@ -73,10 +73,10 @@ public class ConstructionModule
 
     public void OnGUI()
     {
-        GUILayout.BeginArea(new Rect(0, Screen.height - 100, Screen.width, 100));
+        GUILayout.BeginArea(new Rect(0, Screen.height - 200, 100, 200));
         GUILayout.Label("Construction module");
 
-        GUILayout.BeginHorizontal();
+        GUILayout.BeginVertical();
 
         if (!_isPlacingBuilding)
         {
