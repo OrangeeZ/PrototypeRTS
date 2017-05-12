@@ -130,6 +130,7 @@ namespace Assets.Scripts.World
         void OnGUI()
         {
             _constructionModule.OnGUI();
+            _unitCommandModule.OnGUI();
         }
 
     }
