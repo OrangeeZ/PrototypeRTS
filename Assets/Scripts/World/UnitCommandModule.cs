@@ -29,7 +29,10 @@ public class UnitCommandModule
 
     public void SetAttackTarget(SoldierBehaviour behaviour, Actor target)
     {
-        behaviour.SetTarget(target);
+        if (behaviour != null)
+        {
+            behaviour.SetAttackTarget(target);
+        }
     }
 
     public void Update()
@@ -44,11 +47,6 @@ public class UnitCommandModule
 
             foreach (var each in actors)
             {
-                if (!(each.Behaviour is SoldierBehaviour))
-                {
-                    continue;
-                }
-
                 var isClicked = each.GetBounds().IntersectRay(ray);
                 if (isClicked)
                 {
@@ -67,20 +65,34 @@ public class UnitCommandModule
                     }
                     else
                     {
-                        _selectedActor = each;
+
+                        if (each.Behaviour is SoldierBehaviour && !each.IsEnemy)
+                        {
+                            _selectedActor = each;
+                        }
                     }
 
                     didGiveOrder = true;
                 }
             }
 
-            if (!didGiveOrder && _selectedActor != null)
+            if (!didGiveOrder)
             {
                 var distance = 0f;
                 if (new Plane(Vector3.up, Vector3.zero).Raycast(ray, out distance))
                 {
                     var destination = ray.GetPoint(distance);
-                    SetDestination(_selectedActor.Behaviour as SoldierBehaviour, destination);
+                    if (_selectedActor != null)
+                    {
+                        SetDestination(_selectedActor.Behaviour as SoldierBehaviour, destination);
+                    }
+                    else if (_selectedActors.Any())
+                    {
+                        foreach (var eachActor in _selectedActors)
+                        {
+                            SetDestination(eachActor.Behaviour as SoldierBehaviour, destination);
+                        }
+                    }
                 }
             }
         }
