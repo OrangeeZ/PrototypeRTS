@@ -18,6 +18,7 @@ namespace Assets.Scripts.World
         private Queue<Actor> _freeCitizens = new Queue<Actor>();
 
         private ConstructionModule _constructionModule = new ConstructionModule();
+        private UnitCommandModule _unitCommandModule = new UnitCommandModule();
 
         [SerializeField]
         private List<Stockpile> _stockpiles = new List<Stockpile>();
@@ -35,6 +36,8 @@ namespace Assets.Scripts.World
 
             _constructionModule.SetWorld(this);
             _constructionModule.SetUnitFactory(UnitFactory);
+
+            _unitCommandModule.SetWorld(this);
         }
 
         public void RegisterFreeCitizen(Actor actor)
@@ -73,6 +76,7 @@ namespace Assets.Scripts.World
             UpdateEntities(deltaTime);
 
             _constructionModule.Update(deltaTime);
+            _unitCommandModule.Update();
         }
 
         public IList<Entity> GetEntities()

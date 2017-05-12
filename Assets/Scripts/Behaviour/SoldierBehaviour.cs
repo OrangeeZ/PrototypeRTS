@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Actors;
@@ -8,6 +9,10 @@ using UnityEngine;
 public class SoldierBehaviour : ActorBehaviour
 {
     private Entity _target;
+
+    public void SetDestination(Vector3 destination)
+    {
+    }
 
     public void SetTarget(Actor target)
     {
@@ -29,7 +34,7 @@ public class SoldierBehaviour : ActorBehaviour
 
             while (_target == null)
             {
-                _target = GetAnyEnemy();
+                // _target = GetAnyEnemy();
 
                 yield return null;
             }
@@ -37,7 +42,7 @@ public class SoldierBehaviour : ActorBehaviour
             navAgent.isStopped = false;
 
             navAgent.SetDestination(_target.Position);
-			navAgent.stoppingDistance = Actor.Info.AttackRange - 0.5f;
+            navAgent.stoppingDistance = Actor.Info.AttackRange - 0.5f;
             while (navAgent != null && (!navAgent.hasPath || navAgent.remainingDistance > Actor.Info.AttackRange))
             {
                 yield return null;

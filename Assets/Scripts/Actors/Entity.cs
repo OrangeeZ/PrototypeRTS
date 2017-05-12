@@ -51,7 +51,6 @@ namespace Assets.Scripts.Actors
             }
 
             var result = ActorView.GetComponentInChildren<Renderer>().bounds;
-            result.center = ActorView.transform.position;
 
             return result;
         }
