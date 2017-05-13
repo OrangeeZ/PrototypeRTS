@@ -11,9 +11,9 @@ namespace Assets.Scripts.Actors
 
         public UnitInfo Info { get; private set; }
 
-        private ActorBehaviour _behaviour;
+        public ActorBehaviour Behaviour { get; private set; }
 
-        public Actor(IWorld world) : base(world)
+        public Actor(BaseWorld world) : base(world)
         {
 
         }
@@ -25,9 +25,9 @@ namespace Assets.Scripts.Actors
 
         public void SetBehaviour(ActorBehaviour order)
         {
-            _behaviour = order;
-            _behaviour.SetActor(this);
-            _behaviour.Initialize();
+            Behaviour = order;
+            Behaviour.SetActor(this);
+            Behaviour.Initialize();
         }
 
         public override void Update(float deltaTime)
@@ -37,12 +37,12 @@ namespace Assets.Scripts.Actors
                 Position = NavAgent.transform.position;
             }
 
-            if (_behaviour == null)
+            if (Behaviour == null)
             {
                 return;
             }
 
-            if (!_behaviour.Update(deltaTime))
+            if (!Behaviour.Update(deltaTime))
             {
             }
         }
@@ -58,10 +58,10 @@ namespace Assets.Scripts.Actors
         {
             base.DealDamage(amount);
 
-            if (Health <= 0 && _behaviour != null)
+            if (Health <= 0 && Behaviour != null)
             {
-                _behaviour.Dispose();
-                _behaviour = null;
+                Behaviour.Dispose();
+                Behaviour = null;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿public class GuiDrawer {
+﻿public class GuiDrawer : IGuiDrawer
+{
 
     public virtual void Draw()
     {

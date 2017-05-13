@@ -204,6 +204,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _stockpiles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4266708373949428, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b, type: 2}
       propertyPath: m_LocalPosition.x
       value: -0.065564156
@@ -364,17 +369,6 @@ MonoBehaviour:
   _buildingInfos:
   - {fileID: 11400000, guid: 566044814dfd3fd4fa5b1b3be826cd53, type: 2}
   - {fileID: 11400000, guid: 42cd31d980f9c6c4bb37610c5968cbb3, type: 2}
---- !u!114 &1698288134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1698288132}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ebbb8ecfa4603c4eb3577a2143fbdd3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1808621025
 GameObject:
   m_ObjectHideFlags: 0

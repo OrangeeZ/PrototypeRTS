@@ -1,10 +1,23 @@
 using System.Collections.Generic;
 
 public class WorldBehaviourController<TBehaviour>
-    where TBehaviour : IWorldUpdateBehaviour
+    where TBehaviour : IUpdateBehaviour
 {
     private List<TBehaviour> _behaviours = new List<TBehaviour>();
     private List<TBehaviour> _behavioursToRemove = new List<TBehaviour>();
+
+    #region public properties
+
+    public int Count { get { return _behaviours.Count; } }
+
+    public TBehaviour this[int index]
+    {
+        get { return _behaviours[index]; }
+    }
+
+    #endregion
+
+    #region public methods
 
     public IList<TBehaviour> GetItems()
     {
@@ -37,4 +50,6 @@ public class WorldBehaviourController<TBehaviour>
 
         _behavioursToRemove.Clear();
     }
+
+    #endregion
 }

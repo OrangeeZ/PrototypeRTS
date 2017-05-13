@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class OnGuiController : MonoBehaviour
 {
-    private List<GuiDrawer> _drawers = new List<GuiDrawer>();
-    public List<GuiDrawer> Drawers { get { return _drawers; } }
+    private List<IGuiDrawer> _drawers = new List<IGuiDrawer>();
+    public List<IGuiDrawer> Drawers { get { return _drawers; } }
 
     private void OnGUI()
     {

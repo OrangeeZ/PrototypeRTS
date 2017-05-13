@@ -1,4 +1,4 @@
-﻿public interface IWorldUpdateBehaviour
+﻿public interface IUpdateBehaviour
 {
     void Update(float deltaTime);
 }

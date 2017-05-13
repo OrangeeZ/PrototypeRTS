@@ -15,8 +15,7 @@ namespace Assets.Scripts.World
         private List<Stockpile> _stockpiles = new List<Stockpile>();
         [SerializeField]
         private Transform _fireplace;
-
-
+        
         public List<Stockpile> Stockpiles { get { return _stockpiles; } }
 
         public Transform Fireplace { get { return _fireplace; } }

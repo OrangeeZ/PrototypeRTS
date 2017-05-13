@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class ResourcesDrawer : GuiDrawer
 {
-    private readonly IWorld _world;
+    private readonly BaseWorld _world;
 
-    public ResourcesDrawer(IWorld world)
+    public ResourcesDrawer(BaseWorld world)
     {
         _world = world;
     }

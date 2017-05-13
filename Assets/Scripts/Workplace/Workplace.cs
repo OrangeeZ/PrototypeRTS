@@ -19,7 +19,7 @@ namespace Assets.Scripts.Workplace
 
         protected Actor Worker;
 
-        public Workplace(IWorld world) : base(world)
+        public Workplace(BaseWorld world) : base(world)
         {
         }
 

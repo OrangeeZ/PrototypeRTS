@@ -2,13 +2,13 @@
 
 namespace Assets.Scripts.Actors
 {
-    public abstract class Entity : IWorldUpdateBehaviour
+    public abstract class Entity : IUpdateBehaviour
     {
         public Vector3 Position { get; protected set; }
 
         public int Health { get; protected set; }
 
-        public IWorld World { get; private set; }
+        public BaseWorld World { get; private set; }
 
         public bool IsEnemy { get; private set; }
 
@@ -16,7 +16,7 @@ namespace Assets.Scripts.Actors
 
         public abstract void Update(float deltaTime);
 
-        public Entity(IWorld world)
+        public Entity(BaseWorld world)
         {
             World = world;
         }
@@ -40,6 +40,18 @@ namespace Assets.Scripts.Actors
         public void SetHealth(int amount)
         {
             Health = amount;
+        }
+
+        public Bounds GetBounds()
+        {
+            if (ActorView == null)
+            {
+                return new Bounds();
+            }
+
+            var result = ActorView.GetComponentInChildren<Renderer>().bounds;
+
+            return result;
         }
 
         public virtual void DealDamage(int amount)

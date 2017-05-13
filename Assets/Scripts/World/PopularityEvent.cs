@@ -12,7 +12,7 @@ public class PopularityEvent : WorldEvent
 
     #region constructors
 
-    public PopularityEvent(IWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
+    public PopularityEvent(BaseWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
         base(gameWorld)
     {
         _player = player;
@@ -60,7 +60,7 @@ public class PopularityEvent : WorldEvent
         stockpile.RemoveResource(_testFood,Mathf.Min(foodAmount,citizensCount));
     }
 
-    private void RemoveCitizen(IWorld world)
+    private void RemoveCitizen(BaseWorld world)
     {
         var citizen = world.HireCitizen();
         if(citizen==null)return;

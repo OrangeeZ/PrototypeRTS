@@ -14,8 +14,6 @@ namespace Assets.Scripts.Behaviour
 
         protected override IEnumerator UpdateRoutine()
         {
-            Debug.Log("Started working behaviour");
-
             while (true)
             {
                 var navAgent = Actor.NavAgent;

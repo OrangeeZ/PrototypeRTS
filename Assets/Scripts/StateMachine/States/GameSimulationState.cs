@@ -10,16 +10,16 @@ namespace Assets.Scripts.StateMachine.States
 
         #region private properties
 
-        private readonly IFactory<TestWorldData> _city;
+        private readonly IFactory<TestWorldData> _worldData;
         private OnGuiController _guiController;
 
         #endregion
 
         public GameSimulationState(IStateController<GameState> stateController,
-            IFactory<TestWorldData> city) : 
+            IFactory<TestWorldData> worldData) : 
             base(stateController)
         {
-            _city = city;
+            _worldData = worldData;
         }
 
         public override IEnumerator Execute()
@@ -41,30 +41,46 @@ namespace Assets.Scripts.StateMachine.States
         
         #region private methods
 
-        private IWorld InitializeSimulationWorld()
+        private BaseWorld InitializeSimulationWorld()
         {
-            var testWorldData = _city.Create();
-            var playerWorld = new BaseWorld(testWorldData.Stockpiles,
+            //initialize player worlds
+            var commandModule = new UnitCommandModule();
+            var constructionModule = new ConstructionModule();
+            var testWorldData = _worldData.Create();
+            var playerWorld = new PlayerWorld(constructionModule,commandModule, 
+                testWorldData.Stockpiles,
                 testWorldData.Fireplace.position);
+            //init unit factory
             var unitFactory = testWorldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
+            //initialize commands
+            constructionModule.Initialize(playerWorld, unitFactory);
+            commandModule.SetWorld(playerWorld);
+            //create player
             var player = CreatePlayer(playerWorld);
             var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
             playerWorld.Events.Add(popularityEventsBehaviour);
+            //init parent world
             var world = new BaseWorld(new List<Stockpile>(),Vector3.zero);
-            world.Childs.Add(playerWorld);
+            world.Children.Add(playerWorld);
+            playerWorld.Parent = world;
+            //initialize Temp OnGUI drawer
             _guiController = InitializeOnGuiDrawer(playerWorld,player,unitFactory);
+            _guiController.Drawers.Add(constructionModule);
+            _guiController.Drawers.Add(commandModule);
             return world;
         }
 
-        private Player CreatePlayer(IWorld world)
+        private Player CreatePlayer(BaseWorld world)
         {
             var playerInfo = new PlayerInfo();
             var player = new Player(playerInfo, world);
             return player;
         }
 
-        private OnGuiController InitializeOnGuiDrawer(IWorld world,Player player, TestUnitFactory unitFactory)
+        private OnGuiController InitializeOnGuiDrawer(
+            BaseWorld world,Player player, 
+            TestUnitFactory unitFactory)
         {
             var guiObject = new GameObject("GuiConroller");
             var guiController = guiObject.AddComponent<OnGuiController>();

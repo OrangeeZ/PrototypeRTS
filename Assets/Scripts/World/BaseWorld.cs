@@ -4,7 +4,7 @@ using Assets.Scripts.Actors;
 using Assets.Scripts.Workplace;
 using UnityEngine;
 
-public class BaseWorld : IWorld
+public class BaseWorld : IUpdateBehaviour
 {
     protected List<Stockpile> _stockpiles;
     private readonly Vector3 _firePlace;
@@ -17,9 +17,9 @@ public class BaseWorld : IWorld
         _freeCitizens = new Queue<Actor>();
         _stockpiles = stockpiles;
         _firePlace = firePlace;
-        Entities = new List<Entity>();
-        Events = new List<WorldEvent>();
-        Childs =  new List<IWorld>();
+        Entities = new EntitiesController();
+        Events = new WorldEventsController();
+        Children =  new WorldsController();
 
     }
 
@@ -33,18 +33,18 @@ public class BaseWorld : IWorld
         }
     }
 
-    public List<Entity> Entities { get; private set; }
-    public List<WorldEvent> Events { get; private set; }
-    public List<IWorld> Childs { get; private set; }
-    public IWorld Parent { get; set; }
+    public EntitiesController Entities { get; private set; }
+    public WorldEventsController Events { get; private set; }
+    public WorldsController Children { get; private set; }
+    public BaseWorld Parent { get; set; }
 
     #region public methods
 
-    public void Update(float deltaTime)
+    public virtual void Update(float deltaTime)
     {
-        UpdateEvents(deltaTime);
-        UpdateEntities(deltaTime);
-        UpdateChildWorlds(deltaTime);
+        Events.Update(deltaTime);
+        Entities.Update(deltaTime);
+        Children.Update(deltaTime);
     }
 
     public void RegisterFreeCitizen(Actor actor)
@@ -70,37 +70,6 @@ public class BaseWorld : IWorld
     public virtual Vector3 GetFireplace()
     {
         return _firePlace;
-    }
-
-    #endregion
-
-    #region private methods
-
-    protected virtual void UpdateChildWorlds(float deltaTime)
-    {
-        for (int i = 0; i < Childs.Count; i++)
-        {
-            var world = Childs[i];
-            world.Update(deltaTime);
-        }
-    }
-
-    protected virtual void UpdateEntities(float deltaTime)
-    {
-        for (int i = 0; i < Entities.Count; i++)
-        {
-            var item = Entities[i];
-            item.Update(deltaTime);
-        }
-    }
-
-    protected virtual void UpdateEvents(float deltaTime)
-    {
-        for (int i = 0; i < Events.Count; i++)
-        {
-            var item = Events[i];
-            item.Update(deltaTime);
-        }
     }
 
     #endregion
