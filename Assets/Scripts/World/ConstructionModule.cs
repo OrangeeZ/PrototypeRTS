@@ -2,7 +2,7 @@
 using Assets.Scripts.Workplace;
 using UnityEngine;
 
-public class ConstructionModule : IGuiDrawer
+public class ConstructionModule : WorldEvent,IGuiDrawer
 {
     private BaseWorld _world;
 
@@ -16,13 +16,13 @@ public class ConstructionModule : IGuiDrawer
 
     private bool _isRemovingBuildings = false;
 
-    public void Initialize(BaseWorld world, TestUnitFactory unitFactory)
+
+    public ConstructionModule(BaseWorld world, TestUnitFactory unitFactory) : base(world)
     {
-        _world = world;
         _unitFactory = unitFactory;
     }
 
-    public void Update(float deltaTime)
+    public override void Update(float deltaTime)
     {
         var camera = Camera.main;
         var ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -67,9 +67,9 @@ public class ConstructionModule : IGuiDrawer
 
     public void Draw()
     {
-        GUILayout.BeginArea(new Rect(0, Screen.height - 100, Screen.width, 100));
+        GUILayout.BeginArea(new Rect(0, Screen.height - 200, 100, 200));
         GUILayout.Label("Construction module");
-        GUILayout.BeginHorizontal();
+        GUILayout.BeginVertical();
 
         if (!_isPlacingBuilding)
         {
@@ -104,4 +104,5 @@ public class ConstructionModule : IGuiDrawer
 
         GUILayout.EndArea();
     }
+
 }

@@ -42,14 +42,14 @@ namespace Assets.Scripts.Behaviour
                 }
 
                 _workplace.EndProduction();
-                var city = Actor.World;
-                navAgent.SetDestination(city.GetClosestStockpile(Actor.Position).transform.position);
+                var world = Actor.World;
+                navAgent.SetDestination(world.GetClosestStockpile(Actor.Position).transform.position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
                     yield return null;
-                }
+                }               
+                world.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
 
-                city.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
             }
         }
     }

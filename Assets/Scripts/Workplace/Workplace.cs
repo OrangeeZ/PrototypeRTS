@@ -2,6 +2,7 @@
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.World;
+using UnityEngine;
 
 namespace Assets.Scripts.Workplace
 {
@@ -9,6 +10,19 @@ namespace Assets.Scripts.Workplace
     {
         Bread,
         Wood,
+    }
+
+    public class WorkplaceSelectionEventHandler : SelectionEventHandler
+    {
+        public override bool HandleDestinationClick(Vector3 destination)
+        {
+            return false;
+        }
+
+        public override bool HandleEntityClick(Entity entity)
+        {
+            return false;
+        }
     }
 
     public class Workplace : Entity
@@ -33,7 +47,7 @@ namespace Assets.Scripts.Workplace
         {
             HasResources = true;
 
-            return 2f;
+            return Info.ProductionDuration;
         }
 
         public void EndProduction()
@@ -58,6 +72,11 @@ namespace Assets.Scripts.Workplace
         public void SetInfo(BuildingInfo info)
         {
             Info = info;
+        }
+
+        public override EntityDisplayPanel GetDisplayPanelPrefab()
+        {
+            return Info.DisplayPanelPrefab;
         }
     }
 }

@@ -43,19 +43,13 @@ namespace Assets.Scripts.StateMachine.States
 
         private BaseWorld InitializeSimulationWorld()
         {
-            //initialize player worlds
-            var commandModule = new UnitCommandModule();
-            var constructionModule = new ConstructionModule();
+            //initialize world
             var testWorldData = _worldData.Create();
-            var playerWorld = new PlayerWorld(constructionModule,commandModule, 
-                testWorldData.Stockpiles,
+            var playerWorld = new PlayerWorld(testWorldData.Stockpiles,
                 testWorldData.Fireplace.position);
             //init unit factory
             var unitFactory = testWorldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
-            //initialize commands
-            constructionModule.Initialize(playerWorld, unitFactory);
-            commandModule.SetWorld(playerWorld);
             //create player
             var player = CreatePlayer(playerWorld);
             var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
@@ -66,8 +60,6 @@ namespace Assets.Scripts.StateMachine.States
             playerWorld.Parent = world;
             //initialize Temp OnGUI drawer
             _guiController = InitializeOnGuiDrawer(playerWorld,player,unitFactory);
-            _guiController.Drawers.Add(constructionModule);
-            _guiController.Drawers.Add(commandModule);
             return world;
         }
 
@@ -87,6 +79,14 @@ namespace Assets.Scripts.StateMachine.States
             guiController.Drawers.Add(new TestUnitOnGui(unitFactory));
             guiController.Drawers.Add(new PlayerDrawer(player));
             guiController.Drawers.Add(new ResourcesDrawer(world));
+            //initialize additional events
+            var selectionManager = new SelectionManager(world);
+            var constructionModule = new ConstructionModule(world, unitFactory);
+            world.Events.Add(constructionModule);
+            var uiController = new ImUiController(world, selectionManager);
+            guiController.Drawers.Add(constructionModule);
+            guiController.Drawers.Add(selectionManager);
+            guiController.Drawers.Add(uiController);
             return guiController;
         }
 

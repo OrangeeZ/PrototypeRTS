@@ -1,6 +1,4 @@
-﻿using Assets.Scripts.World;
-
-public class WorldEvent : IUpdateBehaviour
+﻿public class WorldEvent : IUpdateBehaviour
 {
 
     protected readonly BaseWorld _gameWorld;
