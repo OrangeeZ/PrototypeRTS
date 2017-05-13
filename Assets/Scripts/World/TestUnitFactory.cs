@@ -18,6 +18,7 @@ public class TestUnitFactory : MonoBehaviour
     private BaseWorld _world;
     private bool _isEnemy = false;
     private Dictionary<string, Type> _behaviourMap;
+    private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
 
     #region public properties
 
@@ -71,18 +72,26 @@ public class TestUnitFactory : MonoBehaviour
 
     public Entity CreateBuilding(BuildingInfo buildingInfo)
     {
-        var building = new Workplace(_world);
-        var city = _world;
+        var building = CreateBuildingEntity(buildingInfo);
         building.SetView(Instantiate(buildingInfo.Prefab));
         building.SetInfo(buildingInfo);
-
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
-
-        building.SetPosition(city.GetFireplace() + randomPosition);
+        building.SetPosition(_world.GetFireplace() + randomPosition);
         building.SetHealth(10);       
         _world.Entities.Add(building);
         return building;
+    }
+
+    private Building CreateBuildingEntity(BuildingInfo buildingInfo)
+    {
+        switch (buildingInfo.Name)
+        {
+            case "Barracks":
+                return new Barracks(_armyUnitsInfos,_world,this);
+            default:
+                return new Workplace(_world);
+        }
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)
@@ -101,6 +110,8 @@ public class TestUnitFactory : MonoBehaviour
             Debug.Log(each.Name);
             _behaviourMap[each.Name] = each;
         }
+        //TODO GET UNITs TYPE from another resource
+        _armyUnitsInfos.AddRange(_unitInfos.Where(x=>x.Name!= "Peasant"));
     }
 
     private IEnumerable<Type> FindDerivedTypes(Assembly assembly, Type baseType)

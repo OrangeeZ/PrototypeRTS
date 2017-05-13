@@ -1,7 +1,5 @@
-﻿using System;
-using Assets.Scripts.Actors;
+﻿using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
-using Assets.Scripts.World;
 using UnityEngine;
 
 namespace Assets.Scripts.Workplace
@@ -25,11 +23,9 @@ namespace Assets.Scripts.Workplace
         }
     }
 
-    public class Workplace : Entity
+    public class Workplace : Building
     {
         public bool HasResources { get; private set; }
-
-        public BuildingInfo Info { get; private set; }
 
         protected Actor Worker;
 
@@ -69,14 +65,5 @@ namespace Assets.Scripts.Workplace
             }
         }
 
-        public void SetInfo(BuildingInfo info)
-        {
-            Info = info;
-        }
-
-        public override EntityDisplayPanel GetDisplayPanelPrefab()
-        {
-            return Info.DisplayPanelPrefab;
-        }
     }
 }
