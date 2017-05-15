@@ -38,7 +38,7 @@ public class PopularityEvent : WorldEvent
     private void UpdatePopularity()
     {
         var city = _gameWorld;
-        var stockpile = city.GetClosestStockpile(Vector3.zero);
+        var stockpile = city.Stockpile.GetClosestStockpileBlock(Vector3.zero);
         var citizensCount = city.FreeCitizensCount;
         var foodAmount = stockpile[_testFood];
         if (foodAmount < citizensCount)

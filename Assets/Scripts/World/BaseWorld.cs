@@ -6,17 +6,16 @@ using UnityEngine;
 
 public class BaseWorld : IUpdateBehaviour
 {
-    protected List<Stockpile> _stockpiles;
     private readonly Vector3 _firePlace;
     protected Queue<Actor> _freeCitizens ;
 
     #region constructor
 
-    public BaseWorld(List<Stockpile> stockpiles,Vector3 firePlace)
+    public BaseWorld(Vector3 firePlace)
     {
         _freeCitizens = new Queue<Actor>();
-        _stockpiles = stockpiles;
         _firePlace = firePlace;
+        Stockpile = new Stockpile();
         Entities = new EntitiesController();
         Events = new WorldEventsController();
         Children =  new WorldsController();
@@ -37,6 +36,7 @@ public class BaseWorld : IUpdateBehaviour
     public WorldEventsController Events { get; private set; }
     public WorldsController Children { get; private set; }
     public BaseWorld Parent { get; set; }
+    public Stockpile Stockpile { get; private set; }
 
     #region public methods
 
@@ -55,11 +55,6 @@ public class BaseWorld : IUpdateBehaviour
     public void GetClosestStockpileWithResource(ResourceType resourceType)
     {
         
-    }
-
-    public virtual Stockpile GetClosestStockpile(Vector3 position)
-    {
-        return _stockpiles.Count > 0 ? _stockpiles[0] : null;
     }
 
     public Actor HireCitizen()

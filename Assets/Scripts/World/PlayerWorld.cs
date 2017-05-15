@@ -5,8 +5,8 @@ public class PlayerWorld : BaseWorld {
 
     #region constructor
 
-    public PlayerWorld(List<Stockpile> stockpiles, Vector3 firePlace) : 
-        base(stockpiles, firePlace)
+    public PlayerWorld(Vector3 firePlace) : 
+        base(firePlace)
     {
     }
 

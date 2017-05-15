@@ -89,6 +89,8 @@ public class TestUnitFactory : MonoBehaviour
         {
             case "Barracks":
                 return new Barracks(_armyUnitsInfos,_world,this);
+            case "Stockpile":
+                return new StockpileBlock(_world);
             default:
                 return new Workplace(_world);
         }

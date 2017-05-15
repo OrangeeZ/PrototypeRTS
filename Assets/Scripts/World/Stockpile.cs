@@ -1,44 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using MoreLinq;
 
-public class Stockpile : MonoBehaviour
+public class Stockpile
 {
-    private Dictionary<string, int> _resources = new Dictionary<string, int>();
+    private List<StockpileBlock> _stockpileBlocks;
 
-    /// <summary>
-    /// amount of target resource
-    /// </summary>
-    public int this[string resource]
+    public Stockpile()
     {
-        get
-        {
-            if (_resources.ContainsKey(resource))
-                return _resources[resource];
-            return -1;
-        }
+        _stockpileBlocks = new List<StockpileBlock>();
     }
 
-    public bool HasResource(string resource)
+    public StockpileBlock GetClosestStockpileBlock(Vector3 position)
     {
-        return _resources.ContainsKey(resource) && _resources[resource] > 0;
+        return _stockpileBlocks.MinBy(block => Vector3.Distance(block.Position, position));
     }
 
-    public void AddResource(string resource, int amount)
+    public void AddStockpileBlock(StockpileBlock stockpileBlock)
     {
-		if (!_resources.ContainsKey(resource))
-		{
-			_resources.Add(resource, 0);
-		}
-
-        _resources[resource] += amount;
-
-		Debug.LogFormat("Added {0}, amount {1}", resource, amount);
-    }
-
-    public void RemoveResource(string resource, int amount)
-    {
-        if(!_resources.ContainsKey(resource))
-            return;
-        _resources[resource] -= amount;
+        _stockpileBlocks.Add(stockpileBlock);
     }
 }

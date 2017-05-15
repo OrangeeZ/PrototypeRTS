@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.World;
 using UnityEngine;
 
@@ -45,17 +46,20 @@ namespace Assets.Scripts.StateMachine.States
         {
             //initialize world
             var testWorldData = _worldData.Create();
-            var playerWorld = new PlayerWorld(testWorldData.Stockpiles,
-                testWorldData.Fireplace.position);
+            var playerWorld = new PlayerWorld(testWorldData.Fireplace.position);
             //init unit factory
             var unitFactory = testWorldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
+            // create dummy stockpile
+            var stockpile = unitFactory.CreateBuilding(unitFactory.BuildingInfos.First(info => info.Name == "Stockpile"));
+            stockpile.SetPosition(Vector3.zero);
+            playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             //create player
             var player = CreatePlayer(playerWorld);
             var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
             playerWorld.Events.Add(popularityEventsBehaviour);
             //init parent world
-            var world = new BaseWorld(new List<Stockpile>(),Vector3.zero);
+            var world = new BaseWorld(Vector3.zero);
             world.Children.Add(playerWorld);
             playerWorld.Parent = world;
             //initialize Temp OnGUI drawer
