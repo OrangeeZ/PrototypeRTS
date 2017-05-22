@@ -43,12 +43,13 @@ namespace Assets.Scripts.Behaviour
 
                 _workplace.EndProduction();
                 var world = Actor.World;
-                navAgent.SetDestination(world.GetClosestStockpile(Actor.Position).transform.position);
+                var stockpileBlock = world.Stockpile.GetClosestStockpileBlock(Actor.Position);
+                navAgent.SetDestination(stockpileBlock.Position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
                     yield return null;
-                }               
-                world.GetClosestStockpile(Actor.Position).AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
+                }
+                stockpileBlock.AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
 
             }
         }

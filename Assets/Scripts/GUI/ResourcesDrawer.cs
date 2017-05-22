@@ -14,7 +14,7 @@ public class ResourcesDrawer : GuiDrawer
     public override void Draw()
     {
         GUILayout.Space(10);
-        var resourceContainer = _world.GetClosestStockpile(Vector3.down);
+        var resourceContainer = _world.Stockpile.GetClosestStockpileBlock(Vector3.down);
         var food = resourceContainer["Bread"];
         GUILayout.Label(string.Format("Breads Count : {0}", food));
     }

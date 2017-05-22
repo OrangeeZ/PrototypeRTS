@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.World;
 using Assets.Scripts.World.SocialModule;
 using UnityEngine;
@@ -48,19 +49,24 @@ namespace Assets.Scripts.StateMachine.States
             var playerRelationshp = new RelationshipMap(1);
             playerRelationshp.SetRelationship(0,10);
             playerRelationshp.SetRelationship(1, -1);
-            var playerWorld = new PlayerWorld(_worldData.Stockpiles, playerRelationshp,
+            var playerWorld = new PlayerWorld( playerRelationshp,
                 _worldData.Fireplace.position);
+
             //init unit factory
             var unitFactory = _worldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
+            // create dummy stockpile
+            var stockpile = unitFactory.
+                CreateBuilding(unitFactory.BuildingInfos.First(info => info.Name == "Stockpile"));
+            stockpile.SetPosition(Vector3.zero);
+            playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             //create player
             var player = CreatePlayer(playerWorld);
             var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
             playerWorld.Events.Add(popularityEventsBehaviour);
             //init parent world
             var neutralRelationshipMap = new RelationshipMap(0);
-            var world = new BaseWorld(new List<Stockpile>(), 
-                neutralRelationshipMap,Vector3.zero);
+            var world = new BaseWorld(neutralRelationshipMap,Vector3.zero);
             world.Children.Add(playerWorld);
             playerWorld.Parent = world;
             //initialize Temp OnGUI drawer

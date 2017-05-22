@@ -6,21 +6,19 @@ using UnityEngine;
 
 public class BaseWorld : IUpdateBehaviour
 {
-    protected List<Stockpile> _stockpiles;
     protected Vector3 _firePlace;
     protected Queue<Actor> _freeCitizens ;
     protected RelationshipMap _relationshipMap;
 
     #region constructor
-
-    public BaseWorld(List<Stockpile> stockpiles,
-        RelationshipMap relationshipMap,
+    
+    public BaseWorld(RelationshipMap relationshipMap,
         Vector3 firePlace)
     {
         _freeCitizens = new Queue<Actor>();
-        _stockpiles = stockpiles;
         _relationshipMap = relationshipMap;
         _firePlace = firePlace;
+        Stockpile = new Stockpile();
         Entities = new EntitiesController();
         Events = new WorldEventsController();
         Children =  new WorldsController();
@@ -42,6 +40,7 @@ public class BaseWorld : IUpdateBehaviour
     public WorldsController Children { get; private set; }
     public BaseWorld Parent { get; set; }
     public int Faction { get { return _relationshipMap.Faction; } }
+    public Stockpile Stockpile { get; private set; }
 
     #region public methods
 
@@ -65,11 +64,6 @@ public class BaseWorld : IUpdateBehaviour
     public void GetClosestStockpileWithResource(ResourceType resourceType)
     {
         
-    }
-
-    public virtual Stockpile GetClosestStockpile(Vector3 position)
-    {
-        return _stockpiles.Count > 0 ? _stockpiles[0] : null;
     }
 
     public Actor HireCitizen()

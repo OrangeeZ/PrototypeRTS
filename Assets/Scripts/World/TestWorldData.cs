@@ -9,12 +9,12 @@ namespace Assets.Scripts.World
         public readonly EventSystem EventSystem = new EventSystem();
 
         [SerializeField]
-        private List<Stockpile> _stockpiles = new List<Stockpile>();
+        private ResourceInfo[] _resourceInfos;
+
         [SerializeField]
         private Transform _fireplace;
-        
-        public List<Stockpile> Stockpiles { get { return _stockpiles; } }
 
         public Transform Fireplace { get { return _fireplace; } }
+        public ResourceInfo[] ResourceInfos { get { return _resourceInfos; }}
     }
 }

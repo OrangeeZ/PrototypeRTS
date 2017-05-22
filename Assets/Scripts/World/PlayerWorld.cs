@@ -6,9 +6,10 @@ public class PlayerWorld : BaseWorld {
 
     #region constructor
 
-    public PlayerWorld(List<Stockpile> stockpiles,RelationshipMap relationshipMap, Vector3 firePlace) : 
-        base(stockpiles,relationshipMap, firePlace)
+    public PlayerWorld(RelationshipMap relationshipMap, Vector3 firePlace) :
+        base(relationshipMap, firePlace)
     {
+        
     }
 
     #endregion
