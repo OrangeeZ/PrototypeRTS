@@ -1,14 +1,12 @@
 ﻿using Assets.Scripts.World;
 using UnityEngine;
 
-public class WorldFactory : IFactory<TestWorldData>
+public class WorldFactory : IFactory<BaseWorld>
 {
 
-    public TestWorldData Create()
+    public BaseWorld Create()
     {
-        //todo initialize simualtion gmae world state machine
-        //use test game world from scene
-        return Object.FindObjectOfType<TestWorldData>();
+        return null;
     }
 
 }

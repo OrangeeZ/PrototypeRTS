@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Assets.Scripts.Actors;
-using Assets.Scripts.Workplace;
 using Packages.EventSystem;
 using UnityEngine;
 

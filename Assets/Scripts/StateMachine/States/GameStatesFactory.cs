@@ -1,12 +1,12 @@
 ﻿using System;
 using Assets.Scripts.StateMachine.States;
+using Assets.Scripts.World;
+using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.StateMachine
 {
     public class GameStatesFactory : IStateFactory<GameState>
     {
-        private WorldFactory _worldFactory = new WorldFactory();
-
         #region public methods
 
         public IState Create(IStateController<GameState> stateController,GameState gameState)
@@ -14,7 +14,7 @@ namespace Assets.Scripts.StateMachine
             switch (gameState)
             {
                 case GameState.Simulate:
-                    return new GameSimulationState(stateController, _worldFactory);
+                    return new GameSimulationState(stateController, Object.FindObjectOfType<TestWorldData>());
                 case GameState.Initialize:
                     return new GameInitializeState(stateController);
                 default:

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.World;
+using Assets.Scripts.World.SocialModule;
 using UnityEngine;
 
 namespace Assets.Scripts.StateMachine.States
@@ -10,13 +11,13 @@ namespace Assets.Scripts.StateMachine.States
 
         #region private properties
 
-        private readonly IFactory<TestWorldData> _worldData;
+        private readonly TestWorldData _worldData;
         private OnGuiController _guiController;
 
         #endregion
 
         public GameSimulationState(IStateController<GameState> stateController,
-            IFactory<TestWorldData> worldData) : 
+            TestWorldData worldData) : 
             base(stateController)
         {
             _worldData = worldData;
@@ -44,18 +45,22 @@ namespace Assets.Scripts.StateMachine.States
         private BaseWorld InitializeSimulationWorld()
         {
             //initialize world
-            var testWorldData = _worldData.Create();
-            var playerWorld = new PlayerWorld(testWorldData.Stockpiles,
-                testWorldData.Fireplace.position);
+            var playerRelationshp = new RelationshipMap(1);
+            playerRelationshp.SetRelationship(0,10);
+            playerRelationshp.SetRelationship(1, -1);
+            var playerWorld = new PlayerWorld(_worldData.Stockpiles, playerRelationshp,
+                _worldData.Fireplace.position);
             //init unit factory
-            var unitFactory = testWorldData.GetComponent<TestUnitFactory>();
+            var unitFactory = _worldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
             //create player
             var player = CreatePlayer(playerWorld);
             var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
             playerWorld.Events.Add(popularityEventsBehaviour);
             //init parent world
-            var world = new BaseWorld(new List<Stockpile>(),Vector3.zero);
+            var neutralRelationshipMap = new RelationshipMap(0);
+            var world = new BaseWorld(new List<Stockpile>(), 
+                neutralRelationshipMap,Vector3.zero);
             world.Children.Add(playerWorld);
             playerWorld.Parent = world;
             //initialize Temp OnGUI drawer

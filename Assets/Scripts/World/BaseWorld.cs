@@ -1,21 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Workplace;
+using Assets.Scripts.World.SocialModule;
 using UnityEngine;
 
 public class BaseWorld : IUpdateBehaviour
 {
     protected List<Stockpile> _stockpiles;
-    private readonly Vector3 _firePlace;
+    protected Vector3 _firePlace;
     protected Queue<Actor> _freeCitizens ;
+    protected RelationshipMap _relationshipMap;
 
     #region constructor
 
-    public BaseWorld(List<Stockpile> stockpiles,Vector3 firePlace)
+    public BaseWorld(List<Stockpile> stockpiles,
+        RelationshipMap relationshipMap,
+        Vector3 firePlace)
     {
         _freeCitizens = new Queue<Actor>();
         _stockpiles = stockpiles;
+        _relationshipMap = relationshipMap;
         _firePlace = firePlace;
         Entities = new EntitiesController();
         Events = new WorldEventsController();
@@ -37,8 +41,14 @@ public class BaseWorld : IUpdateBehaviour
     public WorldEventsController Events { get; private set; }
     public WorldsController Children { get; private set; }
     public BaseWorld Parent { get; set; }
+    public int Faction { get { return _relationshipMap.Faction; } }
 
     #region public methods
+
+    public int GetRelationship(int faction)
+    {
+        return _relationshipMap.GetRelation(faction);
+    }
 
     public virtual void Update(float deltaTime)
     {
