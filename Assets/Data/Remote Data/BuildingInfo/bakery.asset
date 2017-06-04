@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: bakery
   m_EditorClassIdentifier: 
   Name: Bakery
+  Id: 
   Hp: 20
   InputResource: Flour
   InputResourceQuantity: 1

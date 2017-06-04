@@ -12,9 +12,11 @@ public class PopularityEvent : WorldEvent
 
     #region constructors
 
-    public PopularityEvent(BaseWorld gameWorld,Player player,TestUnitFactory unitFactory) : 
+    public PopularityEvent(BaseWorld gameWorld,Player player,
+        TestUnitFactory unitFactory,float period) : 
         base(gameWorld)
     {
+        _updatePeriod = period;
         _player = player;
         _unitFactory = unitFactory;
     }
@@ -37,27 +39,29 @@ public class PopularityEvent : WorldEvent
 
     private void UpdatePopularity()
     {
-        var city = _gameWorld;
-        var stockpile = city.Stockpile.GetClosestStockpileBlock(Vector3.zero);
-        var citizensCount = city.FreeCitizensCount;
+        var gameWorld = _gameWorld;
+        var stockpile = gameWorld.Stockpile.GetClosestStockpileBlock(Vector3.zero);
+        var citizensCount = gameWorld.FreeCitizensCount;
         var foodAmount = stockpile[_testFood];
         if (foodAmount < citizensCount)
         {
-            _player.SetPopularity(_player.Popularity - _popularityStep);
+            _player.ChangePopularity(-_popularityStep);
         }
         else
         {
-            _player.SetPopularity(_player.Popularity + _popularityStep);
+            _player.ChangePopularity(_popularityStep);
         }
-        if (_player.Popularity == 0)
+        if (_player.Popularity <= 0)
         {
-            RemoveCitizen(city);
+            RemoveCitizen(gameWorld);
         }
-        else if (_player.Popularity>50 && city.FreeCitizensCount < 10)
+        else if (foodAmount>0 && _player.Popularity>70 &&
+            gameWorld.FreeCitizensCount < gameWorld.PopulationLimit)
         {
-            _unitFactory.CreateUnit(_unitFactory.UnitInfos.FirstOrDefault(x => x.Name == "Peasant"));
+            _unitFactory.CreateUnit(_unitFactory.UnitInfos.
+                FirstOrDefault(x => x.Name == "Peasant"));
         }
-        stockpile.RemoveResource(_testFood,Mathf.Min(foodAmount,citizensCount));
+        stockpile.ChangeResource(_testFood,-citizensCount);
     }
 
     private void RemoveCitizen(BaseWorld world)

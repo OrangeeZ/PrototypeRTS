@@ -39,8 +39,32 @@ public class BaseWorld : IUpdateBehaviour
     public WorldEventsController Events { get; private set; }
     public WorldsController Children { get; private set; }
     public BaseWorld Parent { get; set; }
-    public int Faction { get { return _relationshipMap.Faction; } }
     public Stockpile Stockpile { get; private set; }
+
+    /// <summary>
+    /// World faction type
+    /// </summary>
+    public int Faction { get { return _relationshipMap.Faction; } }
+
+    /// <summary>
+    /// current population
+    /// </summary>
+    public int Population { get; protected set; }
+
+    /// <summary>
+    /// max citizen count
+    /// </summary>
+    public int PopulationLimit { get; set; }
+
+    /// <summary>
+    /// debt for related to PopulationLimit
+    /// </summary>
+    public int PublicDebt { get; set; }
+    
+    /// <summary>
+    /// world coins
+    /// </summary>
+    public int Gold { get; protected set; }
 
     #region public methods
 
@@ -54,11 +78,17 @@ public class BaseWorld : IUpdateBehaviour
         Events.Update(deltaTime);
         Entities.Update(deltaTime);
         Children.Update(deltaTime);
+        UpdatePopulation();
     }
 
     public void RegisterFreeCitizen(Actor actor)
     {
         _freeCitizens.Enqueue(actor);
+    }
+
+    public void SetGold(int amount)
+    {
+        Gold = amount;
     }
 
     public void GetClosestStockpileWithResource(ResourceType resourceType)
@@ -74,6 +104,15 @@ public class BaseWorld : IUpdateBehaviour
     public virtual Vector3 GetFireplace()
     {
         return _firePlace;
+    }
+
+    #endregion
+
+    #region private methods
+
+    private void UpdatePopulation()
+    {
+        Population = Entities.Count;
     }
 
     #endregion

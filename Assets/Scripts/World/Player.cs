@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class Player
 {
     private readonly PlayerInfo _playerInfo;
@@ -24,13 +26,10 @@ public class Player
 
     #region public methods
 
-    public int SetPopularity(int popularity)
+    public int ChangePopularity(int popularity)
     {
-        Popularity = popularity > _playerInfo.MinPopularity
-            ? popularity < _playerInfo.MaxPopularity
-                ? popularity
-                : _playerInfo.MaxPopularity
-            : _playerInfo.MinPopularity;
+        var result = Popularity + popularity;
+        Popularity = Mathf.Clamp(result, _playerInfo.MinPopularity, _playerInfo.MaxPopularity);
         return Popularity;
     }
 

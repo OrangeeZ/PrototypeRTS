@@ -4,13 +4,29 @@ using UnityEngine;
 public class OnGuiController : MonoBehaviour
 {
     private List<IGuiDrawer> _drawers = new List<IGuiDrawer>();
-    public List<IGuiDrawer> Drawers { get { return _drawers; } }
+    private List<bool> _visibility = new List<bool>();
+
+//    public List<IGuiDrawer> Drawers { get { return _drawers; } }
+
+    public void Add(IGuiDrawer drawer, bool shown = false)
+    {
+        _drawers.Add(drawer);
+        _visibility.Add(shown);
+    }
 
     private void OnGUI()
     {
-        for (int i = 0; i < Drawers.Count; i++)
+        if (_visibility.Count != _drawers.Count)
         {
-            var drawer = Drawers[i];
+            _visibility.Clear();
+            _drawers.ForEach(x => _visibility.Add(true));
+        }
+        for (int i = 0; i < _drawers.Count; i++)
+        {
+            var drawer = _drawers[i];
+            _visibility[i] = GUILayout.Toggle(_visibility[i],
+                string.Format("{0} : Visibility",drawer.GetType().Name));
+            if(!_visibility[i])continue;
             drawer.Draw();
         }
     }

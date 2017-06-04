@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Actors;
-using UnityEngine;
+﻿using Assets.Scripts.Actors;
 
 public class Building : Entity {
 
     public Building(BaseWorld world) : base(world)
     {
+
     }
-
-
+    
     public BuildingInfo Info { get; private set; }
 
     #region public methods
@@ -19,7 +16,7 @@ public class Building : Entity {
         
     }
     
-    public void SetInfo(BuildingInfo info)
+    public virtual void SetInfo(BuildingInfo info)
     {
         Info = info;
     }

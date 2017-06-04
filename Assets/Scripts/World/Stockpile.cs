@@ -12,6 +12,11 @@ public class Stockpile
         _stockpileBlocks = new List<StockpileBlock>();
     }
 
+    public List<StockpileBlock> GetBlocks()
+    {
+        return _stockpileBlocks;
+    }
+
     public StockpileBlock GetClosestStockpileBlock(Vector3 position)
     {
         return _stockpileBlocks.MinBy(block => Vector3.Distance(block.Position, position));

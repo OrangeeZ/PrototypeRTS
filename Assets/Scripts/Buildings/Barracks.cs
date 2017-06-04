@@ -7,7 +7,9 @@ public class Barracks : Building
 
     #region constructor
 
-    public Barracks(List<UnitInfo> barraksUnits,BaseWorld world,TestUnitFactory unitFactory) : base(world)
+    public Barracks(List<UnitInfo> barraksUnits,BaseWorld world,
+        TestUnitFactory unitFactory) : 
+        base(world)
     {
         AvailableUnits = barraksUnits;
         _unitFactory = unitFactory;

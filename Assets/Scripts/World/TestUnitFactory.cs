@@ -11,7 +11,7 @@ public class TestUnitFactory : MonoBehaviour
 {
     [SerializeField]
     private UnitInfo[] _unitInfos;
-    
+
     [SerializeField]
     private BuildingInfo[] _buildingInfos;
 
@@ -19,6 +19,7 @@ public class TestUnitFactory : MonoBehaviour
     private bool _isEnemy = false;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
+    private int _testUnitLimit = 20;
 
     #region public properties
 
@@ -52,14 +53,16 @@ public class TestUnitFactory : MonoBehaviour
 
     public Entity CreateUnit(UnitInfo unitInfo)
     {
+        //no free citizen or population limit reached
+        if (_world.Population >= _world.PopulationLimit) return null;
+
         var unit = new Actor(_world);
-        var city = _world;
         var unitView = Instantiate(unitInfo.Prefab);
-        
+
         unitView.SetIsEnemy(_isEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
-        
+
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
         unit.SetPosition(_world.GetFireplace() + randomPosition);
@@ -78,7 +81,7 @@ public class TestUnitFactory : MonoBehaviour
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
         building.SetPosition(_world.GetFireplace() + randomPosition);
-        building.SetHealth(10);       
+        building.SetHealth(10);
         _world.Entities.Add(building);
         return building;
     }
@@ -88,9 +91,11 @@ public class TestUnitFactory : MonoBehaviour
         switch (buildingInfo.Name)
         {
             case "Barracks":
-                return new Barracks(_armyUnitsInfos,_world,this);
+                return new Barracks(_armyUnitsInfos, _world, this);
             case "Stockpile":
                 return new StockpileBlock(_world);
+            case "cityhouse":
+                return new CityHouse(_world);
             default:
                 return new Workplace(_world);
         }
@@ -113,7 +118,7 @@ public class TestUnitFactory : MonoBehaviour
             _behaviourMap[each.Name] = each;
         }
         //TODO GET UNITs TYPE from another resource
-        _armyUnitsInfos.AddRange(_unitInfos.Where(x=>x.Name!= "Peasant"));
+        _armyUnitsInfos.AddRange(_unitInfos.Where(x => x.Name != "Peasant"));
     }
 
     private IEnumerable<Type> FindDerivedTypes(Assembly assembly, Type baseType)

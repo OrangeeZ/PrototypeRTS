@@ -49,7 +49,8 @@ namespace Assets.Scripts.Behaviour
                 {
                     yield return null;
                 }
-                stockpileBlock.AddResource(_workplace.Info.OutputResource, _workplace.Info.ProductionDuration);
+                stockpileBlock.ChangeResource(_workplace.Info.OutputResource, 
+                    _workplace.Info.ProductionDuration);
 
             }
         }

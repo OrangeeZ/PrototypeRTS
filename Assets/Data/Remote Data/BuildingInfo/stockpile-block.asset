@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: stockpile-block
   m_EditorClassIdentifier: 
   Name: Stockpile
+  Id: 
   Hp: 80
   InputResource: 
   InputResourceQuantity: 0

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Name: barracks
   m_EditorClassIdentifier: 
   Name: Barracks
+  Id: 
   Hp: 50
-  InputResource: 0
+  InputResource: 
   InputResourceQuantity: 0
   ProductionDuration: 0
   OutputResource: 

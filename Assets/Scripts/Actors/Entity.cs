@@ -62,12 +62,7 @@ namespace Assets.Scripts.Actors
 
             if (Health <= 0)
             {
-                World.Entities.Remove(this);
-
-                if (ActorView != null)
-                {
-                    Object.Destroy(ActorView.gameObject);
-                }
+                Kill();
             }
         }
 
@@ -79,6 +74,15 @@ namespace Assets.Scripts.Actors
         public virtual EntityDisplayPanel GetDisplayPanelPrefab()
         {
             return null;
+        }
+
+        public virtual void Kill()
+        {
+            World.Entities.Remove(this);
+            if (ActorView != null)
+            {
+                Object.Destroy(ActorView.gameObject);
+            }
         }
     }
 }

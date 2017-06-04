@@ -14,6 +14,11 @@ public class StockpileBlock : Building
     {
     }
 
+    public string[] Resources
+    {
+        get { return _resources.Keys.ToArray(); }
+    }
+
     /// <summary>
     /// amount of target resource
     /// </summary>
@@ -32,22 +37,14 @@ public class StockpileBlock : Building
         return _resources.ContainsKey(resource) && _resources[resource] > 0;
     }
 
-    public void AddResource(string resource, int amount)
+    public void ChangeResource(string resource, int amount)
     {
         if (!_resources.ContainsKey(resource))
         {
-            _resources.Add(resource, 0);
+            _resources[resource] = 0;
         }
-
-        _resources[resource] += amount;
-
-        Debug.LogFormat("Added {0}, amount {1}", resource, amount);
-    }
-
-    public void RemoveResource(string resource, int amount)
-    {
-        if (!_resources.ContainsKey(resource))
-            return;
-        _resources[resource] -= amount;
+        var result = _resources[resource] + amount;
+        _resources[resource] = result<0 ? 0 : result;
+        Debug.LogFormat("Change resource {0}, amount {1}", resource, amount);
     }
 }

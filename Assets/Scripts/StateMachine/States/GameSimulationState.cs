@@ -12,8 +12,8 @@ namespace Assets.Scripts.StateMachine.States
 
         #region private properties
 
-        private readonly TestWorldData _worldData;
         private OnGuiController _guiController;
+        private readonly TestWorldData _worldData;
 
         #endregion
 
@@ -45,6 +45,8 @@ namespace Assets.Scripts.StateMachine.States
 
         private BaseWorld InitializeSimulationWorld()
         {
+            var guiObject = new GameObject("GuiConroller");
+            _guiController = guiObject.AddComponent<OnGuiController>();
             //initialize world
             var playerRelationshp = new RelationshipMap(1);
             playerRelationshp.SetRelationship(0,10);
@@ -62,16 +64,29 @@ namespace Assets.Scripts.StateMachine.States
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             //create player
             var player = CreatePlayer(playerWorld);
-            var popularityEventsBehaviour = new PopularityEvent(playerWorld, player, unitFactory);
-            playerWorld.Events.Add(popularityEventsBehaviour);
+            CreateWorldEvents(playerWorld,player,unitFactory);
             //init parent world
             var neutralRelationshipMap = new RelationshipMap(0);
             var world = new BaseWorld(neutralRelationshipMap,Vector3.zero);
             world.Children.Add(playerWorld);
             playerWorld.Parent = world;
             //initialize Temp OnGUI drawer
-            _guiController = InitializeOnGuiDrawer(playerWorld,player,unitFactory);
+            InitializeOnGuiDrawer(playerWorld,player,unitFactory);
             return world;
+        }
+
+        private void CreateWorldEvents(BaseWorld world,Player player,TestUnitFactory unitFactory)
+        {
+            var popularityEventsBehaviour = new PopularityEvent(world, player, unitFactory,4f);
+            var debtEvent = new DebtEvent(world,player,10f);
+            //constructions
+            var constructionModule = new ConstructionModule(world, unitFactory);
+            var constructionOnGui = new ConstructionOnGui(unitFactory, constructionModule);
+            _guiController.Add(constructionOnGui);
+            //reggister events
+            world.Events.Add(constructionModule);
+            world.Events.Add(popularityEventsBehaviour);
+            world.Events.Add(debtEvent);
         }
 
         private Player CreatePlayer(BaseWorld world)
@@ -81,24 +96,20 @@ namespace Assets.Scripts.StateMachine.States
             return player;
         }
 
-        private OnGuiController InitializeOnGuiDrawer(
+        private void InitializeOnGuiDrawer(
             BaseWorld world,Player player, 
             TestUnitFactory unitFactory)
         {
-            var guiObject = new GameObject("GuiConroller");
-            var guiController = guiObject.AddComponent<OnGuiController>();
-            guiController.Drawers.Add(new TestUnitOnGui(unitFactory));
-            guiController.Drawers.Add(new PlayerDrawer(player));
-            guiController.Drawers.Add(new ResourcesDrawer(world));
             //initialize additional events
             var selectionManager = new SelectionManager(world);
-            var constructionModule = new ConstructionModule(world, unitFactory);
-            world.Events.Add(constructionModule);
             var uiController = new ImUiController(world, selectionManager);
-            guiController.Drawers.Add(constructionModule);
-            guiController.Drawers.Add(selectionManager);
-            guiController.Drawers.Add(uiController);
-            return guiController;
+            var worldPanel = new WorldDataPanelOnGui(world);
+            _guiController.Add(new ResourcesDrawer(world));
+            _guiController.Add(new PlayerDrawer(player));
+            _guiController.Add(worldPanel);
+            _guiController.Add(new TestUnitOnGui(unitFactory));
+            _guiController.Add(selectionManager,true);
+            _guiController.Add(uiController);
         }
 
         #endregion

@@ -2,20 +2,10 @@
 using Assets.Scripts.Workplace;
 using UnityEngine;
 
-public class ConstructionModule : WorldEvent,IGuiDrawer
+public class ConstructionModule : WorldEvent
 {
     private BaseWorld _world;
-
     private TestUnitFactory _unitFactory;
-
-    private GameObject _selectedBuilding;
-
-    private BuildingInfo _selectedBuildingInfo;
-
-    private bool _isPlacingBuilding = false;
-
-    private bool _isRemovingBuildings = false;
-
 
     public ConstructionModule(BaseWorld world, TestUnitFactory unitFactory) : base(world)
     {
@@ -27,7 +17,7 @@ public class ConstructionModule : WorldEvent,IGuiDrawer
         var camera = Camera.main;
         var ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        if (_selectedBuilding != null)
+        if (SelectedBuilding != null)
         {
             var plane = new Plane(Vector3.up, Vector3.zero);
 
@@ -37,20 +27,20 @@ public class ConstructionModule : WorldEvent,IGuiDrawer
             {
                 var buildingPosition = ray.GetPoint(distance);
 
-                _selectedBuilding.transform.position = buildingPosition;
+                SelectedBuilding.transform.position = buildingPosition;
             }
 
             if (Input.GetMouseButtonDown(0))
             {
-                _isPlacingBuilding = false;
-                Object.Destroy(_selectedBuilding);
+                IsPlacingBuilding = false;
+                Object.Destroy(SelectedBuilding);
 
-                var entity = _unitFactory.CreateBuilding(_selectedBuildingInfo);
-                entity.SetPosition(_selectedBuilding.transform.position);
+                var entity = _unitFactory.CreateBuilding(SelectedBuildingInfo);
+                entity.SetPosition(SelectedBuilding.transform.position);
             }
         }
 
-        if (_isRemovingBuildings && Input.GetMouseButtonDown(0) && _world!=null)
+        if (IsRemovingBuildings && Input.GetMouseButtonDown(0) && _world!=null)
         {
             var entities = _world.Entities.GetItems().OfType<Workplace>();
             foreach (var each in entities)
@@ -63,46 +53,15 @@ public class ConstructionModule : WorldEvent,IGuiDrawer
                 }
             }
         }
+
     }
 
-    public void Draw()
-    {
-        GUILayout.BeginArea(new Rect(0, Screen.height - 200, 100, 200));
-        GUILayout.Label("Construction module");
-        GUILayout.BeginVertical();
+    public GameObject SelectedBuilding { get; set; }
 
-        if (!_isPlacingBuilding)
-        {
-            foreach (var each in _unitFactory.BuildingInfos)
-            {
-                if (GUILayout.Button(each.Name, GUILayout.ExpandWidth(false)))
-                {
-                    _isPlacingBuilding = true;
-                    _selectedBuilding = Object.Instantiate(each.Prefab).gameObject;
-                    _selectedBuildingInfo = each;
+    public BuildingInfo SelectedBuildingInfo { get; set; }
 
-                    break;
-                }
-            }
+    public bool IsPlacingBuilding { get; set; }
 
-            if (GUILayout.Button(_isRemovingBuildings ? "Stop removing buildings" : 
-                "Start removing buildings", GUILayout.ExpandWidth(false)))
-            {
-                _isRemovingBuildings = !_isRemovingBuildings;
-            }
-        }
-
-        if (Event.current.keyCode == KeyCode.Escape)
-        {
-            Object.Destroy(_selectedBuilding);
-
-            _isPlacingBuilding = false;
-            _isRemovingBuildings = false;
-        }
-
-        GUILayout.EndVertical();
-
-        GUILayout.EndArea();
-    }
+    public bool IsRemovingBuildings { get; set; }
 
 }

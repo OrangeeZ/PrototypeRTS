@@ -7,6 +7,9 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     [RemoteProperty("Name")]
     public string Name;
 
+    [RemoteProperty("ID")]
+    public string Id;
+
     [RemoteProperty("HP")]
     public int Hp;
 
