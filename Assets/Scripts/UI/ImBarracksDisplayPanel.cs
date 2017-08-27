@@ -14,10 +14,10 @@ public class ImBarracksDisplayPanel : EntityDisplayPanel
         {
             GUILayout.BeginVertical("Cell");
             var unit = armyUnit;
-            GUILayout.Label(string.Format("Unit name : {0}",armyUnit.Name));
+            GUILayout.Label($"Unit name: {armyUnit.Name}; can hire: {barracks.CanHireUnit(armyUnit)}");
             if (GUILayout.Button("Hire Unit"))
             {
-                barracks.HireArmyUnit(unit);
+                barracks.HireUnit(unit);
             }
             GUILayout.EndVertical();
         }

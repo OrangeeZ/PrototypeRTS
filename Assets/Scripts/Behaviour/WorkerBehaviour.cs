@@ -5,12 +5,12 @@ namespace Assets.Scripts.Behaviour
 {
     public class WorkerBehaviour : ActorBehaviour
     {
-		private Workplace.Workplace _workplace;
+        private readonly Workplace.Workplace _workplace;
 
-		public WorkerBehaviour(Workplace.Workplace workplace) : base()
-		{
-			_workplace = workplace;
-		}
+        public WorkerBehaviour(Workplace.Workplace workplace)
+        {
+            _workplace = workplace;
+        }
 
         protected override IEnumerator UpdateRoutine()
         {
@@ -18,13 +18,37 @@ namespace Assets.Scripts.Behaviour
             {
                 var navAgent = Actor.NavAgent;
 
-                if (!_workplace.HasResources)
+                navAgent.SetDestination(_workplace.Position);
+                while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {
-                    // navAgent.SetDestination(Actor.BaseWorld.GetClosestStockpileWithResource(_workspace.ResourceType));
-                    // while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
-                    // {
-                    //     yield return null;
-                    // }
+                    yield return null;
+                }
+                
+                if (!_workplace.HasResources && _workplace.Info.InputResourceQuantity > 0)
+                {
+                    var closestStockpileBlock = default(StockpileBlock);
+
+                    do
+                    {
+                        var delay = 1f;
+                        while (delay > 0)
+                        {
+                            delay -= DeltaTime;
+                            yield return null;
+                        }
+
+                        closestStockpileBlock = _workplace.World.Stockpile.GetClosestStockpileWithResource
+                        (
+                            _workplace.Position,
+                            _workplace.Info.InputResource
+                        );
+                    } while (closestStockpileBlock == null);
+
+                    navAgent.SetDestination(closestStockpileBlock.Position);
+                    while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+                    {
+                        yield return null;
+                    }
 
                     navAgent.SetDestination(_workplace.Position);
                     while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
@@ -49,9 +73,8 @@ namespace Assets.Scripts.Behaviour
                 {
                     yield return null;
                 }
-                stockpileBlock.ChangeResource(_workplace.Info.OutputResource, 
-                    _workplace.Info.ProductionDuration);
 
+                _workplace.PutResourcesToStockpile(stockpileBlock);
             }
         }
     }

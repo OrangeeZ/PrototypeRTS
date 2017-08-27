@@ -91,11 +91,6 @@ public class BaseWorld : IUpdateBehaviour
         Gold = amount;
     }
 
-    public void GetClosestStockpileWithResource(ResourceType resourceType)
-    {
-        
-    }
-
     public Actor HireCitizen()
     {
         return _freeCitizens.Count > 0 ? _freeCitizens.Dequeue() : null;

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class ConstructionModule : WorldEvent
 {
+    public GameObject SelectedBuilding { get; set; }
+    public BuildingInfo SelectedBuildingInfo { get; set; }
+    public bool IsPlacingBuilding { get; set; }
+    public bool IsRemovingBuildings { get; set; }
+    
     private BaseWorld _world;
     private TestUnitFactory _unitFactory;
 
@@ -55,13 +60,4 @@ public class ConstructionModule : WorldEvent
         }
 
     }
-
-    public GameObject SelectedBuilding { get; set; }
-
-    public BuildingInfo SelectedBuildingInfo { get; set; }
-
-    public bool IsPlacingBuilding { get; set; }
-
-    public bool IsRemovingBuildings { get; set; }
-
 }

@@ -15,7 +15,9 @@ public class ConstructionOnGui : IGuiDrawer
 
     public void Draw()
     {
-        GUILayout.BeginArea(new Rect(0, Screen.height - 200, 100, 200));
+        var height = 400;
+        
+        GUILayout.BeginArea(new Rect(0, Screen.height - height, 100, height));
         GUILayout.Label("Construction module");
         GUILayout.BeginVertical();
 

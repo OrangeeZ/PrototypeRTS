@@ -3,28 +3,28 @@ using Assets.Scripts.Actors;
 
 public class Barracks : Building
 {
+    public List<UnitInfo> AvailableUnits { get; protected set; }
+
     private readonly TestUnitFactory _unitFactory;
 
-    #region constructor
-
-    public Barracks(List<UnitInfo> barraksUnits,BaseWorld world,
-        TestUnitFactory unitFactory) : 
-        base(world)
+    public Barracks(List<UnitInfo> barraksUnits, BaseWorld world, TestUnitFactory unitFactory) : base(world)
     {
         AvailableUnits = barraksUnits;
+
         _unitFactory = unitFactory;
     }
 
-    #endregion
+    public bool CanHireUnit(UnitInfo unitInfo)
+    {
+        var stockpile = World.Stockpile;
+        var hasArmor = unitInfo.RequiredArmor == null || stockpile.HasResource(unitInfo.RequiredArmor);
+        var hasWeapon = unitInfo.RequiredWeapon == null || stockpile.HasResource(unitInfo.RequiredWeapon);
+        
+        return hasArmor && hasWeapon;
+    }
 
-    public List<UnitInfo> AvailableUnits { get; protected set; }
-
-    #region public methods
-
-    public void HireArmyUnit(UnitInfo unitInfo)
+    public void HireUnit(UnitInfo unitInfo)
     {
         _unitFactory.CreateUnit(unitInfo);
     }
-
-    #endregion
 }

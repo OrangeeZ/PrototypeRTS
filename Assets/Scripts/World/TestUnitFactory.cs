@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
+    public bool IsEnemy { get; set; } = false;
+
+    public UnitInfo[] UnitInfos => _unitInfos;
+
+    public BuildingInfo[] BuildingInfos => _buildingInfos;
+
     [SerializeField]
     private UnitInfo[] _unitInfos;
 
@@ -16,30 +22,8 @@ public class TestUnitFactory : MonoBehaviour
     private BuildingInfo[] _buildingInfos;
 
     private BaseWorld _world;
-    private bool _isEnemy = false;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
-    private int _testUnitLimit = 20;
-
-    #region public properties
-
-    public bool IsEnemy
-    {
-        get
-        {
-            return _isEnemy;
-        }
-        set
-        {
-            _isEnemy = value;
-        }
-    }
-
-    public UnitInfo[] UnitInfos { get { return _unitInfos; } }
-
-    public BuildingInfo[] BuildingInfos { get { return _buildingInfos; } }
-
-    #endregion
 
     void Awake()
     {
@@ -59,7 +43,7 @@ public class TestUnitFactory : MonoBehaviour
         var unit = new Actor(_world);
         var unitView = Instantiate(unitInfo.Prefab);
 
-        unitView.SetIsEnemy(_isEnemy);
+        unitView.SetIsEnemy(IsEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
 
@@ -68,7 +52,7 @@ public class TestUnitFactory : MonoBehaviour
         unit.SetPosition(_world.GetFireplace() + randomPosition);
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
-        unit.SetIsEnemy(_isEnemy);
+        unit.SetIsEnemy(IsEnemy);
         _world.Entities.Add(unit);
         return unit;
     }
@@ -103,7 +87,7 @@ public class TestUnitFactory : MonoBehaviour
 
     private ActorBehaviour CreateBehaviour(string behaviourId)
     {
-        return System.Activator.CreateInstance(_behaviourMap[behaviourId]) as ActorBehaviour;
+        return Activator.CreateInstance(_behaviourMap[behaviourId]) as ActorBehaviour;
     }
 
     private void BuildTypeMap()
@@ -114,9 +98,9 @@ public class TestUnitFactory : MonoBehaviour
 
         foreach (var each in behaviours)
         {
-            Debug.Log(each.Name);
             _behaviourMap[each.Name] = each;
         }
+        
         //TODO GET UNITs TYPE from another resource
         _armyUnitsInfos.AddRange(_unitInfos.Where(x => x.Name != "Peasant"));
     }
@@ -124,5 +108,21 @@ public class TestUnitFactory : MonoBehaviour
     private IEnumerable<Type> FindDerivedTypes(Assembly assembly, Type baseType)
     {
         return assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t));
+    }
+
+    [ContextMenu("Hook data")]
+    private void HookData()
+    {
+        _unitInfos = UnityEditor.AssetDatabase
+            .FindAssets("t:unitinfo")
+            .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
+            .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<UnitInfo>)
+            .ToArray();
+        
+        _buildingInfos = UnityEditor.AssetDatabase
+            .FindAssets("t:buildinginfo")
+            .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
+            .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<BuildingInfo>)
+            .ToArray();
     }
 }

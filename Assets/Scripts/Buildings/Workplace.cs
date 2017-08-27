@@ -4,12 +4,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Workplace
 {
-    public enum ResourceType
-    {
-        Bread,
-        Wood,
-    }
-
     public class WorkplaceSelectionEventHandler : SelectionEventHandler
     {
         public override bool HandleDestinationClick(Vector3 destination)
@@ -49,6 +43,11 @@ namespace Assets.Scripts.Workplace
         public void EndProduction()
         {
             HasResources = false;
+        }
+
+        public void PutResourcesToStockpile(StockpileBlock stockpileBlock)
+        {
+            stockpileBlock.ChangeResource(Info.OutputResource.Id, Info.OutputResourceQuantity);
         }
 
         public override void Update(float deltaTime)

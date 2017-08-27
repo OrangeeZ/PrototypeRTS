@@ -10,7 +10,7 @@ public class StockpileBlock : Building
     private Dictionary<string, int> _resources = new Dictionary<string, int>();
 
     public StockpileBlock(BaseWorld world)
-        :base(world)
+        : base(world)
     {
     }
 
@@ -43,8 +43,10 @@ public class StockpileBlock : Building
         {
             _resources[resource] = 0;
         }
+        
         var result = _resources[resource] + amount;
-        _resources[resource] = result<0 ? 0 : result;
-        Debug.LogFormat("Change resource {0}, amount {1}", resource, amount);
+        _resources[resource] = result < 0 ? 0 : result;
+        
+        Debug.Log($"Change resource {resource}, amount {amount}");
     }
 }
