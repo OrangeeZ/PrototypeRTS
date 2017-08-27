@@ -11,5 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a389c921d4f00894c9670e6d31f0d257, type: 3}
   m_Name: flour
   m_EditorClassIdentifier: 
+  Id: Flour
   Name: Flour
   MaxCountPerStockpileTile: 100
