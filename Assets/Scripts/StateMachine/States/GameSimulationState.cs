@@ -57,11 +57,12 @@ namespace Assets.Scripts.StateMachine.States
             //init unit factory
             var unitFactory = _worldData.GetComponent<TestUnitFactory>();
             unitFactory.SetWorld(playerWorld);
+            
             // create dummy stockpile
-            var stockpile = unitFactory.
-                CreateBuilding(unitFactory.BuildingInfos.First(info => info.Name == "Stockpile"));
+            var stockpile = unitFactory.CreateBuilding(unitFactory.BuildingInfos.First(info => info.Id == "StockpileBlock"));
             stockpile.SetPosition(Vector3.zero);
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
+            
             //create player
             var player = CreatePlayer(playerWorld);
             CreateWorldEvents(playerWorld,player,unitFactory);
@@ -91,7 +92,7 @@ namespace Assets.Scripts.StateMachine.States
 
         private Player CreatePlayer(BaseWorld world)
         {
-            var playerInfo = new PlayerInfo();
+            var playerInfo = ScriptableObject.CreateInstance<PlayerInfo>();
             var player = new Player(playerInfo, world);
             return player;
         }

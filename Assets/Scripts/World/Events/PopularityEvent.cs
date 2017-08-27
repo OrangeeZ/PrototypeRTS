@@ -12,8 +12,8 @@ public class PopularityEvent : WorldEvent
 
     #region constructors
 
-    public PopularityEvent(BaseWorld gameWorld,Player player,
-        TestUnitFactory unitFactory,float period) : 
+    public PopularityEvent(BaseWorld gameWorld, Player player,
+        TestUnitFactory unitFactory, float period) :
         base(gameWorld)
     {
         _updatePeriod = period;
@@ -39,10 +39,9 @@ public class PopularityEvent : WorldEvent
 
     private void UpdatePopularity()
     {
-        var gameWorld = _gameWorld;
-        var stockpile = gameWorld.Stockpile.GetClosestStockpileBlock(Vector3.zero);
-        var citizensCount = gameWorld.FreeCitizensCount;
-        var foodAmount = stockpile[_testFood];
+        var citizensCount = _gameWorld.FreeCitizensCount;
+        var foodAmount = _gameWorld.Stockpile.GetTotalResourceAmount(_testFood);
+        
         if (foodAmount < citizensCount)
         {
             _player.ChangePopularity(-_popularityStep);
@@ -51,23 +50,23 @@ public class PopularityEvent : WorldEvent
         {
             _player.ChangePopularity(_popularityStep);
         }
+        
         if (_player.Popularity <= 0)
         {
-            RemoveCitizen(gameWorld);
+            RemoveCitizen(_gameWorld);
         }
-        else if (foodAmount>0 && _player.Popularity>70 &&
-            gameWorld.FreeCitizensCount < gameWorld.PopulationLimit)
+        else if (_player.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
         {
-            _unitFactory.CreateUnit(_unitFactory.UnitInfos.
-                FirstOrDefault(x => x.Name == "Peasant"));
+            _unitFactory.CreateUnit(_unitFactory.UnitInfos.First(x => x.Name == "Peasant"));
         }
-        stockpile.ChangeResource(_testFood,-citizensCount);
+
+        _gameWorld.Stockpile.ChangeTotalResourceAmount(_testFood, -citizensCount);
     }
 
     private void RemoveCitizen(BaseWorld world)
     {
         var citizen = world.HireCitizen();
-        if(citizen==null)return;
+        if (citizen == null) return;
         _gameWorld.Entities.Remove(citizen);
     }
 }

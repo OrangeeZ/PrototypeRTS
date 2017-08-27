@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d80225c0590381448240c7abdb4e81c, type: 3}
   m_Name: stockpile-block
   m_EditorClassIdentifier: 
-  Name: Stockpile
+  Name: Stockpile Block
   Id: StockpileBlock
   Hp: 80
   InputResource: {fileID: 0}
