@@ -6,254 +6,288 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using csv;
+using NUnit.Framework;
+using Debug = UnityEngine.Debug;
 
-public static class GoogleDocsCsvParser {
+public class GoogleDocsCsvParser
+{
+    private string[] _fieldNames;
+    private Dictionary<string, Values> _loadedObjects = new Dictionary<string, Values>();
+    private string _type;
 
-	public static void Get( string url, string type, CsvParseRegime regime, string postfix ) {
+    public void Load(string url, string type, CsvParseMode mode, string postfix)
+    {
+        EditorUtility.DisplayProgressBar("Loading", "Requesting csv file. Please wait...", 0f);
+        Debug.Log("Loading csv from: " + url);
 
-		EditorUtility.DisplayProgressBar( "Loading", "Requesting csv file. Please wait...", 0f );
-		Debug.Log( "Loading csv from: " + url );
-		var www = new WWW( url );
-		ContinuationManager.Add( () => {
-			EditorUtility.DisplayProgressBar( "Loading", "Requesting csv file. Please wait...", www.progress );
-			return www.isDone;
-		},
-			() => {
-				EditorUtility.ClearProgressBar();
+        _type = type;
 
-				// Let's parse this CSV!
-				TextReader sr = new StringReader( www.text );
-				try {
-					if ( regime == CsvParseRegime.ObjectPerRow ) {
-						ParseCsv2( sr, type, postfix );
-					} else {
-						ParseCsv_Sopog( sr, type, postfix );
-					}
-				}
-				catch ( Exception ex ) {
-					Debug.LogException( ex );
-				}
-			} );
-	}
+        var www = new WWW(url);
+        while (!www.isDone)
+        {
+            EditorUtility.DisplayProgressBar("Loading", "Requesting csv file. Please wait...", www.progress);
 
-	private static void ParseCsv2( TextReader csvReader, string type = null, string postfix = null ) {
-		var parser = new CsvParser( csvReader );
-		var row = parser.Read(); // get first row and
+            Thread.Sleep(100);
+        }
+//
+//        ContinuationManager.Add(() =>
+//            {
+//                EditorUtility.DisplayProgressBar("Loading", "Requesting csv file. Please wait...", www.progress);
+//                return www.isDone;
+//            },
+//            () =>
+//            {
+        EditorUtility.ClearProgressBar();
 
-		if ( string.IsNullOrEmpty( type ) ) {
-			// Read Type info
-			if ( row[0] == "type" ) {
-				type = row[1];
+        // Let's parse this CSV!
+        TextReader sr = new StringReader(www.text);
+        try
+        {
+            if (mode == CsvParseMode.ObjectPerRow)
+            {
+                ParseObjectPerRow(sr, type, postfix);
+            }
+            else
+            {
+                ParseObjectPerTable(sr, type, postfix);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogException(ex);
+        }
+//            });
+        
+        www.Dispose();
+    }
 
-				row = parser.Read();
-			} else {
-				Debug.LogError( "Worksheet must declare 'Type' in first wor" );
-				return;
-			}
-		}
+    [Conditional("UNITY_EDITOR")]
+    public void GenerateInfoFiles()
+    {
+        AssetDatabase.StartAssetEditing();
+        
+        foreach (var each in _loadedObjects)
+        {
+            var instance = GetOrCreate(_type, each.Key);
 
-		// Read fields
-		while ( row != null && row[0] != "ID" ) {
-			row = parser.Read();
-		}
-		if ( row == null ) {
-			Debug.LogError( "Can't find header!" );
-			return;
-		}
+            if (instance == null)
+            {
+                continue;
+            }
+            
+            var csvConfigurable = instance as ICsvConfigurable;
 
-		var fieldNames = row;
-		row = parser.Read();
+            ParseObjectFieldsAndProperties(csvConfigurable, each.Value);
+            ProcessObject(csvConfigurable, each.Value);
 
-		while ( row != null ) {
-			if ( row.Length < 2 || string.IsNullOrEmpty( row[0] ) ) {
-				row = parser.Read();
-				continue;
-			}
+            Debug.Log($"Data object {instance.name} saved to {AssetDatabase.GetAssetPath(instance)}", instance);
+        }
+        
+        AssetDatabase.StopAssetEditing();
+    }
 
-			var instanceName = csv.Utility.FixName( row[0], postfix );
-			var instance = GetOrCreate( type, instanceName );
-			var csvConfigurable = instance as ICsvConfigurable;
+    public void GenerateInfoClassFiles()
+    {
+        var fieldTypes = new List<Type>();
+        foreach (var each in _fieldNames)
+        {
+            var firstNonNullValue = _loadedObjects.Values
+                .Select(_ => _.Get<string>(each))
+                .FirstOrDefault(_ => !string.IsNullOrEmpty(_));
 
-			if ( csvConfigurable != null ) {
-				var configurable = csvConfigurable;
+            var fieldType = ObjectInfoCodeGenerator.DeduceType(firstNonNullValue);
+            fieldTypes.Add(fieldType);
+        }
 
-				ParseObjectFieldsAndProperties( configurable, CreateValues( fieldNames, row ) );
-				ProcessObject( configurable, CreateValues( fieldNames, row ) );
-			} else {
-				ParseFields2( row, instance, fieldNames );
-			}
-			Debug.LogFormat( "Data object '{0}' saved to \"{1}\"", instance.name, AssetDatabase.GetAssetPath( instance ) );
+        var path = Application.dataPath + "/Scripts/Info/" + _type + ".cs";
+        ObjectInfoCodeGenerator.Generate(path, _type, _fieldNames, fieldTypes);
+    }
 
-			row = parser.Read();
-		}
-	}
+    private void ParseObjectPerRow(TextReader csvReader, string type, string postfix)
+    {
+        var parser = new CsvParser(csvReader);
+        var row = parser.Read(); // get first row and
 
-	private static void ParseCsv_Sopog( TextReader csvReader, string type = null, string postfix = null ) {
-		var parser = new CsvParser( csvReader );
-		var row = parser.Read(); // get first row and
+        //Here we need to read spreadsheet name and use it for type
+//        if (string.IsNullOrEmpty(type))
+//        {
+//            // Read Type info
+//            if (row[0] == "type")
+//            {
+//                row = parser.Read();
+//            }
+//            else
+//            {
+//                Debug.LogError("Worksheet must declare 'Type' in first wor");
+//                return;
+//            }
+//        }
 
-		//if ( string.IsNullOrEmpty( type ) ) {
-		//	// Read Type info
-		//	if ( row[0] == "type" ) {
-		//		type = row[1];
+        _fieldNames = row;
 
-		//		row = parser.Read();
-		//	} else {
-		//		Debug.LogError( "Worksheet must declare 'Type' in first wor" );
-		//		return;
-		//	}
-		//}
+        row = parser.Read();
 
-		// Read fields
-		//while ( row != null && row[0] != "ID" ) {
-		//	row = parser.Read();
-		//}
-		//if ( row == null ) {
-		//	Debug.LogError( "Can't find header!" );
-		//	return;
-		//}
+        while (row != null)
+        {
+            if (row.Length < 2 || string.IsNullOrEmpty(row[0]))
+            {
+                row = parser.Read();
+                continue;
+            }
 
-		var instanceName = csv.Utility.FixName( type, postfix );
-		var instance = GetOrCreate( type, instanceName );
+            var instanceName = csv.Utility.FixName(row[0], postfix);
+            _loadedObjects.Add(instanceName, CreateValues(_fieldNames, row, startingIndex: 1));
 
-		var csvConfigurable = instance as ICsvConfigurable;
+            row = parser.Read();
+        }
+    }
 
-		if ( csvConfigurable != null ) {
+    private void ParseObjectPerTable(TextReader csvReader, string type = null, string postfix = null)
+    {
+        var parser = new CsvParser(csvReader);
 
-			var configurable = csvConfigurable;
+        var fieldNames = new List<string>();
+        var fieldValues = new List<string>();
 
-			ProcessObject( configurable, CreateValues( parser ) );
+        var row = parser.Read(); // get first row and
+        // Read fields
+        while (row != null) // && row[0] != "ID")
+        {
+            fieldNames.Add(row[0]);
+            fieldValues.Add(row[1]);
 
-			Debug.LogFormat( "Data object '{0}' saved to \"{1}\"", instance.name, AssetDatabase.GetAssetPath( instance ) );
-		} else {
-			Debug.LogError( "This Csv parse mode can't work with not ICsvConfigurable objects!" );
-		}
+            row = parser.Read();
+        }
 
-	}
+        var instanceName = csv.Utility.FixName(type, postfix);
+        _loadedObjects.Add(instanceName, CreateValues(fieldNames, fieldValues, startingIndex: 0));
 
-	private static Values CreateValues( CsvParser parser ) {
-		var dict = new Dictionary<string, string>();
-		var row = parser.Read();
+        _fieldNames = fieldNames.ToArray();
+    }
 
-		while ( row != null ) {
-			if ( row.Length < 2 || string.IsNullOrEmpty( row[0] ) ) {
-				row = parser.Read();
-				continue;
-			}
+    private static Values CreateValues(IList<string> fieldNames, IList<string> fieldValues, int startingIndex)
+    {
+        var valuesDictionary = new Dictionary<string, string>();
 
-			if ( row.Length > 2 ) {
-				Debug.LogError( "This Csv parse regime can't parse rows with more than 2 columns!" );
-				break;
-			}
+        for (var i = startingIndex; i < fieldValues.Count; i++)
+        {
+            if (valuesDictionary.ContainsKey(fieldNames[i]))
+            {
+                Debug.LogFormat("They key is duplicate: {0}:{1}", fieldNames[i], fieldValues[i]);
+                continue;
+            }
 
-			//dict[row[0].TrimEnd( ' ' )] = row[1];
-			dict.Add( row[0].TrimEnd( ' ' ), row[1] );
+            var lowerRow = fieldValues[i].ToLower();
+            if (lowerRow == "yes" || lowerRow == "y") fieldValues[i] = "true";
+            if (lowerRow == "no" || lowerRow == "n") fieldValues[i] = "false";
 
-			row = parser.Read();
-		}
-		return new Values( dict );
-	}
+            valuesDictionary[fieldNames[i].TrimEnd(' ')] = fieldValues[i];
+        }
 
-	private static Values CreateValues( string[] fieldNames, string[] row ) {
-		var dict = new Dictionary<string, string>();
+        return new Values(valuesDictionary);
+    }
 
-		for ( var i = 1; i < row.Length; i++ ) {
+    private static ScriptableObject GetOrCreate(string typeName, string instanceName)
+    {
+        var assembly = Assembly.GetAssembly(typeof(ICsvConfigurable));
+        var type = assembly
+            .GetExportedTypes()
+            .FirstOrDefault(_ => _.FullName.Equals(typeName, StringComparison.InvariantCultureIgnoreCase));
 
-			if ( dict.ContainsKey( fieldNames[i] ) ) {
+        if (type == null)
+        {
+            Debug.LogWarningFormat("Type {0} not found", typeName);
+            return null;
+        }
 
-				Debug.LogFormat( "They key is duplicate: {0}:{1}", fieldNames[i], row[i] );
-				continue;
-			}
+        var assetPath = Path.Combine("Assets/Data/Remote Data/", type.Name);
+        var assetPathWithName = assetPath + "/" + instanceName + ".asset";
 
-			var lowerRow = row[i].ToLower();
-			if ( lowerRow == "yes" ) row[i] = "true";
-			if ( lowerRow == "no" ) row[i] = "false";
+        var instance = AssetDatabase.LoadAssetAtPath<ScriptableObject>(assetPathWithName);
 
-			dict[fieldNames[i].TrimEnd( ' ' )] = row[i];
-		}
+        if (instance == null)
+        {
+            instance = ScriptableObject.CreateInstance(type);
+            Directory.CreateDirectory(assetPath).Attributes = FileAttributes.Normal;
+            AssetDatabase.CreateAsset(instance, assetPathWithName);
+        }
 
-		return new Values( dict );
-	}
+        EditorUtility.SetDirty(instance);
 
-	private static void ParseFields2( string[] row, ScriptableObject target, string[] fieldNames ) {
-		var type = target.GetType();
+        return instance;
+    }
 
-		for ( var i = 1; i < row.Length; i++ ) {
-			var fieldName = fieldNames[i];
-			var fieldValue = row[i];
+    private static void ProcessObject(ICsvConfigurable target, Values values)
+    {
+        ParseObjectFieldsAndProperties(target, values);
+        target.Configure(values);
+    }
 
-			var field = type.GetField( fieldName );
-			if ( field == null ) {
-				Debug.LogErrorFormat( "Type {0} doesn't contains field {1}", type.Name, fieldName );
-				return;
-			}
-			try {
-				field.SetValue( target, Convert.ChangeType( fieldValue, field.FieldType ) );
-			}
-			catch ( Exception ex ) {
-				Debug.LogErrorFormat( "Can't set value {0} of field '{1}' to object '{1}'", fieldValue, fieldName, target.name, target );
-				return;
-			}
-		}
-	}
+    private static void ParseObjectFieldsAndProperties(ICsvConfigurable target, Values values)
+    {
+        var type = target.GetType();
 
-	private static ScriptableObject GetOrCreate( string typeName, string instanceName ) {
-		var assembly = Assembly.GetAssembly( typeof ( ICsvConfigurable ) );
-		var type = assembly.GetExportedTypes().First( ( x ) => x.FullName.Equals( typeName, StringComparison.InvariantCultureIgnoreCase ) );
-		if ( type == null ) {
-			Debug.LogWarningFormat( "Type {0} not found", typeName );
-			return null;
-		}
+        var fields = type.GetFields(BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
 
-		var assetPath = Path.Combine( "Assets/Data/Remote Data/", type.Name );
-		var assetPathWithName = assetPath + "/" + instanceName + ".asset";
+        foreach (var each in fields)
+        {
+            ParseObjectField(target, each, values);
+        }
+    }
 
-		var instance = AssetDatabase.LoadAssetAtPath<ScriptableObject>( assetPathWithName );
+    private static void ParseObjectField(ICsvConfigurable target, FieldInfo fieldInfo, Values values)
+    {
+        var attribute = fieldInfo
+            .GetCustomAttributes(typeof(RemotePropertyAttribute), inherit: false)
+            .OfType<RemotePropertyAttribute>()
+            .FirstOrDefault();
 
-		if ( instance == null ) {
-			instance = ScriptableObject.CreateInstance( type );
-			Directory.CreateDirectory( assetPath ).Attributes = FileAttributes.Normal;
-			AssetDatabase.CreateAsset( instance, assetPathWithName );
-		}
+        if (attribute != null)
+        {
+            var propertyName = string.IsNullOrEmpty(attribute.PropertyName) ? fieldInfo.Name : attribute.PropertyName;
 
-		EditorUtility.SetDirty( instance );
+            var fieldType = fieldInfo.FieldType;
+            var unityTypes = new[] {typeof(Component), typeof(GameObject), typeof(ScriptableObject)};
+            
+            if (unityTypes.Any(_ => fieldType.IsSubclassOf(_)))
+            {
+                LoadUnityTypeValue(target, fieldInfo, values, propertyName);
+            }
+            else
+            {
+                LoadSimpleValue(target, fieldInfo, values, propertyName);                
+            }
+        }
+    }
 
-		return instance;
-	}
+    private static void LoadSimpleValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values, string propertyName)
+    {
+        var value = values.Get(propertyName, string.Empty);
 
-	private static void ProcessObject( ICsvConfigurable target, Values values ) {
+        var fieldValue = default(object);
 
-		ParseObjectFieldsAndProperties( target, values );
-		target.Configure( values );
-	}
+        if (value == string.Empty && fieldInfo.FieldType.IsValueType)
+        {
+            fieldValue = Activator.CreateInstance(fieldInfo.FieldType);
+        }
+        else
+        {
+            fieldValue = Convert.ChangeType(value, fieldInfo.FieldType, CultureInfo.InvariantCulture);
+        }
 
-	private static void ParseObjectFieldsAndProperties( ICsvConfigurable target, Values values ) {
+        fieldInfo.SetValue(target, fieldValue);
 
-		var type = target.GetType();
+    }
 
-		var fields = type.GetFields( BindingFlags.Public | BindingFlags.FlattenHierarchy | BindingFlags.Instance );
-
-		foreach ( var each in fields ) {
-
-			ParseObjectField( target, each, values );
-		}
-	}
-
-	private static void ParseObjectField( ICsvConfigurable target, FieldInfo fieldInfo, Values values ) {
-
-		var attribute = fieldInfo.GetCustomAttributes( typeof ( RemotePropertyAttribute ), inherit: false ).OfType<RemotePropertyAttribute>().FirstOrDefault();
-
-		if ( attribute != null ) {
-
-			var value = values.Get<string>( attribute.PropertyName, string.Empty );
-
-			var fieldValue = Convert.ChangeType( value, fieldInfo.FieldType );
-
-			fieldInfo.SetValue( target, fieldValue );
-		}
-	}
-
+    private static void LoadUnityTypeValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values, string propertyName)
+    {
+        var unityObjectInstance = values.FindUnityAsset(propertyName, fieldInfo.FieldType);
+        fieldInfo.SetValue(target, unityObjectInstance);
+    }
 }

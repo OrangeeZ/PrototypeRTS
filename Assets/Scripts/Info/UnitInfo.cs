@@ -7,31 +7,37 @@ using Assets.Scripts.Actors;
 
 public class UnitInfo : ScriptableObject, ICsvConfigurable
 {
-    [RemoteProperty("Name")]
+    [RemoteProperty]
     public string Name;
 
-    [RemoteProperty("HP")]
+    [RemoteProperty]
     public int Hp;
 
-    [RemoteProperty("AttackRange")]
+    [RemoteProperty]
     public int AttackRange;
 
-    [RemoteProperty("AttackStrength")]
+    [RemoteProperty]
     public int AttackStrength;
 
-    [RemoteProperty("AttackSpeed")]
+    [RemoteProperty]
     public int AttackSpeed;
 
-    [RemoteProperty("BehaviourId")]
+    [RemoteProperty]
     public string BehaviourId;
 
+    [RemoteProperty]
     public ActorView Prefab;
 
+    [RemoteProperty]
     public EntityDisplayPanel DisplayPanelPrefab;
 
+    [RemoteProperty]
+    public ResourceInfo RequiredWeaponId;
+
+    [RemoteProperty]
+    public ResourceInfo RequiredArmorId;
+    
     public void Configure(Values values)
     {
-        Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
-        DisplayPanelPrefab = values.GetPrefabWithComponent<EntityDisplayPanel>("DisplayPanelPrefab", false);
     }
 }

@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class BuildingInfo : ScriptableObject, ICsvConfigurable
 {
-    [RemoteProperty("Name")]
+    [RemoteProperty]
     public string Name;
 
-    [RemoteProperty("ID")]
+    [RemoteProperty]
     public string Id;
 
-    [RemoteProperty("HP")]
+    [RemoteProperty]
     public int Hp;
 
-    [RemoteProperty("InputResource")]
+    [RemoteProperty]
     public string InputResource;
 
-    [RemoteProperty("InputResourceQuantity")]
+    [RemoteProperty]
     public int InputResourceQuantity;
 
-    [RemoteProperty("ProductionDuration")]
+    [RemoteProperty]
     public int ProductionDuration;
 
-    [RemoteProperty("OutputResource")]
+    [RemoteProperty]
     public string OutputResource;
 
-    [RemoteProperty("OutputResourceQuantity")]
+    [RemoteProperty]
     public int OutputResourceQuantity;
-
+    
+    [RemoteProperty]
     public ActorView Prefab;
 
+    [RemoteProperty]
     public EntityDisplayPanel DisplayPanelPrefab;
 
     public void Configure(Values values)
     {
-        Prefab = values.GetPrefabWithComponent<ActorView>("Prefab", false);
-        DisplayPanelPrefab = values.GetPrefabWithComponent<EntityDisplayPanel>("DisplayPanelPrefab", false);
     }
 }
