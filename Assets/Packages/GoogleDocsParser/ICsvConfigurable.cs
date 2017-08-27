@@ -78,16 +78,11 @@ namespace csv
 
     public class Values
     {
-        private Dictionary<string, string> _values;
+        public Dictionary<string, string> RawValues { get; }
 
         public Values(Dictionary<string, string> values)
         {
-            _values = values;
-        }
-
-        public Dictionary<string, string> Raw
-        {
-            get { return _values; }
+            RawValues = values;
         }
 
         public void Get<T>(string name, out T value)
@@ -110,9 +105,9 @@ namespace csv
         public T Get<T>(string name, T defaultValue)
         {
             string strValue;
-            if (_values.TryGetValue(name, out strValue))
+            if (RawValues.TryGetValue(name, out strValue))
             {
-                return As<T>(strValue, defaultValue);
+                return As(strValue, defaultValue);
             }
             return defaultValue;
         }

@@ -142,7 +142,7 @@ public class GoogleDocsCsvParser
             }
 
             var instanceName = csv.Utility.FixName(row[0], postfix);
-            _loadedObjects.Add(instanceName, CreateValues(_fieldNames, row, startingIndex: 1));
+            _loadedObjects.Add(instanceName, CreateValues(_fieldNames, row, startingIndex: 0));
 
             row = parser.Read();
         }
@@ -177,9 +177,10 @@ public class GoogleDocsCsvParser
 
         for (var i = startingIndex; i < fieldValues.Count; i++)
         {
-            if (valuesDictionary.ContainsKey(fieldNames[i]))
+            var fieldName = fieldNames[i].TrimEnd(' ').ToLower();
+            if (valuesDictionary.ContainsKey(fieldName))
             {
-                Debug.LogFormat("They key is duplicate: {0}:{1}", fieldNames[i], fieldValues[i]);
+                Debug.LogFormat("They key is duplicate: {0}:{1}", fieldName, fieldValues[i]);
                 continue;
             }
 
@@ -187,7 +188,7 @@ public class GoogleDocsCsvParser
             if (lowerRow == "yes" || lowerRow == "y") fieldValues[i] = "true";
             if (lowerRow == "no" || lowerRow == "n") fieldValues[i] = "false";
 
-            valuesDictionary[fieldNames[i].TrimEnd(' ')] = fieldValues[i];
+            valuesDictionary[fieldName] = fieldValues[i];
         }
 
         return new Values(valuesDictionary);
@@ -251,10 +252,11 @@ public class GoogleDocsCsvParser
         if (attribute != null)
         {
             var propertyName = string.IsNullOrEmpty(attribute.PropertyName) ? fieldInfo.Name : attribute.PropertyName;
+            propertyName = propertyName.ToLower();
 
             var fieldType = fieldInfo.FieldType;
             var unityTypes = new[] {typeof(Component), typeof(GameObject), typeof(ScriptableObject)};
-            
+           
             if (unityTypes.Any(_ => fieldType.IsSubclassOf(_)))
             {
                 LoadUnityTypeValue(target, fieldInfo, values, propertyName);
@@ -282,7 +284,6 @@ public class GoogleDocsCsvParser
         }
 
         fieldInfo.SetValue(target, fieldValue);
-
     }
 
     private static void LoadUnityTypeValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values, string propertyName)
