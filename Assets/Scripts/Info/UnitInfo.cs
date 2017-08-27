@@ -32,10 +32,10 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
     public EntityDisplayPanel DisplayPanelPrefab;
 
     [RemoteProperty]
-    public ResourceInfo RequiredWeaponId;
+    public ResourceInfo RequiredWeapon;
 
     [RemoteProperty]
-    public ResourceInfo RequiredArmorId;
+    public ResourceInfo RequiredArmor;
     
     public void Configure(Values values)
     {

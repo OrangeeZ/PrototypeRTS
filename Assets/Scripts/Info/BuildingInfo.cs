@@ -14,7 +14,7 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     public int Hp;
 
     [RemoteProperty]
-    public string InputResource;
+    public ResourceInfo InputResource;
 
     [RemoteProperty]
     public int InputResourceQuantity;
@@ -23,7 +23,7 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     public int ProductionDuration;
 
     [RemoteProperty]
-    public string OutputResource;
+    public ResourceInfo OutputResource;
 
     [RemoteProperty]
     public int OutputResourceQuantity;

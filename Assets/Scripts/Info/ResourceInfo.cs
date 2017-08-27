@@ -8,10 +8,13 @@ using UnityEngine;
 
 public class ResourceInfo : ScriptableObject, ICsvConfigurable
 {
-    [RemoteProperty("Name")]
+    [RemoteProperty]
+    public string Id;
+    
+    [RemoteProperty]
     public string Name;
 
-    [RemoteProperty("MaxCountPerStockpileTile")]
+    [RemoteProperty]
     public int MaxCountPerStockpileTile;
 
     public void Configure(Values values)
