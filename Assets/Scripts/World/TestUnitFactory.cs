@@ -38,22 +38,34 @@ public class TestUnitFactory : MonoBehaviour
     public Entity CreateUnit(UnitInfo unitInfo)
     {
         //no free citizen or population limit reached
-        if (_world.Population >= _world.PopulationLimit) return null;
+        if (_world.Population >= _world.PopulationLimit)
+        {
+            return null;
+        }
 
         var unit = new Actor(_world);
+        _world.Entities.Add(unit);
+
+        var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
+        randomPosition.y = 0;
+        unit.SetPosition(_world.GetFireplace() + randomPosition);
+
+        return CreateUnit(unitInfo, unit);
+    }
+
+    public Entity CreateUnit(UnitInfo unitInfo, Actor existingUnit)
+    {
+        var unit = existingUnit;
         var unitView = Instantiate(unitInfo.Prefab);
 
         unitView.SetIsEnemy(IsEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
 
-        var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
-        randomPosition.y = 0;
-        unit.SetPosition(_world.GetFireplace() + randomPosition);
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
         unit.SetIsEnemy(IsEnemy);
-        _world.Entities.Add(unit);
+
         return unit;
     }
 
@@ -72,13 +84,13 @@ public class TestUnitFactory : MonoBehaviour
 
     private Building CreateBuildingEntity(BuildingInfo buildingInfo)
     {
-        switch (buildingInfo.Name)
+        switch (buildingInfo.Id)
         {
             case "Barracks":
                 return new Barracks(_armyUnitsInfos, _world, this);
-            case "Stockpile":
+            case "StockpileBlock":
                 return new StockpileBlock(_world);
-            case "cityhouse":
+            case "Cityhouse":
                 return new CityHouse(_world);
             default:
                 return new Workplace(_world);
@@ -100,7 +112,7 @@ public class TestUnitFactory : MonoBehaviour
         {
             _behaviourMap[each.Name] = each;
         }
-        
+
         //TODO GET UNITs TYPE from another resource
         _armyUnitsInfos.AddRange(_unitInfos.Where(x => x.Name != "Peasant"));
     }
@@ -118,7 +130,7 @@ public class TestUnitFactory : MonoBehaviour
             .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
             .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<UnitInfo>)
             .ToArray();
-        
+
         _buildingInfos = UnityEditor.AssetDatabase
             .FindAssets("t:buildinginfo")
             .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)

@@ -54,7 +54,7 @@ public class SelectionManager : IGuiDrawer
 
     public void Draw()
     {
-        if (Event.current.type == EventType.MouseDrag)
+        if (Event.current.type == EventType.MouseDrag && Event.current.button == 0)
         {
             if (!_isSelectingWithRectangle)
             {
@@ -88,7 +88,6 @@ public class SelectionManager : IGuiDrawer
             SetSelectedEntity(null);
         }
 
-
         if (_isSelectingWithRectangle)
         {
             DrawSelectionRectangle(_selectionStartingPoint, Event.current.mousePosition);
@@ -110,7 +109,6 @@ public class SelectionManager : IGuiDrawer
         var actors = _world.Entities.GetItems().OfType<Actor>();
 
         var camera = Camera.main;
-        var ray = camera.ScreenPointToRay(Input.mousePosition);
 
         var selectionRect = new Rect(fromScreenPoint, toScreenPoint - fromScreenPoint);
 

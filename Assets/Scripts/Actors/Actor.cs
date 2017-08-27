@@ -46,7 +46,7 @@ namespace Assets.Scripts.Actors
 
     public class Actor : Entity
     {
-        public NavMeshAgent NavAgent { get { return ActorView.GetNavMeshAgent(); } }
+        public NavMeshAgent NavAgent => ActorView.GetNavMeshAgent();
 
         public UnitInfo Info { get; private set; }
 
@@ -64,9 +64,11 @@ namespace Assets.Scripts.Actors
             Info = info;
         }
 
-        public void SetBehaviour(ActorBehaviour order)
+        public void SetBehaviour(ActorBehaviour behaviour)
         {
-            Behaviour = order;
+            Behaviour?.Dispose();
+            
+            Behaviour = behaviour;
             Behaviour.SetActor(this);
             Behaviour.Initialize();
         }

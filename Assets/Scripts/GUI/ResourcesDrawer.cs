@@ -24,7 +24,7 @@ public class ResourcesDrawer : GuiDrawer
         for (int i = 0; i < blocks.Count; i++)
         {
             var block = blocks[i];
-            var resources = block.Resources;
+            var resources = block.ResourceIds;
             for (int j = 0; j < resources.Length; j++)
             {
                 GUILayout.BeginHorizontal();

@@ -28,6 +28,8 @@ namespace Assets.Scripts.Actors
 
         public void SetView(ActorView actorView)
         {
+            Object.Destroy(ActorView?.gameObject);
+            
             ActorView = actorView;
         }
 
@@ -56,7 +58,7 @@ namespace Assets.Scripts.Actors
 
         public virtual void DealDamage(int amount)
         {
-            Debug.Log("Recieved damage " + amount);
+            Debug.Log($"Recieved damage {amount}");
 
             Health -= amount;
 

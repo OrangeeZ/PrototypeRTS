@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class Stockpile
 {
-    private List<StockpileBlock> _stockpileBlocks;
+    private readonly List<StockpileBlock> _stockpileBlocks;
 
     public Stockpile()
     {
@@ -31,6 +31,23 @@ public class Stockpile
     public bool HasResource(ResourceInfo resourceInfo)
     {
         return _stockpileBlocks.Any(_ => _.HasResource(resourceInfo.Id));
+    }
+
+    //Stub method until later
+    public int GetTotalResourceAmount(string resourceId)
+    {
+        return _stockpileBlocks.Sum(_ => _[resourceId]);
+    }
+
+    //Yes, this is a miraculous stub as well
+    //This is fast
+    public void ChangeTotalResourceAmount(string resourceId, int amount)
+    {
+        while (GetTotalResourceAmount(resourceId) > 0)
+        {
+            var firstStockpileWithResource = _stockpileBlocks.First(_ => _.HasResource(resourceId));
+            firstStockpileWithResource.ChangeResource(resourceId, -1);
+        }
     }
 
     public StockpileBlock GetClosestStockpileWithResource(Vector3 position, ResourceInfo resourceInfo)
