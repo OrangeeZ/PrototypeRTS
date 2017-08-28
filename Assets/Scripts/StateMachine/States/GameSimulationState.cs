@@ -108,7 +108,7 @@ namespace Assets.Scripts.StateMachine.States
             _guiController.Add(worldPanel);
             _guiController.Add(new TestUnitOnGui(unitFactory));
             _guiController.Add(selectionManager, true);
-            _guiController.Add(uiController);
+            _guiController.Add(uiController, shown: true);
         }
 
         #endregion

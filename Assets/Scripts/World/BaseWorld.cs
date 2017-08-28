@@ -18,6 +18,7 @@ public class BaseWorld : IUpdateBehaviour
         _freeCitizens = new Queue<Actor>();
         _relationshipMap = relationshipMap;
         _firePlace = firePlace;
+        
         Stockpile = new Stockpile();
         Entities = new EntitiesController();
         Events = new WorldEventsController();
