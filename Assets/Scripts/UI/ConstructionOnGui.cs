@@ -15,9 +15,7 @@ public class ConstructionOnGui : IGuiDrawer
 
     public void Draw()
     {
-        var height = 400;
-        
-        GUILayout.BeginArea(new Rect(0, Screen.height - height, 100, height));
+        GUILayout.FlexibleSpace();
         GUILayout.Label("Construction module");
         GUILayout.BeginVertical();
 
@@ -51,7 +49,5 @@ public class ConstructionOnGui : IGuiDrawer
         }
 
         GUILayout.EndVertical();
-
-        GUILayout.EndArea();
     }
 }

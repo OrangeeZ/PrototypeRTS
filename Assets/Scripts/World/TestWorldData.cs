@@ -8,6 +8,8 @@ namespace Assets.Scripts.World
     {
         public readonly EventSystem EventSystem = new EventSystem();
 
+        public EntityDisplayPanel DefaultDisplayPanel;
+        
         [SerializeField]
         private ResourceInfo[] _resourceInfos;
 

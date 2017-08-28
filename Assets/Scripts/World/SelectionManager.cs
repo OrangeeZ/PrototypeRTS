@@ -9,7 +9,8 @@ public abstract class SelectionEventHandler
 {
     public virtual bool HandleDestinationClick(Vector3 destination)
     {
-        return false; //False means event wasn't handled; this helps SelectionManager understand if it should drop the selected object alltogether
+        return
+            false; //False means event wasn't handled; this helps SelectionManager understand if it should drop the selected object alltogether
     }
 
     public virtual bool HandleEntityClick(Entity entity)
@@ -20,12 +21,14 @@ public abstract class SelectionEventHandler
 
 public class NullSelectionEventHandler : SelectionEventHandler
 {
-
 }
 
 public class SelectionManager : IGuiDrawer
 {
+    public IList<Entity> SelectedEntities => _selectedEntities;
+    
     public event Action<Entity> EntitySelected;
+    public event Action SelectionUpdated;
 
     private BaseWorld _world;
     private bool _isSelectingWithRectangle = false;
@@ -35,21 +38,6 @@ public class SelectionManager : IGuiDrawer
     public SelectionManager(BaseWorld world)
     {
         _world = world;
-    }
-
-    public void SetSelectedEntity(Entity entity)
-    {
-        Debug.Log(entity);
-
-        if (EntitySelected != null)
-        {
-            EntitySelected.Invoke(entity);
-        }
-    }
-
-    public void SetSelectedEntities(IList<Entity> entities)
-    {
-        //Todo composite selection with compact views
     }
 
     public void Draw()
@@ -97,7 +85,7 @@ public class SelectionManager : IGuiDrawer
     private void DrawSelectionRectangle(Vector2 fromScreenPoint, Vector2 toScreenPoint)
     {
         GUI.color = new Color(0, 0, 0, 0.2f);
-        GUI.DrawTexture(new Rect(fromScreenPoint, toScreenPoint - fromScreenPoint), 
+        GUI.DrawTexture(new Rect(fromScreenPoint, toScreenPoint - fromScreenPoint),
             Texture2D.whiteTexture, ScaleMode.StretchToFill);
         GUI.color = Color.white;
     }
@@ -127,6 +115,8 @@ public class SelectionManager : IGuiDrawer
                 _selectedEntities.Add(each);
             }
         }
+        
+        SetSelectedEntities(_selectedEntities);
     }
 
     private void CheckSingleSelectionAndOrders()
@@ -141,14 +131,11 @@ public class SelectionManager : IGuiDrawer
             var isClicked = each.GetBounds().IntersectRay(ray);
             if (isClicked)
             {
-                // Debug.Log("Clicked " + each.Info);
-
                 if (_selectedEntities.Any())
                 {
                     var didHandle = false;
                     foreach (var eachActor in _selectedEntities)
                     {
-                        // SetAttackTarget(eachActor.Behaviour as SoldierBehaviour, each);
                         didHandle = eachActor.GetSelectionEventHandler().HandleEntityClick(each) || didHandle;
                     }
 
@@ -180,7 +167,6 @@ public class SelectionManager : IGuiDrawer
 
                 foreach (var eachActor in _selectedEntities)
                 {
-                    // SetDestination(eachActor.Behaviour as SoldierBehaviour, destination);
                     didHandle = eachActor.GetSelectionEventHandler().HandleDestinationClick(destination) || didHandle;
                 }
 
@@ -193,4 +179,18 @@ public class SelectionManager : IGuiDrawer
         }
     }
 
+    private void SetSelectedEntity(Entity entity)
+    {
+        Debug.Log(entity);
+
+        EntitySelected?.Invoke(entity);
+        SelectionUpdated?.Invoke();
+    }
+
+    private void SetSelectedEntities(IList<Entity> entities)
+    {
+        //Todo composite selection with compact views
+        
+        SelectionUpdated?.Invoke();
+    }
 }

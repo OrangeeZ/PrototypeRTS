@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4266708373949428}
   - component: {fileID: 114926365375136622}
+  - component: {fileID: 114686619244387242}
   m_Layer: 0
   m_Name: TestWorld
   m_TagString: Untagged
@@ -40,6 +41,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114686619244387242
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1856029709330848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69bcfe40c5869704da54c44e5e051c25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _unitInfos:
+  - {fileID: 11400000, guid: 940ab32307e6a284588344df285cb570, type: 2}
+  - {fileID: 11400000, guid: bd91975d462378a4688e48990ad9b8e7, type: 2}
+  - {fileID: 11400000, guid: 60149de884b9fea488789ff75daf0057, type: 2}
+  _buildingInfos:
+  - {fileID: 11400000, guid: 7fe81511a7e254a4baa97475eaa0e822, type: 2}
+  - {fileID: 11400000, guid: 53fa5c7234eaf684387d728d2bfca079, type: 2}
+  - {fileID: 11400000, guid: 566044814dfd3fd4fa5b1b3be826cd53, type: 2}
+  - {fileID: 11400000, guid: b6fdb8851b0410342a00275c1e1cc663, type: 2}
+  - {fileID: 11400000, guid: 0164dd46bee6abe43a3a6e0fb0da9af3, type: 2}
+  - {fileID: 11400000, guid: 59beecbf3dc342f4bbcddc0a08e011f0, type: 2}
+  - {fileID: 11400000, guid: 7abdce313abb6e644aa7b6398adcb15f, type: 2}
+  - {fileID: 11400000, guid: 42cd31d980f9c6c4bb37610c5968cbb3, type: 2}
 --- !u!114 &114926365375136622
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -51,10 +76,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae04dd1ad91e1e48b3504925b1645a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stockpiles:
-  - {fileID: 0}
+  DefaultDisplayPanel: {fileID: 114087819250214324, guid: 25a9fb34e8ff0df44977403982d0c930,
+    type: 2}
+  _resourceInfos:
+  - {fileID: 11400000, guid: 7c0dc35b307908248a5fd97b2d7e5f70, type: 2}
+  - {fileID: 11400000, guid: 26df5fc3e1de9d24998727ee1a0d1b2c, type: 2}
+  - {fileID: 11400000, guid: 93648d3d620e0ea4b8dc7f732b27d0b6, type: 2}
   _fireplace: {fileID: 0}
-  _testActorView: {fileID: 114423853591967152, guid: 21e9d21e60fccf9488ca8104d58b78ce,
-    type: 2}
-  _testBuildingView: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067,
-    type: 2}

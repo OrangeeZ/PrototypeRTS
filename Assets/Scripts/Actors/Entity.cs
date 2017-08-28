@@ -31,12 +31,17 @@ namespace Assets.Scripts.Actors
             Object.Destroy(ActorView?.gameObject);
             
             ActorView = actorView;
+            ActorView.transform.position = Position;
         }
 
         public virtual void SetPosition(Vector3 position)
         {
             Position = position;
-            ActorView.transform.position = position;
+
+            if (ActorView != null)
+            {
+                ActorView.transform.position = position;
+            }
         }
 
         public void SetHealth(int amount)

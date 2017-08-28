@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Behaviour;
+﻿using System.Runtime.InteropServices;
+using Assets.Scripts.Behaviour;
 using Assets.Scripts.World;
 using UnityEngine;
 using UnityEngine.AI;
@@ -46,7 +47,7 @@ namespace Assets.Scripts.Actors
 
     public class Actor : Entity
     {
-        public NavMeshAgent NavAgent => ActorView.GetNavMeshAgent();
+        public NavMeshAgent NavAgent => ActorView?.GetNavMeshAgent();
 
         public UnitInfo Info { get; private set; }
 
@@ -94,7 +95,10 @@ namespace Assets.Scripts.Actors
         {
             base.SetPosition(position);
 
-            NavAgent.transform.position = position;
+            if (NavAgent != null)
+            {
+                NavAgent.transform.position = position;
+            }
         }
 
         public override void DealDamage(int amount)

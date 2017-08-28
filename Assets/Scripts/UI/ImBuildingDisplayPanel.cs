@@ -5,9 +5,12 @@ public class ImBuildingDisplayPanel : EntityDisplayPanel
 {
     public override void DrawOnGUI()
     {
-		var workplace = Entity as Workplace;
+        var workplace = Entity as Workplace;
         if (workplace == null)
+        {
             return;
-		GUILayout.Label(workplace.Info.Name);
+        }
+        
+        GUILayout.Label(workplace.Info.Name);
     }
 }

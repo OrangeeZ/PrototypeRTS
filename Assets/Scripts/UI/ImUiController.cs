@@ -1,37 +1,75 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Actors;
 using Assets.Scripts.World;
 using UnityEngine;
 
 public class ImUiController : IGuiDrawer
 {
-    private EntityDisplayPanel _currentDisplayPanel;
-    private SelectionManager _selectionManager;
-    private BaseWorld _world;
+    private EntityDisplayPanel _defaultDisplayPanel;
 
-    public ImUiController(BaseWorld world, SelectionManager selectionManager)
+    private EntityDisplayPanel _currentDisplayPanel;
+    private readonly SelectionManager _selectionManager;
+
+    public ImUiController(SelectionManager selectionManager, TestWorldData worldData)
     {
-        _world = world;
+        _defaultDisplayPanel = UnityEngine.Object.Instantiate(worldData.DefaultDisplayPanel);
+        _defaultDisplayPanel.Initialize(selectionManager, null);
+
         _selectionManager = selectionManager;
-        _selectionManager.EntitySelected += SetEntityDisplayPanelInfo;
+        _selectionManager.SelectionUpdated += OnSelectionUpdated;
     }
 
-    public void SetEntityDisplayPanelInfo(Entity entity)
+    public void OnSelectionUpdated()
     {
         ClearEntityDisplayPanel();
+
+        var entity = default(Entity);
+        
+        if (_selectionManager.SelectedEntities.Count == 1)
+        {
+            entity = _selectionManager.SelectedEntities.First();
+        }
 
         if (entity != null && entity.GetDisplayPanelPrefab() != null)
         {
             _currentDisplayPanel = UnityEngine.Object.Instantiate(entity.GetDisplayPanelPrefab());
-            _currentDisplayPanel.SetEntity(entity);
+            _currentDisplayPanel.Initialize(_selectionManager, entity);
+            _currentDisplayPanel.Show();
         }
+        
+        UpdateCurrentDisplayPanel(_currentDisplayPanel);
     }
 
     public void ClearEntityDisplayPanel()
     {
-        UnityEngine.Object.Destroy(_currentDisplayPanel);
+        if (_currentDisplayPanel != null)
+        {
+            _currentDisplayPanel.Hide();
+            UnityEngine.Object.Destroy(_currentDisplayPanel.gameObject);
+        }
+    }
+
+    public void UpdateCurrentDisplayPanel(EntityDisplayPanel displayPanel)
+    {
+        if (displayPanel == null)
+        {
+            if (!_defaultDisplayPanel.gameObject.activeInHierarchy)
+            {
+                _defaultDisplayPanel.gameObject.SetActive(true);
+                _defaultDisplayPanel.Show();
+            }
+        }
+        else
+        {
+            if (_defaultDisplayPanel.gameObject.activeInHierarchy)
+            {
+                _defaultDisplayPanel.Hide();
+                _defaultDisplayPanel.gameObject.SetActive(false);
+            }
+        }
     }
 
     public void Draw()
@@ -51,6 +89,10 @@ public class ImUiController : IGuiDrawer
         if (_currentDisplayPanel != null)
         {
             _currentDisplayPanel.DrawOnGUI();
+        }
+        else
+        {
+            _defaultDisplayPanel.DrawOnGUI();
         }
 
         GUILayout.EndArea();
