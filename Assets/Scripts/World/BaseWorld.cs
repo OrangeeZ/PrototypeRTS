@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Workplace;
 using Assets.Scripts.World.SocialModule;
@@ -7,13 +8,12 @@ using UnityEngine;
 public class BaseWorld : IUpdateBehaviour
 {
     protected Vector3 _firePlace;
-    protected Queue<Actor> _freeCitizens ;
+    protected Queue<Actor> _freeCitizens;
     protected RelationshipMap _relationshipMap;
 
     #region constructor
-    
-    public BaseWorld(RelationshipMap relationshipMap,
-        Vector3 firePlace)
+
+    public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
     {
         _freeCitizens = new Queue<Actor>();
         _relationshipMap = relationshipMap;
@@ -21,19 +21,12 @@ public class BaseWorld : IUpdateBehaviour
         Stockpile = new Stockpile();
         Entities = new EntitiesController();
         Events = new WorldEventsController();
-        Children =  new WorldsController();
-
+        Children = new WorldsController();
     }
 
     #endregion
 
-    public int FreeCitizensCount
-    {
-        get
-        {
-            return _freeCitizens.Count;
-        }
-    }
+    public int FreeCitizensCount => _freeCitizens.Count;
 
     public EntitiesController Entities { get; private set; }
     public WorldEventsController Events { get; private set; }
@@ -44,7 +37,10 @@ public class BaseWorld : IUpdateBehaviour
     /// <summary>
     /// World faction type
     /// </summary>
-    public int Faction { get { return _relationshipMap.Faction; } }
+    public int Faction
+    {
+        get { return _relationshipMap.Faction; }
+    }
 
     /// <summary>
     /// current population
@@ -60,7 +56,7 @@ public class BaseWorld : IUpdateBehaviour
     /// debt for related to PopulationLimit
     /// </summary>
     public int PublicDebt { get; set; }
-    
+
     /// <summary>
     /// world coins
     /// </summary>
@@ -107,7 +103,7 @@ public class BaseWorld : IUpdateBehaviour
 
     private void UpdatePopulation()
     {
-        Population = Entities.Count;
+        Population = Entities.GetItems().OfType<Actor>().Count();
     }
 
     #endregion
