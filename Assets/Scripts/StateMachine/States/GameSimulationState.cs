@@ -61,6 +61,7 @@ namespace Assets.Scripts.StateMachine.States
                 unitFactory.CreateBuilding(unitFactory.BuildingInfos.First(info => info.Id == "StockpileBlock"));
             stockpile.SetPosition(Vector3.zero);
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
+            playerWorld.PopulationLimit = 15;
 
             //create player
             var player = CreatePlayer(playerWorld);
