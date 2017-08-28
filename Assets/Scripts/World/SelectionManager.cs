@@ -9,8 +9,9 @@ public abstract class SelectionEventHandler
 {
     public virtual bool HandleDestinationClick(Vector3 destination)
     {
-        return
-            false; //False means event wasn't handled; this helps SelectionManager understand if it should drop the selected object alltogether
+        // False means event wasn't handled
+        // This helps SelectionManager understand if it should drop the selected object alltogether
+        return false;
     }
 
     public virtual bool HandleEntityClick(Entity entity)
@@ -26,7 +27,7 @@ public class NullSelectionEventHandler : SelectionEventHandler
 public class SelectionManager : IGuiDrawer
 {
     public IList<Entity> SelectedEntities => _selectedEntities;
-    
+
     public event Action<Entity> EntitySelected;
     public event Action SelectionUpdated;
 
@@ -35,22 +36,29 @@ public class SelectionManager : IGuiDrawer
     private Vector2 _selectionStartingPoint;
     private List<Entity> _selectedEntities = new List<Entity>();
 
+    private float _minDragDelta;
+
     public SelectionManager(BaseWorld world)
     {
         _world = world;
+        _minDragDelta = Mathf.Sqrt(2f);
     }
 
     public void Draw()
     {
         if (Event.current.type == EventType.MouseDrag && Event.current.button == 0)
         {
-            if (!_isSelectingWithRectangle)
+            var deltaMagnitude = Event.current.delta.magnitude;
+            if (!_isSelectingWithRectangle && deltaMagnitude > _minDragDelta)
             {
                 _selectionStartingPoint = Event.current.mousePosition;
                 _isSelectingWithRectangle = true;
             }
 
-            CheckMultiSelection(_selectionStartingPoint, Event.current.mousePosition);
+            if (_isSelectingWithRectangle)
+            {
+                CheckMultiSelection(_selectionStartingPoint, Event.current.mousePosition);
+            }
 
             if (_selectedEntities.Count == 1)
             {
@@ -115,7 +123,7 @@ public class SelectionManager : IGuiDrawer
                 _selectedEntities.Add(each);
             }
         }
-        
+
         SetSelectedEntities(_selectedEntities);
     }
 
@@ -181,8 +189,6 @@ public class SelectionManager : IGuiDrawer
 
     private void SetSelectedEntity(Entity entity)
     {
-        Debug.Log(entity);
-
         EntitySelected?.Invoke(entity);
         SelectionUpdated?.Invoke();
     }
@@ -190,7 +196,7 @@ public class SelectionManager : IGuiDrawer
     private void SetSelectedEntities(IList<Entity> entities)
     {
         //Todo composite selection with compact views
-        
+
         SelectionUpdated?.Invoke();
     }
 }
