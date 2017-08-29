@@ -33,7 +33,7 @@ public class ConstructionOnGui : IGuiDrawer
             }
 
             if (GUILayout.Button(_constructionModule.IsRemovingBuildings ? 
-                "Stop removing buildings" :
+                "SwitchActiveState removing buildings" :
                 "Start removing buildings", GUILayout.ExpandWidth(false)))
             {
                 _constructionModule.IsRemovingBuildings = !_constructionModule.IsRemovingBuildings;

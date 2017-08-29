@@ -4,6 +4,11 @@ namespace Assets.Scripts.Actors
 {
     public abstract class Entity : IUpdateBehaviour
     {
+
+        protected ActorView ActorView;
+
+        #region public properties
+
         public Vector3 Position { get; protected set; }
 
         public int Health { get; protected set; }
@@ -11,8 +16,15 @@ namespace Assets.Scripts.Actors
         public BaseWorld World { get; private set; }
 
         public bool IsEnemy { get; private set; }
+        
+        /// <summary>
+        /// is building active
+        /// </summary>
+        public bool IsActive { get; protected set; }
 
-        protected ActorView ActorView;
+        #endregion
+
+        #region public methods
 
         public abstract void Update(float deltaTime);
 
@@ -24,6 +36,18 @@ namespace Assets.Scripts.Actors
         public void SetIsEnemy(bool isEnemy)
         {
             IsEnemy = isEnemy;
+        }
+
+
+        public void SetState(bool active)
+        {
+            IsActive = active;
+            if (IsActive)
+            {
+                Activate();
+                return;
+            }
+            Deactivate();
         }
 
         public void SetView(ActorView actorView)
@@ -91,5 +115,21 @@ namespace Assets.Scripts.Actors
                 Object.Destroy(ActorView.gameObject);
             }
         }
+
+        #endregion
+
+        #region private methods
+
+        protected virtual void Activate()
+        {
+            
+        }
+
+        protected virtual void Deactivate()
+        {
+            
+        }
+
+        #endregion
     }
 }

@@ -1250,9 +1250,9 @@
             Removes the sequence from the interleave set, and continues interleaving remaining sequences.
             </summary>
         </member>
-        <member name="F:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy.Stop">
+        <member name="F:MoreLinq.MoreEnumerable.ImbalancedInterleaveStrategy.SwitchActiveState">
             <summary>
-            Stops the interleave operation.
+            SwitchActiveStates the interleave operation.
             </summary>
         </member>
         <member name="M:MoreLinq.MoreEnumerable.Lag``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,``0,``1})">

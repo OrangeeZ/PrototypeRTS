@@ -25,6 +25,7 @@ namespace Assets.Scripts.Workplace
 
         public Workplace(BaseWorld world) : base(world)
         {
+            IsActive = true;
         }
 
         public void SetWorker(Actor actor)
@@ -36,7 +37,6 @@ namespace Assets.Scripts.Workplace
         public float BeginProduction()
         {
             HasResources = true;
-
             return Info.ProductionDuration;
         }
 
@@ -52,7 +52,7 @@ namespace Assets.Scripts.Workplace
 
         public override void Update(float deltaTime)
         {
-            if (Worker != null)
+            if (Worker != null || !IsActive)
             {
                 return;
             }
@@ -63,6 +63,22 @@ namespace Assets.Scripts.Workplace
                 SetWorker(freeCitizen);
             }
         }
+
+        #region private methods
+
+        private void DismissWorker()
+        {
+            if (Worker == null) return;
+            Worker.SetBehaviour(new CitizenBehaviour());
+            Worker = null;
+        }
+
+        protected override void Deactivate()
+        {
+            DismissWorker();
+        }
+
+        #endregion
 
     }
 }

@@ -10,7 +10,7 @@ public class Building : Entity {
     public BuildingInfo Info { get; private set; }
 
     #region public methods
-
+    
     public override void Update(float deltaTime)
     {
         
@@ -26,5 +26,14 @@ public class Building : Entity {
         return Info.DisplayPanelPrefab;
     }
 
+    public override void Kill()
+    {
+        SetState(false);
+        base.Kill();
+    }
+
     #endregion
+
+
+    
 }

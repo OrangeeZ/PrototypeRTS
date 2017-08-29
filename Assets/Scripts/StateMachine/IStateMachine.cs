@@ -10,7 +10,7 @@ namespace Assets.Scripts.StateMachine
         /// <param name="state">target state</param>
         void StartState(IState state);
         /// <summary>
-        /// Stop active gameState
+        /// SwitchActiveState active gameState
         /// </summary>
         void Stop();
     }
