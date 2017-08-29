@@ -129,11 +129,6 @@ public class SelectionManager : IGuiDrawer
 
     private void CheckSingleSelectionAndOrders()
     {
-        if (Event.current.button != 1)
-        {
-            return;
-        }
-        
         var actors = _world.Entities.GetItems();
         var camera = Camera.main;
         var ray = camera.ScreenPointToRay(Input.mousePosition);
@@ -169,6 +164,11 @@ public class SelectionManager : IGuiDrawer
             }
         }
 
+        if (Event.current.button != 1)
+        {
+            return;
+        }
+        
         if (!didGiveOrder)
         {
             var distance = 0f;
