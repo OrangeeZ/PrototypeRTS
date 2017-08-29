@@ -23,6 +23,13 @@ public class ImArmySelectorDisplayPanel : EntityDisplayPanel
     {
         using (new GUILayout.HorizontalScope())
         {
+            using (new GUILayout.VerticalScope(GUILayout.Width(100)))
+            {
+                GUILayout.Button("Aggressive");
+                GUILayout.Button("Passive");
+                GUILayout.Button("Defensive");
+            }
+            
             foreach (var each in _groupedUnits)
             {
                 using (new GUILayout.VerticalScope(GUILayout.Width(200)))
@@ -38,6 +45,7 @@ public class ImArmySelectorDisplayPanel : EntityDisplayPanel
     {
         var selectedEntities = SelectionManager.SelectedEntities;
         var selectedUnits = selectedEntities.OfType<Actor>();
+        
         _groupedUnits = selectedUnits.GroupBy(_ => _.Info, _ => _).ToDictionary(_ => _.Key, _ => _.ToArray());
     }
 }
