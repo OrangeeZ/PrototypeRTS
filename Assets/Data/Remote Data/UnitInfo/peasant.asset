@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Peasant
   Hp: 1
+  AggressiveDetectionRange: 0
+  PassiveDetectionRange: 0
+  DefensiveDetectionRange: 0
   AttackRange: 0
   AttackStrength: 0
   AttackSpeed: 0

@@ -13,12 +13,14 @@ namespace Assets.Scripts.Behaviour
 
         public virtual void Initialize()
         {
-
         }
 
         public virtual void Dispose()
         {
+        }
 
+        public virtual void OnActorDamageReceiveDamage(Entity damageSource)
+        {
         }
 
         public void SetActor(Actor actor)

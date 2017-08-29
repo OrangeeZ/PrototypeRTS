@@ -8,7 +8,7 @@ public class ConstructionModule : WorldEvent
     public BuildingInfo SelectedBuildingInfo { get; set; }
     public bool IsPlacingBuilding { get; set; }
     public bool IsRemovingBuildings { get; set; }
-    
+
     private BaseWorld _world;
     private TestUnitFactory _unitFactory;
 
@@ -45,7 +45,7 @@ public class ConstructionModule : WorldEvent
             }
         }
 
-        if (IsRemovingBuildings && Input.GetMouseButtonDown(0) && _world!=null)
+        if (IsRemovingBuildings && Input.GetMouseButtonDown(0) && _world != null)
         {
             var entities = _world.Entities.GetItems().OfType<Workplace>();
             foreach (var each in entities)
@@ -54,10 +54,9 @@ public class ConstructionModule : WorldEvent
                 {
                     //Will later be changed into a disband command 
                     //if for some reason we want this to work with soldiers
-                    each.DealDamage(each.Health); 
+                    each.DealDamage(each.Health, null);
                 }
             }
         }
-
     }
 }

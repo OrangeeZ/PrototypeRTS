@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Archer
   Hp: 3
+  AggressiveDetectionRange: 10
+  PassiveDetectionRange: 3
+  DefensiveDetectionRange: 0
   AttackRange: 5
   AttackStrength: 1
   AttackSpeed: 1

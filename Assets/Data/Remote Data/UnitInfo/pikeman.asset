@@ -13,6 +13,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pikeman
   Hp: 6
+  AggressiveDetectionRange: 10
+  PassiveDetectionRange: 3
+  DefensiveDetectionRange: 0
   AttackRange: 1
   AttackStrength: 2
   AttackSpeed: 1
