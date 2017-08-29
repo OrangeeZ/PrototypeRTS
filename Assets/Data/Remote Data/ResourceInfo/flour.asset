@@ -14,3 +14,4 @@ MonoBehaviour:
   Id: Flour
   Name: Flour
   MaxCountPerStockpileTile: 100
+  ResourceType: 0

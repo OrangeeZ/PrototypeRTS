@@ -1,24 +1,32 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.World;
 
 public class PopularityEvent : WorldEvent
 {
     private readonly Player _player;
     private readonly TestUnitFactory _unitFactory;
+    private readonly WorldInfo _worldInfo;
     private float _updatePeriod = 3f;
-    private int _popularityStep = 2;
+    private int _inscreasePopularityStep = 1;
+    private int _decreasePopularityStep = 2;
     private float _lastUpdateTime;
-    private string _testFood = "Bread";
+    private List<ResourceInfo> _foodInfos;
 
     #region constructors
 
-    public PopularityEvent(BaseWorld gameWorld, Player player,
+    public PopularityEvent(BaseWorld gameWorld,
+        WorldInfo worldInfo,
+        Player player,
         TestUnitFactory unitFactory, float period) :
         base(gameWorld)
     {
+        _worldInfo = worldInfo;
         _updatePeriod = period;
         _player = player;
         _unitFactory = unitFactory;
+        _foodInfos = new List<ResourceInfo>(_worldInfo.ResourceInfos.
+            Where(x => x.ResourceType == ResourceType.Food));
     }
 
     #endregion
@@ -40,27 +48,9 @@ public class PopularityEvent : WorldEvent
     private void UpdatePopularity()
     {
         var citizensCount = _gameWorld.FreeCitizensCount;
-        var foodAmount = _gameWorld.Stockpile.GetTotalResourceAmount(_testFood);
-        
-        if (foodAmount < citizensCount)
-        {
-            _player.ChangePopularity(-_popularityStep);
-        }
-        else
-        {
-            _player.ChangePopularity(_popularityStep);
-        }
-        
-        if (_player.Popularity <= 0)
-        {
-            RemoveCitizen(_gameWorld);
-        }
-        else if (_player.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
-        {
-            _unitFactory.CreateUnit(_unitFactory.UnitInfos.First(x => x.Name == "Peasant"));
-        }
-
-        _gameWorld.Stockpile.ChangeTotalResourceAmount(_testFood, -citizensCount);
+        UpdatePopularity(citizensCount);
+        HireCitizen();
+        ConsumeFood(citizensCount);
     }
 
     private void RemoveCitizen(BaseWorld world)
@@ -68,5 +58,52 @@ public class PopularityEvent : WorldEvent
         var citizen = world.HireCitizen();
         if (citizen == null) return;
         _gameWorld.Entities.Remove(citizen);
+    }
+
+    private void HireCitizen()
+    {
+        if (_player.Popularity <= 0)
+        {
+            RemoveCitizen(_gameWorld);
+        }
+        else if (_player.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
+        {
+            _unitFactory.CreateUnit(_worldInfo.UnitInfos.First(x => x.Name == "Peasant"));
+        }
+
+    }
+
+    private void UpdatePopularity(int citizensCount)
+    {
+        var foodVariety = 0;
+        var foodAmount = _foodInfos.Sum(x =>
+        {
+            var amount = _gameWorld.Stockpile.GetTotalResourceAmount(x.Id);
+            if (amount > 0)
+                foodVariety++;
+            return amount;
+        });
+        if (foodAmount < citizensCount)
+        {
+            _player.ChangePopularity(-_decreasePopularityStep);
+        }
+        else
+        {
+            _player.ChangePopularity(_inscreasePopularityStep + foodVariety);
+        }
+    }
+
+    private void ConsumeFood(int requiredFood)
+    {
+        var consumedFood = 0;
+        for (int i = 0; i < _foodInfos.Count; i++)
+        {
+            var food = _foodInfos[i];
+            var foodCount = _gameWorld.Stockpile.GetTotalResourceAmount(food.Id);
+            var foodTaken = foodCount + consumedFood > requiredFood ? requiredFood - foodCount : foodCount;
+            consumedFood += foodTaken;
+            _gameWorld.Stockpile.ChangeTotalResourceAmount(food.Id, -foodTaken);
+        }
+
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Archer
   Hp: 3
-  AttackRange: 8
+  AttackRange: 5
   AttackStrength: 1
   AttackSpeed: 1
   BehaviourId: SoldierBehaviour

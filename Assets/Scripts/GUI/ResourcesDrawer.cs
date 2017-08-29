@@ -30,7 +30,7 @@ public class ResourcesDrawer : GuiDrawer
                 GUILayout.BeginHorizontal();
                 var amount = block[resources[j]];
                 var resource = resources[j];
-                GUILayout.Label(string.Format("{0} Count : {1}", resource, amount));
+                GUILayout.Label($"{resource} Count : {amount}");
                 if (!_resources.ContainsKey(resource))
                     _resources[resource] = string.Empty;
                 _resources[resource] = 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Pikeman
   Hp: 6
-  AttackRange: 2
+  AttackRange: 1
   AttackStrength: 2
   AttackSpeed: 1
   BehaviourId: SoldierBehaviour

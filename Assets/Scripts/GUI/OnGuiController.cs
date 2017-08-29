@@ -6,13 +6,17 @@ public class OnGuiController : MonoBehaviour
     private List<IGuiDrawer> _drawers = new List<IGuiDrawer>();
     private List<bool> _visibility = new List<bool>();
 
-//    public List<IGuiDrawer> Drawers { get { return _drawers; } }
+    public List<IGuiDrawer> Drawers { get { return _drawers; } }
+
+    #region public methods
 
     public void Add(IGuiDrawer drawer, bool shown = false)
     {
         _drawers.Add(drawer);
         _visibility.Add(shown);
     }
+
+    #endregion
 
     private void OnGUI()
     {

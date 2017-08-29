@@ -5,34 +5,28 @@ using System.Reflection;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
 using Assets.Scripts.Workplace;
+using Assets.Scripts.World;
 using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
     public bool IsEnemy { get; set; } = false;
 
-    public UnitInfo[] UnitInfos => _unitInfos;
+    public UnitInfo[] UnitInfos => _worldInfo.UnitInfos;
 
-    public BuildingInfo[] BuildingInfos => _buildingInfos;
-
-    [SerializeField]
-    private UnitInfo[] _unitInfos;
-
-    [SerializeField]
-    private BuildingInfo[] _buildingInfos;
+    public BuildingInfo[] BuildingInfos => _worldInfo.BuildingInfos;
 
     private BaseWorld _world;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
+    private WorldInfo _worldInfo;
 
-    void Awake()
-    {
-        BuildTypeMap();
-    }
 
-    public void SetWorld(BaseWorld world)
+    public void SetWorld(BaseWorld world, WorldInfo worldInfo)
     {
         _world = world;
+        _worldInfo = worldInfo;
+        BuildTypeMap();
     }
 
     public Entity CreateUnit(UnitInfo unitInfo)
@@ -82,6 +76,8 @@ public class TestUnitFactory : MonoBehaviour
         return building;
     }
 
+    #region private methods
+
     private Building CreateBuildingEntity(BuildingInfo buildingInfo)
     {
         switch (buildingInfo.Id)
@@ -89,7 +85,7 @@ public class TestUnitFactory : MonoBehaviour
             case "Barracks":
                 return new Barracks(_armyUnitsInfos, _world, this);
             case "StockpileBlock":
-                return new StockpileBlock(_world);
+                return new StockpileBlock(_world, _worldInfo.ResourceInfos);
             case "Cityhouse":
                 return new CityHouse(_world);
             default:
@@ -114,7 +110,13 @@ public class TestUnitFactory : MonoBehaviour
         }
 
         //TODO GET UNITs TYPE from another resource
-        _armyUnitsInfos.AddRange(_unitInfos.Where(x => x.Name != "Peasant"));
+        _armyUnitsInfos.AddRange(UnitInfos.Where(x => x.Name != "Peasant"));
+    }
+
+
+    private void Awake()
+    {
+        
     }
 
     private IEnumerable<Type> FindDerivedTypes(Assembly assembly, Type baseType)
@@ -122,19 +124,5 @@ public class TestUnitFactory : MonoBehaviour
         return assembly.GetTypes().Where(t => baseType.IsAssignableFrom(t));
     }
 
-    [ContextMenu("Hook data")]
-    private void HookData()
-    {
-        _unitInfos = UnityEditor.AssetDatabase
-            .FindAssets("t:unitinfo")
-            .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
-            .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<UnitInfo>)
-            .ToArray();
-
-        _buildingInfos = UnityEditor.AssetDatabase
-            .FindAssets("t:buildinginfo")
-            .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
-            .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<BuildingInfo>)
-            .ToArray();
-    }
+    #endregion
 }

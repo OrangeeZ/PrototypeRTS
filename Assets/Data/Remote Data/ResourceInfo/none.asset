@@ -14,3 +14,4 @@ MonoBehaviour:
   Id: None
   Name: None
   MaxCountPerStockpileTile: 0
+  ResourceType: 0

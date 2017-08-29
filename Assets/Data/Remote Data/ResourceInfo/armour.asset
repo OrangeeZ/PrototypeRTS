@@ -14,3 +14,4 @@ MonoBehaviour:
   Id: Armour
   Name: Armour
   MaxCountPerStockpileTile: 10
+  ResourceType: 0

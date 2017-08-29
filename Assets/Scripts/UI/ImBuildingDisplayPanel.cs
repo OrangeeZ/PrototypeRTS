@@ -3,25 +3,9 @@ using UnityEngine;
 
 public class ImBuildingDisplayPanel : EntityDisplayPanel
 {
-    private const string STOP = "STOP";
-    private const string ACTIVATE = "ACTIVATE";
-
-    /// <summary>
-    /// destroy building
-    /// </summary>
-    public void Remove()
-    {
-        
-    }
-
-    /// <summary>
-    /// stop building func
-    /// </summary>
-    public void SwitchActiveState()
-    {
-        
-    }
-
+    private const string Stop = "STOP";
+    private const string Activate = "ACTIVATE";
+    
     public override void DrawOnGUI()
     {
         var workplace = Entity as Workplace;
@@ -33,7 +17,7 @@ public class ImBuildingDisplayPanel : EntityDisplayPanel
         GUILayout.BeginVertical();
         if(GUILayout.Button("REMOVE"))
             workplace.Kill();
-        if(GUILayout.Button(workplace.IsActive?STOP : ACTIVATE))
+        if(GUILayout.Button(workplace.IsActive?Stop : Activate))
            workplace.SetState(!workplace.IsActive);
         GUILayout.EndVertical();
     }

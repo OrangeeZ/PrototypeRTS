@@ -1,41 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Assets.Scripts.Actors;
 using UnityEngine;
 
 public class StockpileBlock : Building
 {
-    private readonly Dictionary<string, int> _resources = new Dictionary<string, int>();
+    #region private properties
 
-    public StockpileBlock(BaseWorld world)
+    private readonly Dictionary<ResourceInfo, int> _resources = new Dictionary<ResourceInfo, int>();
+    private readonly Dictionary<string, ResourceInfo> _resourcesIds = new Dictionary<string, ResourceInfo>();
+
+    #endregion
+
+    #region constructor
+
+    public StockpileBlock(BaseWorld world, IEnumerable<ResourceInfo> supportedResources)
         : base(world)
     {
+        foreach (var resource in supportedResources)
+        {
+            _resourcesIds[resource.Id] = resource;
+            _resources[resource] = 0;
+        }
     }
 
-    public string[] ResourceIds => _resources.Keys.ToArray();
+    #endregion
+
+    #region public properties
+
+    public string[] ResourceIds => _resources.Keys.Select(x => x.Id).ToArray();
 
     /// <summary>
     /// amount of target resource
     /// </summary>
-    public int this[string resource] => _resources.ContainsKey(resource) ? _resources[resource] : 0;
+    public int this[string resource] => GetResourceAmount(resource);
+
+    #endregion
 
     public bool HasResource(string resource)
     {
-        return _resources.ContainsKey(resource) && _resources[resource] > 0;
+        return GetResourceAmount(resource) > 0;
     }
 
-    public void ChangeResource(string resource, int amount)
+    public bool ChangeResource(string resource, int amount)
     {
-        if (!_resources.ContainsKey(resource))
-        {
-            _resources[resource] = 0;
-        }
-        
-        var result = _resources[resource] + amount;
-        _resources[resource] = result < 0 ? 0 : result;
-        
+        var resourceItem = GetResource(resource);
+        if (resourceItem == null) return false;
+        var resourceAmount = GetResourceAmount(resource);
+        var result = resourceAmount + amount;
+        _resources[resourceItem] = result < 0 ? 0 : result;
         Debug.Log($"Change resource {resource}, amount {amount}");
+        return true;
     }
+
+    public int GetResourceAmount(string id)
+    {
+        if(!_resourcesIds.ContainsKey(id))return 0;
+        var resource =_resourcesIds[id];
+        if (!_resources.ContainsKey(resource)) return 0;
+        return _resources[resource];
+    }
+
+    #region private methods
+
+    private ResourceInfo GetResource(string id)
+    {
+        if (!_resourcesIds.ContainsKey(id)) return null;
+        var resource = _resourcesIds[id];
+        return resource;
+    }
+
+    #endregion
+
 }

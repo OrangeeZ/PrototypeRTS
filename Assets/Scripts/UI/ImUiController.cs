@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Assets.Scripts.Actors;
 using Assets.Scripts.World;
 using UnityEngine;
@@ -13,9 +10,9 @@ public class ImUiController : IGuiDrawer
     private EntityDisplayPanel _currentDisplayPanel;
     private readonly SelectionManager _selectionManager;
 
-    public ImUiController(SelectionManager selectionManager, TestWorldData worldData)
+    public ImUiController(SelectionManager selectionManager, WorldInfo worldInfo)
     {
-        _defaultDisplayPanel = UnityEngine.Object.Instantiate(worldData.DefaultDisplayPanel);
+        _defaultDisplayPanel = Object.Instantiate(worldInfo.DefaultDisplayPanel);
         _defaultDisplayPanel.Initialize(selectionManager, null);
 
         _selectionManager = selectionManager;
@@ -35,7 +32,7 @@ public class ImUiController : IGuiDrawer
 
         if (entity != null && entity.GetDisplayPanelPrefab() != null)
         {
-            _currentDisplayPanel = UnityEngine.Object.Instantiate(entity.GetDisplayPanelPrefab());
+            _currentDisplayPanel = Object.Instantiate(entity.GetDisplayPanelPrefab());
             _currentDisplayPanel.Initialize(_selectionManager, entity);
             _currentDisplayPanel.Show();
         }
@@ -48,7 +45,7 @@ public class ImUiController : IGuiDrawer
         if (_currentDisplayPanel != null)
         {
             _currentDisplayPanel.Hide();
-            UnityEngine.Object.Destroy(_currentDisplayPanel.gameObject);
+            Object.Destroy(_currentDisplayPanel.gameObject);
         }
     }
 

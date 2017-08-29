@@ -14,7 +14,7 @@ namespace Assets.Scripts.StateMachine
             switch (gameState)
             {
                 case GameState.Simulate:
-                    return new GameSimulationState(stateController, Object.FindObjectOfType<TestWorldData>());
+                    return new GameSimulationState(stateController, Object.FindObjectOfType<WorldInfo>());
                 case GameState.Initialize:
                     return new GameInitializeState(stateController);
                 default:

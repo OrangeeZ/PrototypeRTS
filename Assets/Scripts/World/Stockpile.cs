@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
-using NUnit.Framework;
 using UnityEngine;
 
 public class Stockpile
@@ -58,10 +57,10 @@ public class Stockpile
         }
         
         var blocksWithResource = _stockpileBlocks.Where(_ => _.HasResource(resourceInfo.Id));
-
-        if (blocksWithResource.Any())
+        var stockpileBlocks = blocksWithResource as StockpileBlock[] ?? blocksWithResource.ToArray();
+        if (stockpileBlocks.Any())
         {
-            var closestBlock = blocksWithResource.MinBy(_ => Vector3.Distance(_.Position, position));
+            var closestBlock = stockpileBlocks.MinBy(_ => Vector3.Distance(_.Position, position));
 
             return closestBlock;            
         }

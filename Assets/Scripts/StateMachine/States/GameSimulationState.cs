@@ -12,15 +12,15 @@ namespace Assets.Scripts.StateMachine.States
         #region private properties
 
         private OnGuiController _guiController;
-        private readonly TestWorldData _worldData;
+        private readonly WorldInfo _worldInfo;
 
         #endregion
 
         public GameSimulationState(IStateController<GameState> stateController,
-            TestWorldData worldData) :
+            WorldInfo worldInfo) :
             base(stateController)
         {
-            _worldData = worldData;
+            _worldInfo = worldInfo;
         }
 
         public override IEnumerator Execute()
@@ -50,11 +50,11 @@ namespace Assets.Scripts.StateMachine.States
             var playerRelationshp = new RelationshipMap(1);
             playerRelationshp.SetRelationship(0, 10);
             playerRelationshp.SetRelationship(1, -1);
-            var playerWorld = new PlayerWorld(playerRelationshp, _worldData.Fireplace.position);
+            var playerWorld = new PlayerWorld(playerRelationshp, _worldInfo.Fireplace.position);
 
             //init unit factory
-            var unitFactory = _worldData.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(playerWorld);
+            var unitFactory = _worldInfo.GetComponent<TestUnitFactory>();
+            unitFactory.SetWorld(playerWorld,_worldInfo);
 
             // create dummy stockpile
             var stockpile =
@@ -78,7 +78,7 @@ namespace Assets.Scripts.StateMachine.States
 
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)
         {
-            var popularityEventsBehaviour = new PopularityEvent(world, player, unitFactory, 4f);
+            var popularityEventsBehaviour = new PopularityEvent(world,_worldInfo, player, unitFactory, 4f);
             var debtEvent = new DebtEvent(world, player, 10f);
             //constructions
             var constructionModule = new ConstructionModule(world, unitFactory);
@@ -101,7 +101,7 @@ namespace Assets.Scripts.StateMachine.States
         {
             //initialize additional events
             var selectionManager = new SelectionManager(world);
-            var uiController = new ImUiController(selectionManager, _worldData);
+            var uiController = new ImUiController(selectionManager, _worldInfo);
             var worldPanel = new WorldDataPanelOnGui(world);
             
             _guiController.Add(new ResourcesDrawer(world));
