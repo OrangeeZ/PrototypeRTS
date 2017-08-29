@@ -85,7 +85,7 @@ namespace Assets.Scripts.Actors
             return result;
         }
 
-        public virtual void DealDamage(int amount)
+        public virtual void DealDamage(int amount, Entity damageSource)
         {
             Debug.Log($"Recieved damage {amount}");
 

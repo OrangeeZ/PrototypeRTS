@@ -25,14 +25,25 @@ public class ImArmySelectorDisplayPanel : EntityDisplayPanel
         {
             using (new GUILayout.VerticalScope(GUILayout.Width(100)))
             {
-                GUILayout.Button("Aggressive");
-                GUILayout.Button("Passive");
-                GUILayout.Button("Defensive");
+                if (GUILayout.Button("Aggressive"))
+                {
+                    SetSoldierBehaviourMode(SoldierBehaviour.BehaviourMode.Aggressive);
+                }
+
+                if (GUILayout.Button("Passive"))
+                {
+                    SetSoldierBehaviourMode(SoldierBehaviour.BehaviourMode.Passive);
+                }
+
+                if (GUILayout.Button("Defensive"))
+                {
+                    SetSoldierBehaviourMode(SoldierBehaviour.BehaviourMode.Defensive);
+                }
             }
-            
+
             foreach (var each in _groupedUnits)
             {
-                using (new GUILayout.VerticalScope(GUILayout.Width(200)))
+                using (new GUILayout.VerticalScope(GUILayout.Width(100)))
                 {
                     GUILayout.Label(each.Key.Name);
                     GUILayout.Label($"Count: {each.Value.Length}");
@@ -45,7 +56,20 @@ public class ImArmySelectorDisplayPanel : EntityDisplayPanel
     {
         var selectedEntities = SelectionManager.SelectedEntities;
         var selectedUnits = selectedEntities.OfType<Actor>();
-        
+
         _groupedUnits = selectedUnits.GroupBy(_ => _.Info, _ => _).ToDictionary(_ => _.Key, _ => _.ToArray());
+    }
+
+    private void SetSoldierBehaviourMode(SoldierBehaviour.BehaviourMode targetBehaviourMode)
+    {
+        var soldierBehaviours = _groupedUnits.Values
+            .SelectMany(_ => _)
+            .Select(_ => _.Behaviour)
+            .OfType<SoldierBehaviour>();
+
+        foreach (var each in soldierBehaviours)
+        {
+            each.SetBehaviourMode(targetBehaviourMode);
+        }
     }
 }

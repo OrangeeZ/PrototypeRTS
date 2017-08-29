@@ -101,9 +101,11 @@ namespace Assets.Scripts.Actors
             }
         }
 
-        public override void DealDamage(int amount)
+        public override void DealDamage(int amount, Entity damageSource)
         {
-            base.DealDamage(amount);
+            base.DealDamage(amount, damageSource);
+            
+            Behaviour.OnActorDamageReceiveDamage(damageSource);
 
             if (Health <= 0 && Behaviour != null)
             {

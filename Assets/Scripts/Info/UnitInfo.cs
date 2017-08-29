@@ -14,8 +14,17 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
     public int Hp;
 
     [RemoteProperty]
-    public int AttackRange;
+    public int AggressiveDetectionRange;
+    
+    [RemoteProperty]
+    public int PassiveDetectionRange;
+    
+    [RemoteProperty]
+    public int DefensiveDetectionRange;
 
+    [RemoteProperty]
+    public int AttackRange;
+    
     [RemoteProperty]
     public int AttackStrength;
 

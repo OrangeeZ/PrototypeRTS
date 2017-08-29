@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Linq;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Behaviour;
@@ -8,6 +6,13 @@ using UnityEngine;
 
 public class SoldierBehaviour : ActorBehaviour
 {
+    public enum BehaviourMode
+    {
+        Aggressive,
+        Passive,
+        Defensive
+    }
+
     private class Target
     {
         public Vector3 TargetPosition;
@@ -21,13 +26,14 @@ public class SoldierBehaviour : ActorBehaviour
     }
 
     private Target _target;
+    private BehaviourMode _behaviourMode = BehaviourMode.Aggressive;
 
     public void SetDestination(Vector3 destination)
     {
         _target = new Target();
 
         _target.TargetPosition = destination;
-        _target.StoppingDistance = 0.1f;
+        _target.StoppingDistance = 1f;
     }
 
     public void SetAttackTarget(Entity target)
@@ -35,7 +41,20 @@ public class SoldierBehaviour : ActorBehaviour
         _target = new Target();
 
         _target.TargetEntity = target;
-        _target.StoppingDistance = Actor.Info.AttackRange;
+        _target.StoppingDistance = GetAttackRange();
+    }
+
+    public void SetBehaviourMode(BehaviourMode targetBehaviourMode)
+    {
+        _behaviourMode = targetBehaviourMode;
+    }
+
+    public override void OnActorDamageReceiveDamage(Entity damageSource)
+    {
+        if (_target == null && _behaviourMode == BehaviourMode.Passive)
+        {
+            SetAttackTarget(damageSource);
+        }
     }
 
     protected override IEnumerator UpdateRoutine()
@@ -59,35 +78,28 @@ public class SoldierBehaviour : ActorBehaviour
             }
 
             navAgent.isStopped = false;
-
             navAgent.SetDestination(_target.GetDestination());
-            navAgent.stoppingDistance = Actor.Info.AttackRange - 0.5f;
+            navAgent.stoppingDistance = _target.StoppingDistance;
+
             while (navAgent != null && (!navAgent.hasPath || navAgent.remainingDistance > _target.StoppingDistance))
             {
-                yield return null;
-
-                navAgent.SetDestination(_target.GetDestination());
-
                 if (!IsTargetValid())
                 {
                     break;
                 }
 
-                yield return null;
-            }
+                navAgent.SetDestination(_target.GetDestination());
 
-            if (navAgent == null)
-            {
-                yield break;
+                yield return null;
             }
 
             if (_target.TargetEntity != null)
             {
                 if (Vector3.Distance(_target.GetDestination(), Actor.Position) < _target.StoppingDistance)
                 {
-                    _target.TargetEntity.DealDamage(Actor.Info.AttackStrength);
+                    _target.TargetEntity.DealDamage(Actor.Info.AttackStrength, Actor);
 
-                    var delay = (float)Actor.Info.AttackSpeed;
+                    var delay = (float) Actor.Info.AttackSpeed;
                     while (delay > 0)
                     {
                         delay -= DeltaTime;
@@ -109,11 +121,15 @@ public class SoldierBehaviour : ActorBehaviour
     {
         var world = Actor.World;
         var entities = world.Entities;
-        var potentialTargets = entities.GetItems()
+        var potentialTargets = entities
+            .GetItems()
             .Where(_ => _.IsEnemy != Actor.IsEnemy && _ != Actor);
+
+        var detectionRange = GetDetectionRange();
+
         foreach (var each in potentialTargets)
         {
-            if (Vector3.Distance(each.Position, Actor.Position) <= Actor.Info.AttackRange)
+            if (Vector3.Distance(each.Position, Actor.Position) <= detectionRange)
             {
                 SetAttackTarget(each);
 
@@ -135,5 +151,27 @@ public class SoldierBehaviour : ActorBehaviour
         }
 
         return true;
+    }
+
+    private float GetAttackRange()
+    {
+        return Actor.Info.AttackRange;
+    }
+
+    private float GetDetectionRange()
+    {
+        switch (_behaviourMode)
+        {
+            case BehaviourMode.Aggressive:
+                return Actor.Info.AggressiveDetectionRange;
+
+            case BehaviourMode.Passive:
+                return Actor.Info.PassiveDetectionRange;
+
+            case BehaviourMode.Defensive:
+                return Actor.Info.DefensiveDetectionRange;
+        }
+
+        return 0f;
     }
 }
