@@ -14,4 +14,4 @@ MonoBehaviour:
   Id: Bread
   Name: Bread
   MaxCountPerStockpileTile: 100
-  ResourceType: 0
+  ResourceType: 1

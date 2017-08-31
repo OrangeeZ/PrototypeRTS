@@ -6,6 +6,7 @@ public enum ResourceType
 {
     None,
     Food,
+    Military
 }
 
 public class ResourceInfo : ScriptableObject, ICsvConfigurable
@@ -24,6 +25,6 @@ public class ResourceInfo : ScriptableObject, ICsvConfigurable
 
     public void Configure(Values values)
     {
-        values.GetEnum<ResourceType>("ResourceType", out ResourceType, ResourceType.None);
+        values.GetEnum<ResourceType>("resourcetype", out ResourceType, ResourceType.None);
     }
 }

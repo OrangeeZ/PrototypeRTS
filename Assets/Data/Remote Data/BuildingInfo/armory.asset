@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d80225c0590381448240c7abdb4e81c, type: 3}
+  m_Name: armory
+  m_EditorClassIdentifier: 
+  Name: Armory
+  Id: Armory
+  Hp: 80
+  InputResource: {fileID: 0}
+  InputResourceQuantity: 0
+  ProductionDuration: 0
+  OutputResource: {fileID: 0}
+  OutputResourceQuantity: 0
+  Prefab: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067, type: 2}
+  DisplayPanelPrefab: {fileID: 114430292296469734, guid: 22aa66d951295f94eb854d919d5f2aa3,
+    type: 2}

@@ -16,6 +16,9 @@ namespace Assets.Scripts.World
         private ResourceInfo[] _resourceInfos;
 
         [SerializeField]
+        private StorageInfo[] _storageInfos;
+
+        [SerializeField]
         private UnitInfo[] _unitInfos;
 
         [SerializeField]
@@ -34,9 +37,19 @@ namespace Assets.Scripts.World
 
         public ResourceInfo[] ResourceInfos { get { return _resourceInfos; } }
 
+        public StorageInfo[] StorageInfos => _storageInfos;
+
         public Transform Fireplace { get { return _fireplace; } }
 
         #endregion
+
+        void Start()
+        {
+            foreach (var storageInfo in _storageInfos)
+            {
+                storageInfo.Init(_resourceInfos);
+            }
+        }
 
         [ContextMenu("Hook data")]
         private void HookData()
@@ -57,6 +70,12 @@ namespace Assets.Scripts.World
                 .FindAssets("t:resourceinfo")
                 .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
                 .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<ResourceInfo>)
+                .ToArray();
+
+            _storageInfos = UnityEditor.AssetDatabase
+                .FindAssets("t:storageinfo")
+                .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
+                .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<StorageInfo>)
                 .ToArray();
         }
     }

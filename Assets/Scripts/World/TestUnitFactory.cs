@@ -85,12 +85,19 @@ public class TestUnitFactory : MonoBehaviour
             case "Barracks":
                 return new Barracks(_armyUnitsInfos, _world, this);
             case "StockpileBlock":
-                return new StockpileBlock(_world, _worldInfo.ResourceInfos);
+            case "Barn":
+            case "Armory":
+                return new StockpileBlock(_world, GetStorageInfo(buildingInfo));
             case "Cityhouse":
                 return new CityHouse(_world);
             default:
                 return new Workplace(_world);
         }
+    }
+
+    private StorageInfo GetStorageInfo(BuildingInfo buildingInfo)
+    {
+        return _worldInfo.StorageInfos.First(info => info.BuildingId == buildingInfo.Id);
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)

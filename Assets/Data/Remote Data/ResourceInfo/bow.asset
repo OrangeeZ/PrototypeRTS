@@ -14,4 +14,4 @@ MonoBehaviour:
   Id: Bow
   Name: Bow
   MaxCountPerStockpileTile: 10
-  ResourceType: 0
+  ResourceType: 2

@@ -14,4 +14,4 @@ MonoBehaviour:
   Id: Meat
   Name: Meat
   MaxCountPerStockpileTile: 100
-  ResourceType: 0
+  ResourceType: 1
