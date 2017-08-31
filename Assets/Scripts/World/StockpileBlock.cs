@@ -114,7 +114,7 @@ public class StockpileBlock : Building
 
     private StorageSlot GetFreeSlot()
     {
-        return _storageSlots.FirstOrDefault(slot => slot == null || slot.Resource == null || slot.Amount == 0);
+        return _storageSlots.FirstOrDefault(slot => slot.IsEmpty);
     }
 
     private bool StoreResource(ResourceInfo resource, int amount)
