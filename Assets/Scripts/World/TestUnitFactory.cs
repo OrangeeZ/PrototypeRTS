@@ -87,7 +87,9 @@ public class TestUnitFactory : MonoBehaviour
             case "StockpileBlock":
             case "Barn":
             case "Armory":
-                return new StockpileBlock(_world, GetStorageInfo(buildingInfo));
+                var stockpile = new StockpileBlock(_world, GetStorageInfo(buildingInfo));
+                _world.Stockpile.AddStockpileBlock(stockpile);
+                return stockpile;
             case "Cityhouse":
                 return new CityHouse(_world);
             default:

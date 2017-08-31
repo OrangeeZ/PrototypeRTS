@@ -67,7 +67,15 @@ namespace Assets.Scripts.Behaviour
 
                 _workplace.EndProduction();
                 var world = Actor.World;
-                var stockpileBlock = world.Stockpile.GetClosestStockpileBlock(Actor.Position);
+                StockpileBlock stockpileBlock;
+                while (true)
+                {
+                    stockpileBlock = world.Stockpile.GetClosestStockpileBlock(Actor.Position, _workplace.Info.OutputResource);
+                    if (stockpileBlock != null)
+                        break;
+
+                    yield return null;
+                }
                 navAgent.SetDestination(stockpileBlock.Position);
                 while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
                 {

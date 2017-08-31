@@ -17,9 +17,12 @@ public class Stockpile
         return _stockpileBlocks;
     }
 
-    public StockpileBlock GetClosestStockpileBlock(Vector3 position)
+    public StockpileBlock GetClosestStockpileBlock(Vector3 position, ResourceInfo resourceToStore)
     {
-        return _stockpileBlocks.MinBy(block => Vector3.Distance(block.Position, position));
+        var filterByResource = _stockpileBlocks.Where(block => block.CanStore(resourceToStore, 1)).ToArray();
+        if (!filterByResource.Any())
+            return null;
+        return filterByResource.MinBy(block => Vector3.Distance(block.Position, position));
     }
 
     public void AddStockpileBlock(StockpileBlock stockpileBlock)

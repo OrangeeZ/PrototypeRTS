@@ -6,7 +6,7 @@ public class StockpileBlock : Building
 {
     #region private properties
 
-    private readonly int _slotsCount;
+    private readonly StorageInfo _storageInfo;
     private readonly Dictionary<ResourceInfo, int> _resources = new Dictionary<ResourceInfo, int>();
     private readonly Dictionary<string, ResourceInfo> _resourcesIds = new Dictionary<string, ResourceInfo>();
 
@@ -17,7 +17,7 @@ public class StockpileBlock : Building
     public StockpileBlock(BaseWorld world, StorageInfo storageInfo)
         : base(world)
     {
-        _slotsCount = storageInfo.SlotsCount;
+        _storageInfo = storageInfo;
         foreach (var resource in storageInfo.AllowedResources.Select(filter => filter.Resource))
         {
             _resourcesIds[resource.Id] = resource;
@@ -37,6 +37,11 @@ public class StockpileBlock : Building
     public int this[string resource] => GetResourceAmount(resource);
 
     #endregion
+
+    public bool CanStore(ResourceInfo resource, int amount)
+    {
+        return _storageInfo.AllowedResources.Any(filter => filter.Resource.Id == resource.Id);
+    }
 
     public bool HasResource(string resource)
     {
