@@ -21,7 +21,7 @@ MonoBehaviour:
   AttackSpeed: 1
   BehaviourId: SoldierBehaviour
   Prefab: {fileID: 114423853591967152, guid: 2c4397ce5ff4bfa4789ddf8d3e9d20e1, type: 2}
-  DisplayPanelPrefab: {fileID: 114087819250214324, guid: 25a9fb34e8ff0df44977403982d0c930,
+  DisplayPanelPrefab: {fileID: 114989558808342114, guid: f3b3bdec68879dd45901541419d719d3,
     type: 2}
   RequiredWeapon: {fileID: 11400000, guid: e9fcd98776b7ff547b7b689b4c2be26e, type: 2}
   RequiredArmor: {fileID: 11400000, guid: 7fcca3f863410fe4a85efa9fb5a20560, type: 2}
