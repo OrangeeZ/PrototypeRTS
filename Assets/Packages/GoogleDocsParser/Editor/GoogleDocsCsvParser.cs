@@ -66,7 +66,7 @@ public class GoogleDocsCsvParser
             Debug.LogException(ex);
         }
 //            });
-        
+
         www.Dispose();
     }
 
@@ -74,7 +74,7 @@ public class GoogleDocsCsvParser
     public void GenerateInfoFiles()
     {
         AssetDatabase.StartAssetEditing();
-        
+
         foreach (var each in _loadedObjects)
         {
             var instance = GetOrCreate(_type, each.Key);
@@ -83,7 +83,7 @@ public class GoogleDocsCsvParser
             {
                 continue;
             }
-            
+
             var csvConfigurable = instance as ICsvConfigurable;
 
             ParseObjectFieldsAndProperties(csvConfigurable, each.Value);
@@ -91,7 +91,7 @@ public class GoogleDocsCsvParser
 
             Debug.Log($"Data object {instance.name} saved to {AssetDatabase.GetAssetPath(instance)}", instance);
         }
-        
+
         AssetDatabase.StopAssetEditing();
     }
 
@@ -296,12 +296,13 @@ public class GoogleDocsCsvParser
             }
             else
             {
-                LoadSimpleValue(target, fieldInfo, values, propertyName);                
+                LoadSimpleValue(target, fieldInfo, values, propertyName);
             }
         }
     }
 
-    private static void LoadSimpleValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values, string propertyName)
+    private static void LoadSimpleValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values,
+        string propertyName)
     {
         var value = values.Get(propertyName, string.Empty);
 
@@ -311,6 +312,10 @@ public class GoogleDocsCsvParser
         {
             fieldValue = Activator.CreateInstance(fieldInfo.FieldType);
         }
+        else if (fieldInfo.FieldType.IsEnum)
+        {
+            fieldValue = Enum.Parse(fieldInfo.FieldType, value);
+        }
         else
         {
             fieldValue = Convert.ChangeType(value, fieldInfo.FieldType, CultureInfo.InvariantCulture);
@@ -319,7 +324,8 @@ public class GoogleDocsCsvParser
         fieldInfo.SetValue(target, fieldValue);
     }
 
-    private static void LoadUnityTypeValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values, string propertyName)
+    private static void LoadUnityTypeValue(ICsvConfigurable target, FieldInfo fieldInfo, Values values,
+        string propertyName)
     {
         var unityObjectInstance = values.FindUnityAsset(propertyName, fieldInfo.FieldType);
         fieldInfo.SetValue(target, unityObjectInstance);
