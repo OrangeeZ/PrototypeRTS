@@ -1,7 +1,11 @@
+<<<<<<< f8148aa54878b436da711513ce755c353fa6977b
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Actors;
 using Assets.Scripts.Actors;
+=======
+﻿using Actors;
+>>>>>>> 51109a5ae2f0af8e4c1aa3bacf25fb4abc855286
 
 public class Building : Entity {
 

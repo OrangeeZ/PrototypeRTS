@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-namespace Assets.Scripts.Actors
+namespace Actors
 {
     public class ActorView : MonoBehaviour
     {
