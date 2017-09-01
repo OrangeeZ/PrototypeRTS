@@ -31,15 +31,7 @@ namespace Buildings
         public void SetWorker(Actor actor)
         {
             Worker = actor;
-
-            if (Info.Id == "Woodcutter")
-            {
-                Worker.SetBehaviour(new GetterBehaviour(this));
-            }
-            else
-            {
-                Worker.SetBehaviour(new WorkerBehaviour(this));
-            }
+            Worker.SetBehaviour(new WorkerBehaviour(this));
         }
 
         public float BeginProduction()
@@ -55,7 +47,8 @@ namespace Buildings
 
         public void PutResourcesToStockpile(StockpileBlock stockpileBlock)
         {
-            stockpileBlock.ChangeResource(ActiveProductionCycle.OutputResource.Id, ActiveProductionCycle.OutputResourceQuantity);
+            stockpileBlock.ChangeResource(ActiveProductionCycle.OutputResource.Id,
+                ActiveProductionCycle.OutputResourceQuantity);
         }
 
         public override void Update(float deltaTime)
@@ -87,6 +80,5 @@ namespace Buildings
         }
 
         #endregion
-
     }
 }
