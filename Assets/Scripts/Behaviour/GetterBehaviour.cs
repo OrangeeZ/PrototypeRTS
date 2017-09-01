@@ -166,9 +166,11 @@ namespace Behaviour
         {
             var world = Actor.World;
             var entities = world.Entities;
+            var targetEntitiesInfo = _workplace.Info.ProductionCycles.InputResource.AssociatedUnitInfo;
             var potentialTargets = entities
                 .GetItems()
-                .Where(_ => _.IsEnemy != Actor.IsEnemy && _ != Actor);
+                .OfType<Actor>()
+                .Where(_ => _.Info == targetEntitiesInfo);
 
             var detectionRange = Actor.Info.AggressiveDetectionRange;
 
