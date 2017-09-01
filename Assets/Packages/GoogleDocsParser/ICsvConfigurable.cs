@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MoreLinq;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -148,7 +149,8 @@ namespace csv
         {
             if (objectType.IsSubclassOf(typeof(ScriptableObject)))
             {
-                return LoadScriptableObject(Get(fieldName, string.Empty), objectType);
+                var field = Get(fieldName, string.Empty);
+                return LoadScriptableObject(field, objectType);
             }
             else
             {
@@ -185,7 +187,7 @@ namespace csv
         private UnityEngine.Object LoadScriptableObject(string name, Type objectType)
         {
             name = Utility.FixName(name);
-
+            Debug.Log("LoadScriptableObject : "+name);
             if (name.IsNullOrEmpty())
             {
                 return null;
@@ -196,7 +198,7 @@ namespace csv
                 .FindAssets("t:" + objectType.Name + " " + name)
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Select(_ => AssetDatabase.LoadAssetAtPath(_, objectType));
-
+            foundObjects.ForEach(x=> Debug.Log("LOAD INFO REFS ASSET " + x));
             return foundObjects.FirstOrDefault(where => where.name == name);
 #else
 			return null;

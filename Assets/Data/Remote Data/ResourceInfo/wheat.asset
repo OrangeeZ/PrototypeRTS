@@ -14,4 +14,4 @@ MonoBehaviour:
   Id: Wheat
   Name: Wheat
   MaxCountPerStockpileTile: 1000
-  ResourceType: 1
+  ResourceType: 0

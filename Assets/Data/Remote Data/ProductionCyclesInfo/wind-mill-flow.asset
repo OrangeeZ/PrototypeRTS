@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520913c82b500fc4ba1fbaa2f0c9aacf, type: 3}
+  m_Name: wind-mill-flow
+  m_EditorClassIdentifier: 
+  Id: WindMillFlow
+  Name: WindMillFlow
+  InputResource: {fileID: 11400000, guid: cdf80de7b65506849a266b2ae31b8ce5, type: 2}
+  InputResourceQuantity: 5
+  ProductionDuration: 2
+  OutputResource: {fileID: 11400000, guid: 26df5fc3e1de9d24998727ee1a0d1b2c, type: 2}
+  OutputResourceQuantity: 1

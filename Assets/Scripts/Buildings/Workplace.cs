@@ -37,7 +37,7 @@ namespace Assets.Scripts.Workplace
         public float BeginProduction()
         {
             HasResources = true;
-            return Info.ProductionDuration;
+            return ProductionCycle.ProductionDuration;
         }
 
         public void EndProduction()
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Workplace
 
         public void PutResourcesToStockpile(StockpileBlock stockpileBlock)
         {
-            stockpileBlock.ChangeResource(Info.OutputResource.Id, Info.OutputResourceQuantity);
+            stockpileBlock.ChangeResource(ProductionCycle.OutputResource.Id, ProductionCycle.OutputResourceQuantity);
         }
 
         public override void Update(float deltaTime)

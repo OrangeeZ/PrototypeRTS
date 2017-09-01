@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -30,6 +31,8 @@ public class RemoteDataLoader : ScriptableObject
 
     [SerializeField]
     private CsvParseMode _mode = CsvParseMode.ObjectPerRow;
+    
+    //public int Priority = 0;
 
 #if UNITY_EDITOR
 

@@ -16,3 +16,4 @@ MonoBehaviour:
   _type: ResourceInfo
   _postfix: 
   _mode: 0
+  Priority: 20

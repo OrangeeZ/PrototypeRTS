@@ -14,11 +14,7 @@ MonoBehaviour:
   Name: Woodcutter
   Id: Woodcutter
   Hp: 20
-  InputResource: {fileID: 11400000, guid: 93648d3d620e0ea4b8dc7f732b27d0b6, type: 2}
-  InputResourceQuantity: 0
-  ProductionDuration: 2
-  OutputResource: {fileID: 11400000, guid: 93648d3d620e0ea4b8dc7f732b27d0b6, type: 2}
-  OutputResourceQuantity: 10
   Prefab: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067, type: 2}
   DisplayPanelPrefab: {fileID: 114430292296469734, guid: 22aa66d951295f94eb854d919d5f2aa3,
     type: 2}
+  ProductionCycles: {fileID: 11400000, guid: b348b0fec2bb36140b263a22752acf5c, type: 2}

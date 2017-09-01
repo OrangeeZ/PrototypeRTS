@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520913c82b500fc4ba1fbaa2f0c9aacf, type: 3}
+  m_Name: produce-leather-cycle
+  m_EditorClassIdentifier: 
+  Id: ProduceLeatherCycle
+  Name: ProduceLeatherCycle
+  InputResource: {fileID: 0}
+  InputResourceQuantity: 0
+  ProductionDuration: 5
+  OutputResource: {fileID: 0}
+  OutputResourceQuantity: 1

@@ -14,25 +14,13 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     public int Hp;
 
     [RemoteProperty]
-    public ResourceInfo InputResource;
-
-    [RemoteProperty]
-    public int InputResourceQuantity;
-
-    [RemoteProperty]
-    public int ProductionDuration;
-
-    [RemoteProperty]
-    public ResourceInfo OutputResource;
-
-    [RemoteProperty]
-    public int OutputResourceQuantity;
-    
-    [RemoteProperty]
     public ActorView Prefab;
 
     [RemoteProperty]
     public EntityDisplayPanel DisplayPanelPrefab;
+
+    [RemoteProperty]
+    public ProductionCyclesInfo ProductionCycles;
 
     public void Configure(Values values)
     {

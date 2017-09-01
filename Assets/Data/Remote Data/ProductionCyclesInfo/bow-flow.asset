@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 520913c82b500fc4ba1fbaa2f0c9aacf, type: 3}
+  m_Name: bow-flow
+  m_EditorClassIdentifier: 
+  Id: BowFlow
+  Name: BowFlow
+  InputResource: {fileID: 11400000, guid: 93648d3d620e0ea4b8dc7f732b27d0b6, type: 2}
+  InputResourceQuantity: 1
+  ProductionDuration: 5
+  OutputResource: {fileID: 11400000, guid: d8eb4625c216d7941b74e830faf15f92, type: 2}
+  OutputResourceQuantity: 1

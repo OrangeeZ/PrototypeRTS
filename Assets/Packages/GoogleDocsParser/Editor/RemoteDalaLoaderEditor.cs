@@ -14,6 +14,7 @@ public class RemoteDalaLoaderEditor : Editor
     private SerializedProperty _type;
     private SerializedProperty _postfix;
     private SerializedProperty _mode;
+    private SerializedProperty _priority;
 
     private int _selectedType;
     private string[] _types;
@@ -41,7 +42,8 @@ public class RemoteDalaLoaderEditor : Editor
         EditorGUILayout.PropertyField(_mode);
 
         EditorGUILayout.PropertyField(_type);
-
+        EditorGUILayout.PropertyField(_mode);
+        
         var selected = EditorGUILayout.Popup(_selectedType, _types);
         if (selected != _selectedType)
         {

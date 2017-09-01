@@ -24,7 +24,7 @@ namespace Assets.Scripts.Behaviour
                     yield return null;
                 }
                 
-                if (!_workplace.HasResources && _workplace.Info.InputResourceQuantity > 0)
+                if (!_workplace.HasResources && _workplace.ProductionCycle.InputResourceQuantity > 0)
                 {
                     var closestStockpileBlock = default(StockpileBlock);
 
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Behaviour
                         closestStockpileBlock = _workplace.World.Stockpile.GetClosestStockpileWithResource
                         (
                             _workplace.Position,
-                            _workplace.Info.InputResource
+                            _workplace.ProductionCycle.InputResource
                         );
                     } while (closestStockpileBlock == null);
 
@@ -70,7 +70,7 @@ namespace Assets.Scripts.Behaviour
                 StockpileBlock stockpileBlock;
                 while (true)
                 {
-                    stockpileBlock = world.Stockpile.GetClosestStockpileBlock(Actor.Position, _workplace.Info.OutputResource);
+                    stockpileBlock = world.Stockpile.GetClosestStockpileBlock(Actor.Position, _workplace.ProductionCycle.OutputResource);
                     if (stockpileBlock != null)
                         break;
 
