@@ -8,11 +8,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a389c921d4f00894c9670e6d31f0d257, type: 3}
-  m_Name: wood
+  m_Script: {fileID: 11500000, guid: 5d80225c0590381448240c7abdb4e81c, type: 3}
+  m_Name: hunter
   m_EditorClassIdentifier: 
-  Id: Wood
-  Name: Wood
-  MaxCountPerStockpileTile: 100
-  ResourceType: 0
-  AssociatedUnitInfo: {fileID: 0}
+  Name: 
+  Id: 
+  Hp: 0
+  Prefab: {fileID: 0}
+  DisplayPanelPrefab: {fileID: 0}
+  ProductionCycles: []
