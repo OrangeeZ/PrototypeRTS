@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Actors;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Actors;
 
 public class Building : Entity {
 
@@ -6,14 +8,16 @@ public class Building : Entity {
 
     public Building(BaseWorld world) : base(world)
     {
-        
+        Available = new List<ProductionCyclesInfo>();
     }
 
     #endregion
 
     #region public properties
 
-    public ProductionCyclesInfo ProductionCycle { get; protected set; }
+    public List<ProductionCyclesInfo> Available { get; protected set; }
+
+    public ProductionCyclesInfo ActiveProductionCycle { get; protected set; }
 
     public BuildingInfo Info { get; private set; }
 
@@ -29,7 +33,8 @@ public class Building : Entity {
     public virtual void SetInfo(BuildingInfo info)
     {
         Info = info;
-        ProductionCycle = Info.ProductionCycles;
+        Available.AddRange(Info.ProductionCycles);
+        ActiveProductionCycle = Info.ProductionCycles.FirstOrDefault();
     }
 
     public override EntityDisplayPanel GetDisplayPanelPrefab()
