@@ -158,8 +158,6 @@ namespace Behaviour
 
                         if (_target.Health <= 0)
                         {
-                            Debug.Log("Killed target");
-
                             yield break;
                         }
 
