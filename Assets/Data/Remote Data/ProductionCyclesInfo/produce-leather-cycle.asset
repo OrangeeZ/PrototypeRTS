@@ -16,5 +16,5 @@ MonoBehaviour:
   InputResource: {fileID: 0}
   InputResourceQuantity: 0
   ProductionDuration: 5
-  OutputResource: {fileID: 0}
+  OutputResource: {fileID: 11400000, guid: b34e5359596d31e49ac580f5b25b02da, type: 2}
   OutputResourceQuantity: 1

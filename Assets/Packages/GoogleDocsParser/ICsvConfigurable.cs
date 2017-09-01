@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MoreLinq;
+using Object = UnityEngine.Object;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -132,6 +133,17 @@ namespace csv
             {
                 return default(T);
             }
+        }
+
+        public Object[] GetScriptableObjects(Type type,string name)
+        {
+            var names = Get(name, string.Empty).Split(',', ' ');
+
+#if UNITY_EDITOR
+            return names.Select(_ => LoadScriptableObject(_, type)).Where(_ => _ != null).ToArray();
+#else
+            return null;
+#endif
         }
 
         public T[] GetScriptableObjects<T>(string name) where T : ScriptableObject

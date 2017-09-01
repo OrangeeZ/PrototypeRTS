@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Threading;
 using CsvHelper;
@@ -20,6 +21,8 @@ public class GoogleDocsCsvParser
     private string[] _fieldNames;
     private Dictionary<string, Values> _loadedObjects = new Dictionary<string, Values>();
     private string _type;
+    private static Type[] unityTypes = new[] { typeof(Component), typeof(GameObject), typeof(ScriptableObject) };
+
 
     public void Load(string url, string type, CsvParseMode mode, string postfix)
     {
@@ -242,21 +245,51 @@ public class GoogleDocsCsvParser
         }
     }
 
-    private static void ParseObjectField(ICsvConfigurable target, FieldInfo fieldInfo, Values values)
+    private static bool ParseListObjectField(ICsvConfigurable target,string name, FieldInfo fieldInfo, Values values)
+    {
+        var fieldType = fieldInfo.FieldType;
+        if (!fieldType.IsGenericType || (fieldType.GetGenericTypeDefinition() != typeof(List<>)))
+            return false;
+        var genericType = fieldType.GetGenericArguments().FirstOrDefault();
+        var isAssetGenericType = unityTypes.Any(x => x.IsAssignableFrom(genericType));
+        if (!isAssetGenericType)
+            return false;
+        var list = Activator.CreateInstance(fieldType) as IList;
+        var assets = values.GetScriptableObjects(genericType, name);
+        if (assets == null || list==null)
+            return false;
+        foreach (var asset in assets)
+        {
+            if(asset)
+                list.Add(asset);
+        }
+        fieldInfo.SetValue(target, list);
+        return true;
+    }
+
+    private static string GetPropertyName(FieldInfo fieldInfo)
     {
         var attribute = fieldInfo
             .GetCustomAttributes(typeof(RemotePropertyAttribute), inherit: false)
             .OfType<RemotePropertyAttribute>()
             .FirstOrDefault();
+        if (attribute == null)
+            return null;
+        var propertyName = string.IsNullOrEmpty(attribute.PropertyName) ? fieldInfo.Name : attribute.PropertyName;
+        propertyName = propertyName.ToLower();
+        return propertyName;
+    }
 
-        if (attribute != null)
+    private static void ParseObjectField(ICsvConfigurable target, FieldInfo fieldInfo, Values values)
+    {
+        var propertyName = GetPropertyName(fieldInfo);
+        if (propertyName != null)
         {
-            var propertyName = string.IsNullOrEmpty(attribute.PropertyName) ? fieldInfo.Name : attribute.PropertyName;
-            propertyName = propertyName.ToLower();
-
             var fieldType = fieldInfo.FieldType;
-            var unityTypes = new[] {typeof(Component), typeof(GameObject), typeof(ScriptableObject)};
-           
+            if (ParseListObjectField(target, propertyName, fieldInfo, values))
+            {
+                return;
+            }
             if (unityTypes.Any(_ => fieldType.IsSubclassOf(_)))
             {
                 LoadUnityTypeValue(target, fieldInfo, values, propertyName);

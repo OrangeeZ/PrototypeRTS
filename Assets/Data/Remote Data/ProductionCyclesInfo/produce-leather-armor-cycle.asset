@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: ProduceLeatherArmorCycle
   Name: ProduceLeatherArmorCycle
-  InputResource: {fileID: 0}
+  InputResource: {fileID: 11400000, guid: b34e5359596d31e49ac580f5b25b02da, type: 2}
   InputResourceQuantity: 2
   ProductionDuration: 5
-  OutputResource: {fileID: 0}
+  OutputResource: {fileID: 11400000, guid: d7d07e7fc0d429b4db4ada14712db7c9, type: 2}
   OutputResourceQuantity: 1

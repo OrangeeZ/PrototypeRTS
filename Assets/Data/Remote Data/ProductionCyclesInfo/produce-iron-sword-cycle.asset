@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: ProduceIronSwordCycle
   Name: ProduceIronSwordCycle
-  InputResource: {fileID: 0}
+  InputResource: {fileID: 11400000, guid: 7a0824332ab7f664694e5ff8d43bba2d, type: 2}
   InputResourceQuantity: 2
   ProductionDuration: 5
   OutputResource: {fileID: 11400000, guid: e9fcd98776b7ff547b7b689b4c2be26e, type: 2}
