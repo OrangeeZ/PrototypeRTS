@@ -21,3 +21,5 @@
 *.zpr filter=lfs diff=lfs merge=lfs -text
 *.mlt filter=lfs diff=lfs merge=lfs -text
 *.assbin filter=lfs diff=lfs merge=lfs -text
+*.vs
+*.ide
