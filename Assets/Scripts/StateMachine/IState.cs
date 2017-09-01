@@ -4,7 +4,8 @@ namespace Assets.Scripts.StateMachine
 {
     public interface IState
     {
-
+        void OnStateEnter();
+        
         /// <summary>
         /// state execution logic
         /// </summary>
@@ -14,6 +15,6 @@ namespace Assets.Scripts.StateMachine
         /// <summary>
         /// stop state execution
         /// </summary>
-        void Stop();
+        void OnStateExit();
     }
 }

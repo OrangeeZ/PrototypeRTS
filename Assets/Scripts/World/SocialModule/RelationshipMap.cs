@@ -1,41 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Assets.Scripts.World.SocialModule
+namespace World.SocialModule
 {
-
     public class RelationshipMap
     {
-        #region private properties
-
-        private Dictionary<int, int> _relationshipDictionary;
-
-        #endregion
-
-        public RelationshipMap(int faction)
+        public enum RelationshipType
         {
-            _relationshipDictionary = new Dictionary<int, int>();
-            SetRelationship(faction,20);
+            Neutral,
+            Hostile,
+            Friendly
         }
 
-        #region public properties
+        private readonly Dictionary<Tuple<byte, byte>, RelationshipType> _relationshipDictionary;
 
-        public int Faction { get; protected set; }
-
-        #endregion
-
-        #region public methods
-
-        public int GetRelation(int faction)
+        public RelationshipMap()
         {
-            return _relationshipDictionary.ContainsKey(faction) ? 
-                _relationshipDictionary[faction] : 0;
+            _relationshipDictionary = new Dictionary<Tuple<byte, byte>, RelationshipType>();
         }
 
-        public void SetRelationship(int faction, int relationship)
+        public RelationshipType GetRelationshipType(byte factionIdA, byte factionIdB)
         {
-            _relationshipDictionary[faction] = relationship;
+            var tuple = Tuple.Create(factionIdA, factionIdB);
+
+            return _relationshipDictionary.ContainsKey(tuple)
+                ? _relationshipDictionary[tuple]
+                : RelationshipType.Neutral;
         }
 
-        #endregion
+        public void SetRelationship(byte factionIdA, byte factionIdB, RelationshipType relationshipType)
+        {
+            var tuple = Tuple.Create(factionIdA, factionIdB);
+
+            _relationshipDictionary[tuple] = relationshipType;
+        }
     }
 }

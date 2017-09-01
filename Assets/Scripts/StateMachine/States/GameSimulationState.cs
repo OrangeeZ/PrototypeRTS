@@ -1,60 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.StateMachine;
 using Assets.Scripts.World;
-using Assets.Scripts.World.SocialModule;
 using UnityEngine;
+using World.SocialModule;
 
-namespace Assets.Scripts.StateMachine.States
+namespace StateMachine.States
 {
     public class GameSimulationState : State<GameState>
     {
-        #region private properties
-
         private OnGuiController _guiController;
         private readonly WorldInfo _worldInfo;
 
-        #endregion
+        private BaseWorld _rootWorld;
+        private RelationshipMap _relationshipMap;
 
-        public GameSimulationState(IStateController<GameState> stateController,
-            WorldInfo worldInfo) :
+        public GameSimulationState(IStateController<GameState> stateController, WorldInfo worldInfo) :
             base(stateController)
         {
             _worldInfo = worldInfo;
         }
 
+        public override void OnStateEnter()
+        {
+            InitializeSimulationWorlds();
+        }
+
         public override IEnumerator Execute()
         {
-            var world = InitializeSimulationWorld();
-
             while (true)
             {
-                world.Update(Time.unscaledDeltaTime);
+                _rootWorld.Update(Time.unscaledDeltaTime);
+                
                 yield return null;
             }
         }
 
-        public override void Stop()
+        public override void OnStateExit()
         {
-            base.Stop();
             Object.DestroyImmediate(_guiController);
         }
 
-        #region private methods
-
-        private BaseWorld InitializeSimulationWorld()
+        private void InitializeSimulationWorlds()
         {
-            var guiObject = new GameObject("GuiConroller");
-            _guiController = guiObject.AddComponent<OnGuiController>();
-            //initialize world
-            var playerRelationshp = new RelationshipMap(1);
-            playerRelationshp.SetRelationship(0, 10);
-            playerRelationshp.SetRelationship(1, -1);
-            var playerWorld = new PlayerWorld(playerRelationshp, _worldInfo.Fireplace.position);
+            _guiController = new GameObject("GuiConroller").AddComponent<OnGuiController>();
+            _relationshipMap = new RelationshipMap();
+            _rootWorld = new BaseWorld(_relationshipMap, Vector3.zero);
+
+            CreatePlayerAndWorld();
+
+            var neutralWorld = new BaseWorld(_relationshipMap, Vector3.zero);
+            neutralWorld.PopulationLimit = 15;
+
+            _rootWorld.Children.Add(neutralWorld);
+        }
+
+        private void CreatePlayerAndWorld()
+        {
+            var playerWorld = new PlayerWorld(_relationshipMap, _worldInfo.Fireplace.position);
 
             //init unit factory
             var unitFactory = _worldInfo.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(playerWorld,_worldInfo);
+            unitFactory.SetWorld(playerWorld, _worldInfo);
 
             // create dummy stockpile
             var stockpile =
@@ -63,27 +71,25 @@ namespace Assets.Scripts.StateMachine.States
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             playerWorld.PopulationLimit = 15;
 
-            //create player
+            _rootWorld.Children.Add(playerWorld);
+
             var player = CreatePlayer(playerWorld);
             CreateWorldEvents(playerWorld, player, unitFactory);
-            //init parent world
-            var neutralRelationshipMap = new RelationshipMap(0);
-            var world = new BaseWorld(neutralRelationshipMap, Vector3.zero);
-            world.Children.Add(playerWorld);
-            playerWorld.Parent = world;
+
             //initialize Temp OnGUI drawer
             InitializeOnGuiDrawer(playerWorld, player, unitFactory);
-            return world;
         }
 
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)
         {
-            var popularityEventsBehaviour = new PopularityEvent(world,_worldInfo, player, unitFactory, 4f);
+            var popularityEventsBehaviour = new PopularityEvent(world, _worldInfo, player, unitFactory, 4f);
             var debtEvent = new DebtEvent(world, player, 10f);
+
             //constructions
             var constructionModule = new ConstructionModule(world, unitFactory);
             var constructionOnGui = new ConstructionOnGui(unitFactory, constructionModule);
             _guiController.Add(constructionOnGui);
+
             //reggister events
             world.Events.Add(constructionModule);
             world.Events.Add(popularityEventsBehaviour);
@@ -103,15 +109,13 @@ namespace Assets.Scripts.StateMachine.States
             var selectionManager = new SelectionManager(world);
             var uiController = new ImUiController(selectionManager, _worldInfo);
             var worldPanel = new WorldDataPanelOnGui(world);
-            
+
             _guiController.Add(new ResourcesDrawer(world));
             _guiController.Add(new PlayerDrawer(player));
             _guiController.Add(worldPanel);
             _guiController.Add(new TestUnitOnGui(unitFactory));
-            _guiController.Add(selectionManager, true);
+            _guiController.Add(selectionManager, shown: true);
             _guiController.Add(uiController, shown: true);
         }
-
-        #endregion
     }
 }

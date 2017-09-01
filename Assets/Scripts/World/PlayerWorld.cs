@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.World.SocialModule;
 using UnityEngine;
+using World.SocialModule;
 
 public class PlayerWorld : BaseWorld {
 
