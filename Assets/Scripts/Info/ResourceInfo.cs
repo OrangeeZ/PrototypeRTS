@@ -11,7 +11,6 @@ public enum ResourceType
 
 public class ResourceInfo : ScriptableObject, ICsvConfigurable
 {
-
     [RemoteProperty]
     public string Id;
     
@@ -21,10 +20,13 @@ public class ResourceInfo : ScriptableObject, ICsvConfigurable
     [RemoteProperty]
     public int MaxCountPerStockpileTile;
 
+    [RemoteProperty]
     public ResourceType ResourceType;
 
+    [RemoteProperty]
+    public UnitInfo AssociatedUnitInfo;
+    
     public void Configure(Values values)
     {
-        values.GetEnum<ResourceType>("resourcetype", out ResourceType, ResourceType.None);
     }
 }

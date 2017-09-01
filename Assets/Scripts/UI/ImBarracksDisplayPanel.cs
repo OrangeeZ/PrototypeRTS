@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Workplace;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ImBarracksDisplayPanel : EntityDisplayPanel
 {

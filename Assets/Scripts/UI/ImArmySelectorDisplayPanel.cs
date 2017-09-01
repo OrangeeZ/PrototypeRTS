@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Actors;
 using Assets.Scripts.Actors;
 using UniRx;
 using UnityEngine;

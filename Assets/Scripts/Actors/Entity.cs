@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Actors;
+using UnityEngine;
 
-namespace Assets.Scripts.Actors
+namespace Actors
 {
     public abstract class Entity : IUpdateBehaviour
     {

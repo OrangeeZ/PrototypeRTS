@@ -1,10 +1,9 @@
-﻿using System.Runtime.InteropServices;
-using Assets.Scripts.Behaviour;
-using Assets.Scripts.World;
+﻿using Assets.Scripts.Actors;
+using Behaviour;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Assets.Scripts.Actors
+namespace Actors
 {
     public class ActorSelectionEventHandler : SelectionEventHandler
     {

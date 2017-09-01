@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
-using Assets.Scripts.Actors;
-using Assets.Scripts.Behaviour;
+using Actors;
+using Behaviour;
 using UnityEngine;
 
 public class SoldierBehaviour : ActorBehaviour

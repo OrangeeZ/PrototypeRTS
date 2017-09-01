@@ -1,7 +1,8 @@
 ﻿using System.Collections;
+using Actors;
 using Assets.Scripts.Actors;
 
-namespace Assets.Scripts.Behaviour
+namespace Behaviour
 {
     public abstract class ActorBehaviour
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using Assets.Scripts.StateMachine;
 
-namespace Assets.Scripts.StateMachine.States
+namespace StateMachine.States
 {
     public class GameInitializeState : State<GameState>
     {
@@ -14,7 +15,7 @@ namespace Assets.Scripts.StateMachine.States
         {
             //todo do somethink
             yield return null;
-            _stateController.SetState(GameState.Simulate);
+            StateController.SetState(GameState.Simulate);
         }
 
     }

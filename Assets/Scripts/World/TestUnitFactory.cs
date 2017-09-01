@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Actors;
 using Assets.Scripts.Actors;
-using Assets.Scripts.Behaviour;
-using Assets.Scripts.Workplace;
 using Assets.Scripts.World;
+using Behaviour;
+using Buildings;
 using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour

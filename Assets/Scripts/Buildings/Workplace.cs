@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Actors;
-using Assets.Scripts.Behaviour;
+﻿using Actors;
+using Behaviour;
 using UnityEngine;
 
-namespace Assets.Scripts.Workplace
+namespace Buildings
 {
     public class WorkplaceSelectionEventHandler : SelectionEventHandler
     {
