@@ -46,4 +46,8 @@ namespace Behaviour
             yield return null;
         }
     }
+
+    public class NullActorBehaviour : ActorBehaviour
+    {
+    }
 }
