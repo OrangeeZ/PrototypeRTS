@@ -1,8 +1,4 @@
 ﻿using Actors;
-<<<<<<< f8148aa54878b436da711513ce755c353fa6977b
-=======
-using Assets.Scripts.Behaviour;
->>>>>>> 51109a5ae2f0af8e4c1aa3bacf25fb4abc855286
 using Behaviour;
 using UnityEngine;
 
@@ -35,7 +31,15 @@ namespace Buildings
         public void SetWorker(Actor actor)
         {
             Worker = actor;
-            Worker.SetBehaviour(new WorkerBehaviour(this));
+
+            if (Info.Id == "Woodcutter")
+            {
+                Worker.SetBehaviour(new GetterBehaviour(this));
+            }
+            else
+            {
+                Worker.SetBehaviour(new WorkerBehaviour(this));
+            }
         }
 
         public float BeginProduction()

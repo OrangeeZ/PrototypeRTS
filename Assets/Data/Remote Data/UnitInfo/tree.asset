@@ -20,7 +20,11 @@ MonoBehaviour:
   AttackStrength: 0
   AttackSpeed: 0
   BehaviourId: NullActorBehaviour
+<<<<<<< 6408e68a656206815631e2e1d0ec23927ac43046
   Prefab: {fileID: 0}
+=======
+  Prefab: {fileID: 114423853591967152, guid: 531fd717f121998409e9cd1afd75e83f, type: 2}
+>>>>>>> ce4304ea4f9f7b0da475b33d3ef1ffec9464007c
   DisplayPanelPrefab: {fileID: 114430292296469734, guid: 22aa66d951295f94eb854d919d5f2aa3,
     type: 2}
   RequiredWeapon: {fileID: 0}

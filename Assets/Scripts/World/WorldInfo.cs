@@ -27,6 +27,10 @@ namespace Assets.Scripts.World
         [SerializeField]
         private Transform _fireplace;
 
+        [Space]
+        [SerializeField]
+        private UnitInfo _treeInfo;
+
         #endregion
 
         #region public properties
@@ -35,11 +39,17 @@ namespace Assets.Scripts.World
 
         public BuildingInfo[] BuildingInfos => _buildingInfos;
 
-        public ResourceInfo[] ResourceInfos { get { return _resourceInfos; } }
+        public ResourceInfo[] ResourceInfos
+        {
+            get { return _resourceInfos; }
+        }
 
         public StorageInfo[] StorageInfos => _storageInfos;
 
-        public Transform Fireplace { get { return _fireplace; } }
+        public Transform Fireplace
+        {
+            get { return _fireplace; }
+        }
 
         #endregion
 
@@ -77,6 +87,19 @@ namespace Assets.Scripts.World
                 .Select(UnityEditor.AssetDatabase.GUIDToAssetPath)
                 .Select(UnityEditor.AssetDatabase.LoadAssetAtPath<StorageInfo>)
                 .ToArray();
+        }
+
+        public void PopulateWorld(PlayerWorld playerWorld)
+        {
+            var factory = GetComponent<TestUnitFactory>();
+
+            for (var i = 0; i < 5; ++i)
+            {
+                var unit = factory.CreateUnit(_treeInfo);
+                var randomDirection = Random.onUnitSphere.Set(y: 0).normalized;
+                var randomPosition = randomDirection * 10 + randomDirection * Random.Range(5, 10);
+                unit.SetPosition(randomPosition);
+            }
         }
     }
 }

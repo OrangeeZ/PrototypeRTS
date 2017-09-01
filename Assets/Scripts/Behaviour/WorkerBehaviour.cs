@@ -17,6 +17,12 @@ namespace Behaviour
             var navAgent = Actor.NavAgent;
 
             navAgent.SetDestination(_workplace.Position);
+
+            while (navAgent.pathPending)
+            {
+                yield return null;
+            }
+
             while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
             {
                 yield return null;
@@ -48,13 +54,12 @@ namespace Behaviour
                 } while (closestStockpileBlock == null);
 
                 navAgent.SetDestination(closestStockpileBlock.Position);
-                while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+                while (navAgent.pathPending)
                 {
                     yield return null;
                 }
 
-                navAgent.SetDestination(_workplace.Position);
-                while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+                while (navAgent.remainingDistance > 1f)
                 {
                     yield return null;
                 }
@@ -111,23 +116,31 @@ namespace Behaviour
                     yield return null;
                 }
 
-                FetchResources().GetEnumerator();
+                routine = FetchResources().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
 
-                RunProductionCycle().GetEnumerator();
+                routine = GoToWorkplace().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
 
-                CarryProducedResourcesToStockpile().GetEnumerator();
+                routine = RunProductionCycle().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
+
+                routine = CarryProducedResourcesToStockpile().GetEnumerator();
+                while (routine.MoveNext())
+                {
+                    yield return null;
+                }
+
+                yield return null;
             }
         }
     }

@@ -14,6 +14,8 @@ namespace Behaviour
         public GetterBehaviour(Workplace workplace)
         {
             _workplace = workplace;
+            Debug.Log(nameof(_workplace));
+            Debug.Log($"Created getter behaviour");
         }
 
         protected IEnumerable GoToWorkplace()
@@ -21,7 +23,13 @@ namespace Behaviour
             var navAgent = Actor.NavAgent;
 
             navAgent.SetDestination(_workplace.Position);
-            while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+
+            while (navAgent.pathPending)
+            {
+                yield return null;
+            }
+            
+            while (navAgent.remainingDistance > 1f)
             {
                 yield return null;
             }
@@ -68,6 +76,13 @@ namespace Behaviour
                     if (Vector3.Distance(_target.Position, Actor.Position) < Actor.Info.AttackRange)
                     {
                         _target.DealDamage(Actor.Info.AttackStrength, Actor);
+
+                        if (_target.Health <= 0)
+                        {
+                            Debug.Log("Killed target");
+                            
+                            yield break;
+                        }
 
                         var delay = (float) Actor.Info.AttackSpeed;
                         while (delay > 0)
@@ -119,7 +134,13 @@ namespace Behaviour
             }
 
             navAgent.SetDestination(closestStockpileBlock.Position);
-            while (!navAgent.hasPath || navAgent.remainingDistance > 1f)
+
+            while (navAgent.pathPending)
+            {
+                yield return null;
+            }
+            
+            while (navAgent.remainingDistance > 1f)
             {
                 yield return null;
             }
@@ -137,23 +158,31 @@ namespace Behaviour
                     yield return null;
                 }
 
-                FetchResources().GetEnumerator();
+                routine = FetchResources().GetEnumerator();
+                while (routine.MoveNext())
+                {
+                    yield return null;
+                }
+                
+                routine = GoToWorkplace().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
 
-                RunProductionCycle().GetEnumerator();
+                routine = RunProductionCycle().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
 
-                CarryProducedResourcesToStockpile().GetEnumerator();
+                routine = CarryProducedResourcesToStockpile().GetEnumerator();
                 while (routine.MoveNext())
                 {
                     yield return null;
                 }
+
+                yield return null;
             }
         }
 
@@ -166,7 +195,7 @@ namespace Behaviour
         {
             var world = Actor.World;
             var entities = world.Entities;
-            var targetEntitiesInfo = _workplace.Info.ProductionCycles.InputResource.AssociatedUnitInfo;
+            var targetEntitiesInfo = _workplace.ActiveProductionCycle.InputResource.AssociatedUnitInfo;
             var potentialTargets = entities
                 .GetItems()
                 .OfType<Actor>()

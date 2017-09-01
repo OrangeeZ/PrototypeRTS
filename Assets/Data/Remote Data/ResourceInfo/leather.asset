@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Leather
   MaxCountPerStockpileTile: 100
   ResourceType: 0
+  AssociatedUnitInfo: {fileID: 0}

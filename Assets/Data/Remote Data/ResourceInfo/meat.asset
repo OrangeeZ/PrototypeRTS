@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: Meat
   MaxCountPerStockpileTile: 100
   ResourceType: 1
+  AssociatedUnitInfo: {fileID: 0}

@@ -71,6 +71,8 @@ namespace StateMachine.States
             playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             playerWorld.PopulationLimit = 15;
 
+            _worldInfo.PopulateWorld(playerWorld);
+            
             _rootWorld.Children.Add(playerWorld);
 
             var player = CreatePlayer(playerWorld);
