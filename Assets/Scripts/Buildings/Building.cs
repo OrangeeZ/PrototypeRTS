@@ -8,14 +8,14 @@ public class Building : Entity {
 
     public Building(BaseWorld world) : base(world)
     {
-        Available = new List<ProductionCyclesInfo>();
+        AvailableProduction = new List<ProductionCyclesInfo>();
     }
 
     #endregion
 
     #region public properties
 
-    public List<ProductionCyclesInfo> Available { get; protected set; }
+    public List<ProductionCyclesInfo> AvailableProduction { get; protected set; }
 
     public ProductionCyclesInfo ActiveProductionCycle { get; protected set; }
 
@@ -25,6 +25,14 @@ public class Building : Entity {
 
     #region public methods
 
+    public bool ActivateProduction(ProductionCyclesInfo cyclesInfo)
+    {
+        if(!AvailableProduction.Contains(cyclesInfo))
+            return false;
+        ActiveProductionCycle = cyclesInfo;
+        return true;
+    }
+
     public override void Update(float deltaTime)
     {
         
@@ -33,7 +41,7 @@ public class Building : Entity {
     public virtual void SetInfo(BuildingInfo info)
     {
         Info = info;
-        Available.AddRange(Info.ProductionCycles);
+        AvailableProduction.AddRange(Info.ProductionCycles);
         ActiveProductionCycle = Info.ProductionCycles.FirstOrDefault();
     }
 

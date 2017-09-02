@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ConstructionOnGui : IGuiDrawer
 {
@@ -21,6 +19,7 @@ public class ConstructionOnGui : IGuiDrawer
 
         if (!_constructionModule.IsPlacingBuilding)
         {
+            GUILayout.BeginVertical();
             foreach (var each in _unitFactory.BuildingInfos)
             {
                 if (GUILayout.Button(each.Name, GUILayout.ExpandWidth(false)))
@@ -31,6 +30,7 @@ public class ConstructionOnGui : IGuiDrawer
                     break;
                 }
             }
+            GUILayout.EndVertical();
 
             if (GUILayout.Button(_constructionModule.IsRemovingBuildings ? 
                 "SwitchActiveState removing buildings" :
