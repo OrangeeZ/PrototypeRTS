@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 520913c82b500fc4ba1fbaa2f0c9aacf, type: 3}
   m_Name: produce-meat-cycle
   m_EditorClassIdentifier: 
-  Id: 
-  Name: 
+  Id: ProduceMeatCycle
+  Name: ProduceMeatCycle
   InputResource: {fileID: 0}
   InputResourceQuantity: 0
-  ProductionDuration: 0
-  OutputResource: {fileID: 0}
-  OutputResourceQuantity: 0
+  ProductionDuration: 10
+  OutputResource: {fileID: 11400000, guid: 665b0ed7df2e87948bb12ef46ec05413, type: 2}
+  OutputResourceQuantity: 1

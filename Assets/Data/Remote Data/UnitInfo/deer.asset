@@ -11,16 +11,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8312aa3668d4cb945bfcf01170df8c81, type: 3}
   m_Name: deer
   m_EditorClassIdentifier: 
-  Name: 
-  Hp: 0
+  Name: Deer
+  Hp: 3
   AggressiveDetectionRange: 0
   PassiveDetectionRange: 0
   DefensiveDetectionRange: 0
   AttackRange: 0
   AttackStrength: 0
   AttackSpeed: 0
-  BehaviourId: 
-  Prefab: {fileID: 0}
-  DisplayPanelPrefab: {fileID: 0}
+  BehaviourId: NullActorBehaviour
+  Prefab: {fileID: 114423853591967152, guid: 531fd717f121998409e9cd1afd75e83f, type: 2}
+  DisplayPanelPrefab: {fileID: 114430292296469734, guid: 22aa66d951295f94eb854d919d5f2aa3,
+    type: 2}
   RequiredWeapon: {fileID: 0}
   RequiredArmor: {fileID: 0}
