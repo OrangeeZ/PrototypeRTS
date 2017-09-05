@@ -233,12 +233,8 @@ namespace Behaviour
         private void FindAttackTarget()
         {
             var world = Actor.World;
-            var entities = world.Entities;
             var targetEntitiesInfo = _workplace.ActiveProductionCycle.InputResource.AssociatedUnitInfo;
-            var potentialTargets = entities
-                .GetItems()
-                .OfType<Actor>()
-                .Where(_ => _.Info == targetEntitiesInfo);
+            var potentialTargets = world.EntityMapping.GetActorsByInfo(targetEntitiesInfo);
 
             var detectionRange = Actor.Info.AggressiveDetectionRange;
 

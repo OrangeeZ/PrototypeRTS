@@ -12,6 +12,7 @@ public class BaseWorld : IUpdateBehaviour
     public WorldEventsController Events { get; private set; }
     public Stockpile Stockpile { get; private set; }
     public byte FactionId { get; private set; }
+    public readonly EntityMapping EntityMapping;
 
     /// <summary>
     /// current population
@@ -39,12 +40,14 @@ public class BaseWorld : IUpdateBehaviour
 
     public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
     {
+        EntityMapping = new EntityMapping();
+        Entities = new EntitiesController(EntityMapping);
+        
         FreeCitizens = new Queue<Actor>();
         RelationshipMap = relationshipMap;
         FirePlace = firePlace;
 
         Stockpile = new Stockpile();
-        Entities = new EntitiesController();
         Events = new WorldEventsController();
     }
     
@@ -64,6 +67,7 @@ public class BaseWorld : IUpdateBehaviour
     {
         Events.Update(deltaTime);
         Entities.Update(deltaTime);
+        
         UpdatePopulation();
     }
 

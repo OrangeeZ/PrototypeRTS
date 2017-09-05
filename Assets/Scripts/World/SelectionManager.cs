@@ -102,7 +102,7 @@ public class SelectionManager : IGuiDrawer
     {
         _selectedEntities.Clear();
 
-        var actors = _world.Entities.GetItems().OfType<Actor>();
+        var actors = _world.EntityMapping.GetEntitiesByType<Actor>();
 
         var camera = Camera.main;
 
@@ -129,12 +129,12 @@ public class SelectionManager : IGuiDrawer
 
     private void CheckSingleSelectionAndOrders()
     {
-        var actors = _world.Entities.GetItems();
+        var entities = _world.Entities.GetItems();
         var camera = Camera.main;
         var ray = camera.ScreenPointToRay(Input.mousePosition);
         var didGiveOrder = false;
 
-        foreach (var each in actors)
+        foreach (var each in entities)
         {
             var isClicked = each.GetBounds().IntersectRay(ray);
             if (isClicked)

@@ -24,12 +24,12 @@ public class WorldBehaviourController<TBehaviour>
         return _behaviours;
     }
 
-    public void Add(TBehaviour behaviour)
+    public virtual void Add(TBehaviour behaviour)
     {
         _behaviours.Add(behaviour);
     }
 
-    public void Remove(TBehaviour behaviour)
+    public virtual void Remove(TBehaviour behaviour)
     {
         _behavioursToRemove.Add(behaviour);
     }

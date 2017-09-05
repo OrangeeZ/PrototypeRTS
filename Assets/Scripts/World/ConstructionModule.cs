@@ -47,7 +47,7 @@ public class ConstructionModule : WorldEvent
 
         if (IsRemovingBuildings && Input.GetMouseButtonDown(0) && _world != null)
         {
-            var entities = _world.Entities.GetItems().OfType<Workplace>();
+            var entities = _world.EntityMapping.GetEntitiesByType<Workplace>();
             foreach (var each in entities)
             {
                 if (each.GetBounds().IntersectRay(ray))
