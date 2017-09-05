@@ -38,13 +38,15 @@ public class TestUnitFactory : MonoBehaviour
         }
 
         var unit = new Actor(_world);
-        _world.Entities.Add(unit);
+        var result = CreateUnit(unitInfo, unit);
 
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
         unit.SetPosition(_world.GetFireplace() + randomPosition);
 
-        return CreateUnit(unitInfo, unit);
+        _world.Entities.Add(result);
+
+        return result;
     }
 
     public Entity CreateUnit(UnitInfo unitInfo, Actor existingUnit)

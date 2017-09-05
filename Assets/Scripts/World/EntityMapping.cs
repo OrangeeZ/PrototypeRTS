@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Actors;
 using UnityEngine;
@@ -8,7 +7,7 @@ using World.SocialModule;
 public class MultiDictionary<TKey, TValue>
 {
     private static readonly TValue[] EmptyCollection = new TValue[0];
-    private Dictionary<TKey, List<TValue>> _dictionary;
+    private readonly Dictionary<TKey, List<TValue>> _dictionary = new Dictionary<TKey, List<TValue>>();
 
     public void Add(TKey key, TValue value)
     {
@@ -16,6 +15,7 @@ public class MultiDictionary<TKey, TValue>
         if (!_dictionary.TryGetValue(key, out collection))
         {
             collection = new List<TValue>();
+            _dictionary[key] = collection;
         }
 
         collection.Add(value);
@@ -53,7 +53,7 @@ public class EntityMapping
     {
         if (entity is Actor)
         {
-            var actor = entity as Actor;
+            var actor = (Actor) entity;
             _infoToActorMapping.Add(actor.Info, actor);
         }
 
@@ -85,8 +85,8 @@ public class EntityMapping
 
     public IEnumerable<Entity> GetEntitiesByRelationship(byte factionId, RelationshipMap.RelationshipType relationshipType)
     {
-        var factions = _relationshipMap.GetFactionsWithRelationship(factionId, relationshipType);
+        var factionsWithRelationship = _relationshipMap.GetFactionsWithRelationship(factionId, relationshipType);
 
-        return factions.SelectMany(_factionToEntityMapping.Get);
+        return factionsWithRelationship.SelectMany(_factionToEntityMapping.Get);
     }
 }

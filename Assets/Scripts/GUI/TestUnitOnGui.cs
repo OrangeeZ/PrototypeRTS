@@ -15,12 +15,17 @@ namespace Assets.Scripts.World
         {
             GUILayout.Space(10);
 
-            var factionId = (int)_unitFactory.FactionId;
-            var factionIdString = GUILayout.TextArea(_unitFactory.FactionId.ToString(), "Faction Id");
-            
-            if (int.TryParse(factionIdString, out factionId))
+            using (new GUILayout.HorizontalScope())
             {
-                _unitFactory.FactionId = (byte)factionId;
+                GUILayout.Label("Faction Id");
+                
+                var factionId = (int)_unitFactory.FactionId;
+                var factionIdString = GUILayout.TextField(_unitFactory.FactionId.ToString());
+            
+                if (int.TryParse(factionIdString, out factionId))
+                {
+                    _unitFactory.FactionId = (byte)factionId;
+                }
             }
             
             foreach (var each in _unitFactory.UnitInfos)

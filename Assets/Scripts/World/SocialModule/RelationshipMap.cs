@@ -12,32 +12,33 @@ namespace World.SocialModule
             Friendly
         }
 
-        private readonly Dictionary<Tuple<byte, byte>, RelationshipType> _mapping;
+        private readonly RelationshipType[,] _relationshipMapping;
 
         public RelationshipMap()
         {
-            _mapping = new Dictionary<Tuple<byte, byte>, RelationshipType>();
+            _relationshipMapping = new RelationshipType[3, 3];
         }
 
         public RelationshipType GetRelationshipType(byte factionIdA, byte factionIdB)
         {
-            var tuple = Tuple.Create(factionIdA, factionIdB);
-
-            return _mapping.ContainsKey(tuple)
-                ? _mapping[tuple]
-                : RelationshipType.Neutral;
+            return _relationshipMapping[factionIdA, factionIdB];
         }
 
         public void SetRelationship(byte factionIdA, byte factionIdB, RelationshipType relationshipType)
         {
-            var tuple = Tuple.Create(factionIdA, factionIdB);
-
-            _mapping[tuple] = relationshipType;
+            _relationshipMapping[factionIdA, factionIdB] = relationshipType;
+            _relationshipMapping[factionIdB, factionIdA] = relationshipType;
         }
 
         public IEnumerable<byte> GetFactionsWithRelationship(byte factionId, RelationshipType relationshipType)
         {
-            return new byte[0];
+            for (var i = 0; i < 3; ++i)
+            {
+                if (_relationshipMapping[factionId, i] == relationshipType)
+                {
+                    yield return (byte) i;
+                }
+            }
         }
     }
 }

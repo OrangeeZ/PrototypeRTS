@@ -3,6 +3,7 @@ using System.Linq;
 using Actors;
 using Behaviour;
 using UnityEngine;
+using World.SocialModule;
 
 public class SoldierBehaviour : ActorBehaviour
 {
@@ -120,10 +121,8 @@ public class SoldierBehaviour : ActorBehaviour
     private void FindAttackTarget()
     {
         var world = Actor.World;
-        var entities = world.Entities;
-        var potentialTargets = entities
-            .GetItems()
-            .Where(_ => _.IsEnemy != Actor.IsEnemy && _ != Actor);
+        var potentialTargets = 
+            world.EntityMapping.GetEntitiesByRelationship(Actor.FactionId, RelationshipMap.RelationshipType.Hostile);
 
         var detectionRange = GetDetectionRange();
 
