@@ -19,7 +19,6 @@ public class WorldDataPanelOnGui : IGuiDrawer {
         GUILayout.Label(string.Format("PopulationLimit : {0}", _world.PopulationLimit));
         GUILayout.Label(string.Format("Population : {0}", _world.Population));
         GUILayout.Label(string.Format("Gold : {0}", _world.Gold));
-        GUILayout.Label(string.Format("Faction : {0}", _world.FactionId));
 
         GUILayout.BeginHorizontal();
 

@@ -11,7 +11,6 @@ public class BaseWorld : IUpdateBehaviour
     public EntitiesController Entities { get; private set; }
     public WorldEventsController Events { get; private set; }
     public Stockpile Stockpile { get; private set; }
-    public byte FactionId { get; private set; }
     public readonly EntityMapping EntityMapping;
 
     /// <summary>
@@ -40,7 +39,7 @@ public class BaseWorld : IUpdateBehaviour
 
     public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
     {
-        EntityMapping = new EntityMapping();
+        EntityMapping = new EntityMapping(relationshipMap);
         Entities = new EntitiesController(EntityMapping);
         
         FreeCitizens = new Queue<Actor>();
@@ -52,16 +51,6 @@ public class BaseWorld : IUpdateBehaviour
     }
     
     #region public methods
-
-    public void SetFaction(byte factionId)
-    {
-        FactionId = factionId;
-    }
-
-    public RelationshipMap.RelationshipType GetRelationshipType(byte factionId)
-    {
-        return RelationshipMap.GetRelationshipType(FactionId, factionId);
-    }
 
     public virtual void Update(float deltaTime)
     {

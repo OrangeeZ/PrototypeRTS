@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Actors;
 using UnityEngine;
+using World.SocialModule;
 
 public class MultiDictionary<TKey, TValue>
 {
@@ -39,17 +40,37 @@ public class EntityMapping
 {
     private readonly MultiDictionary<UnitInfo, Actor> _infoToActorMapping = new MultiDictionary<UnitInfo, Actor>();
     private readonly MultiDictionary<System.Type, Entity> _typeToEntityMapping = new MultiDictionary<System.Type, Entity>();
+    private readonly MultiDictionary<byte, Entity> _factionToEntityMapping = new MultiDictionary<byte, Entity>();
 
-    public void AddActor(Actor actor)
+    private readonly RelationshipMap _relationshipMap;
+
+    public EntityMapping(RelationshipMap relationshipMap)
     {
-        _infoToActorMapping.Add(actor.Info, actor);
-        _typeToEntityMapping.Add(actor.GetType(), actor);
+        _relationshipMap = relationshipMap;
     }
 
-    public void RemoveActor(Actor actor)
+    public void AddEntity(Entity entity)
     {
-        _infoToActorMapping.Remove(actor.Info, actor);
-        _typeToEntityMapping.Remove(actor.GetType(), actor);
+        if (entity is Actor)
+        {
+            var actor = entity as Actor;
+            _infoToActorMapping.Add(actor.Info, actor);
+        }
+
+        _typeToEntityMapping.Add(entity.GetType(), entity);
+        _factionToEntityMapping.Add(entity.FactionId, entity);
+    }
+
+    public void RemoveEntity(Entity entity)
+    {
+        if (entity is Actor)
+        {
+            var actor = entity as Actor;
+            _infoToActorMapping.Remove(actor.Info, actor);
+        }
+
+        _typeToEntityMapping.Remove(entity.GetType(), entity);
+        _factionToEntityMapping.Add(entity.FactionId, entity);
     }
 
     public IList<Actor> GetActorsByInfo(UnitInfo info)
@@ -60,5 +81,12 @@ public class EntityMapping
     public IEnumerable<TEntity> GetEntitiesByType<TEntity>() where TEntity : Entity
     {
         return _typeToEntityMapping.Get(typeof(TEntity)).OfType<TEntity>();
+    }
+
+    public IEnumerable<Entity> GetEntitiesByRelationship(byte factionId, RelationshipMap.RelationshipType relationshipType)
+    {
+        var factions = _relationshipMap.GetFactionsWithRelationship(factionId, relationshipType);
+
+        return factions.SelectMany(_factionToEntityMapping.Get);
     }
 }

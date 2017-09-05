@@ -12,19 +12,19 @@ namespace World.SocialModule
             Friendly
         }
 
-        private readonly Dictionary<Tuple<byte, byte>, RelationshipType> _relationshipDictionary;
+        private readonly Dictionary<Tuple<byte, byte>, RelationshipType> _mapping;
 
         public RelationshipMap()
         {
-            _relationshipDictionary = new Dictionary<Tuple<byte, byte>, RelationshipType>();
+            _mapping = new Dictionary<Tuple<byte, byte>, RelationshipType>();
         }
 
         public RelationshipType GetRelationshipType(byte factionIdA, byte factionIdB)
         {
             var tuple = Tuple.Create(factionIdA, factionIdB);
 
-            return _relationshipDictionary.ContainsKey(tuple)
-                ? _relationshipDictionary[tuple]
+            return _mapping.ContainsKey(tuple)
+                ? _mapping[tuple]
                 : RelationshipType.Neutral;
         }
 
@@ -32,7 +32,12 @@ namespace World.SocialModule
         {
             var tuple = Tuple.Create(factionIdA, factionIdB);
 
-            _relationshipDictionary[tuple] = relationshipType;
+            _mapping[tuple] = relationshipType;
+        }
+
+        public IEnumerable<byte> GetFactionsWithRelationship(byte factionId, RelationshipType relationshipType)
+        {
+            return new byte[0];
         }
     }
 }

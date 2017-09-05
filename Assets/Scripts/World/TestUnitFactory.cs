@@ -10,7 +10,7 @@ using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
-    public bool IsEnemy { get; set; } = false;
+    public byte FactionId;
 
     public UnitInfo[] UnitInfos => _worldInfo.UnitInfos;
 
@@ -52,13 +52,12 @@ public class TestUnitFactory : MonoBehaviour
         var unit = existingUnit;
         var unitView = Instantiate(unitInfo.Prefab);
 
-        unitView.SetIsEnemy(IsEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
 
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
-        unit.SetIsEnemy(IsEnemy);
+        unit.SetFactionId(FactionId);
 
         return unit;
     }
