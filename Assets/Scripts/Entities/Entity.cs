@@ -86,8 +86,6 @@ namespace Actors
 
         public virtual void DealDamage(int amount, Entity damageSource)
         {
-            Debug.Log($"Recieved damage {amount}");
-
             Health -= amount;
 
             if (Health <= 0)
