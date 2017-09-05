@@ -70,7 +70,7 @@ public class EntityMapping
         }
 
         _typeToEntityMapping.Remove(entity.GetType(), entity);
-        _factionToEntityMapping.Add(entity.FactionId, entity);
+        _factionToEntityMapping.Remove(entity.FactionId, entity);
     }
 
     public IList<Actor> GetActorsByInfo(UnitInfo info)

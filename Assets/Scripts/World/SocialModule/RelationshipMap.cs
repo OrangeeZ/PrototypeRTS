@@ -11,12 +11,14 @@ namespace World.SocialModule
             Hostile,
             Friendly
         }
+        
+        private const int MaxFactionCount = 3;
 
         private readonly RelationshipType[,] _relationshipMapping;
 
         public RelationshipMap()
         {
-            _relationshipMapping = new RelationshipType[3, 3];
+            _relationshipMapping = new RelationshipType[MaxFactionCount, MaxFactionCount];
         }
 
         public RelationshipType GetRelationshipType(byte factionIdA, byte factionIdB)
@@ -32,7 +34,7 @@ namespace World.SocialModule
 
         public IEnumerable<byte> GetFactionsWithRelationship(byte factionId, RelationshipType relationshipType)
         {
-            for (var i = 0; i < 3; ++i)
+            for (var i = 0; i < MaxFactionCount; ++i)
             {
                 if (_relationshipMapping[factionId, i] == relationshipType)
                 {

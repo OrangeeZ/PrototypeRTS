@@ -99,6 +99,7 @@ namespace Assets.Scripts.World
                 var randomDirection = Random.onUnitSphere.Set(y: 0).normalized;
                 var randomPosition = randomDirection * 10 + randomDirection * Random.Range(5, 10);
                 unit.SetPosition(randomPosition);
+                unit.SetFactionId(2); // Neutral, otherwise trees will be hostile to enemies
             }
         }
     }

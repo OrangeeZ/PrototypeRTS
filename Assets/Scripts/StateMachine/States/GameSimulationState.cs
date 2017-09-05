@@ -46,6 +46,9 @@ namespace StateMachine.States
         {
             _guiController = new GameObject("GuiConroller").AddComponent<OnGuiController>();
             _relationshipMap = new RelationshipMap();
+            _relationshipMap.SetRelationship(0, 1, RelationshipMap.RelationshipType.Hostile); // Players A and B
+            _relationshipMap.SetRelationship(0, 2, RelationshipMap.RelationshipType.Neutral); // Other players and nature
+            _relationshipMap.SetRelationship(1, 2, RelationshipMap.RelationshipType.Neutral);
 
             CreatePlayerAndWorld();
         }

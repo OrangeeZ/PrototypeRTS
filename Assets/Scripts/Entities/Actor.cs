@@ -103,7 +103,7 @@ namespace Actors
         {
             base.DealDamage(amount, damageSource);
             
-            Behaviour.OnActorDamageReceiveDamage(damageSource);
+            Behaviour?.OnActorDamageReceiveDamage(damageSource);
 
             if (Health <= 0 && Behaviour != null)
             {
