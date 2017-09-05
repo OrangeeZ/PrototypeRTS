@@ -13,7 +13,7 @@ namespace StateMachine.States
         private OnGuiController _guiController;
         private readonly WorldInfo _worldInfo;
 
-        private BaseWorld _rootWorld;
+        private BaseWorld _gameWorld;
         private RelationshipMap _relationshipMap;
 
         public GameSimulationState(IStateController<GameState> stateController, WorldInfo worldInfo) :
@@ -31,8 +31,8 @@ namespace StateMachine.States
         {
             while (true)
             {
-                _rootWorld.Update(Time.unscaledDeltaTime);
-                
+                _gameWorld.Update(Time.unscaledDeltaTime);
+
                 yield return null;
             }
         }
@@ -46,14 +46,8 @@ namespace StateMachine.States
         {
             _guiController = new GameObject("GuiConroller").AddComponent<OnGuiController>();
             _relationshipMap = new RelationshipMap();
-            _rootWorld = new BaseWorld(_relationshipMap, Vector3.zero);
 
             CreatePlayerAndWorld();
-
-            var neutralWorld = new BaseWorld(_relationshipMap, Vector3.zero);
-            neutralWorld.PopulationLimit = 15;
-
-            _rootWorld.Children.Add(neutralWorld);
         }
 
         private void CreatePlayerAndWorld()
@@ -72,14 +66,13 @@ namespace StateMachine.States
             playerWorld.PopulationLimit = 15;
 
             _worldInfo.PopulateWorld(playerWorld);
-            
-            _rootWorld.Children.Add(playerWorld);
 
             var player = CreatePlayer(playerWorld);
             CreateWorldEvents(playerWorld, player, unitFactory);
 
             //initialize Temp OnGUI drawer
             InitializeOnGuiDrawer(playerWorld, player, unitFactory);
+            _gameWorld = playerWorld;
         }
 
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)
@@ -87,12 +80,10 @@ namespace StateMachine.States
             var popularityEventsBehaviour = new PopularityEvent(world, _worldInfo, player, unitFactory, 4f);
             var debtEvent = new DebtEvent(world, player, 10f);
 
-            //constructions
             var constructionModule = new ConstructionModule(world, unitFactory);
             var constructionOnGui = new ConstructionOnGui(unitFactory, constructionModule);
             _guiController.Add(constructionOnGui);
 
-            //reggister events
             world.Events.Add(constructionModule);
             world.Events.Add(popularityEventsBehaviour);
             world.Events.Add(debtEvent);

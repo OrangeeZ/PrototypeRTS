@@ -8,11 +8,8 @@ public class BaseWorld : IUpdateBehaviour
 {
     public int FreeCitizensCount => FreeCitizens.Count;
 
-    public BaseWorld Parent { get; set; }
-    
     public EntitiesController Entities { get; private set; }
     public WorldEventsController Events { get; private set; }
-    public WorldsController Children { get; private set; }
     public Stockpile Stockpile { get; private set; }
     public byte FactionId { get; private set; }
 
@@ -49,7 +46,6 @@ public class BaseWorld : IUpdateBehaviour
         Stockpile = new Stockpile();
         Entities = new EntitiesController();
         Events = new WorldEventsController();
-        Children = new WorldsController();
     }
     
     #region public methods
@@ -68,7 +64,6 @@ public class BaseWorld : IUpdateBehaviour
     {
         Events.Update(deltaTime);
         Entities.Update(deltaTime);
-        Children.Update(deltaTime);
         UpdatePopulation();
     }
 
