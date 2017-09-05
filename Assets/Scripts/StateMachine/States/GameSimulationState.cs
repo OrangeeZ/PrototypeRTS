@@ -55,27 +55,27 @@ namespace StateMachine.States
 
         private void CreatePlayerAndWorld()
         {
-            var playerWorld = new PlayerWorld(_relationshipMap, _worldInfo.Fireplace.position);
+            var world = new BaseWorld(_relationshipMap, _worldInfo.Fireplace.position);
 
             //init unit factory
             var unitFactory = _worldInfo.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(playerWorld, _worldInfo);
+            unitFactory.SetWorld(world, _worldInfo);
 
             // create dummy stockpile
             var stockpile =
                 unitFactory.CreateBuilding(unitFactory.BuildingInfos.First(info => info.Id == "StockpileBlock"));
             stockpile.SetPosition(Vector3.zero);
-            playerWorld.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
-            playerWorld.PopulationLimit = 15;
+            world.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
+            world.PopulationLimit = 15;
 
-            _worldInfo.PopulateWorld(playerWorld);
+            _worldInfo.PopulateWorld(world);
 
-            var player = CreatePlayer(playerWorld);
-            CreateWorldEvents(playerWorld, player, unitFactory);
+            var player = CreatePlayer(world);
+            CreateWorldEvents(world, player, unitFactory);
 
             //initialize Temp OnGUI drawer
-            InitializeOnGuiDrawer(playerWorld, player, unitFactory);
-            _gameWorld = playerWorld;
+            InitializeOnGuiDrawer(world, player, unitFactory);
+            _gameWorld = world;
         }
 
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)

@@ -89,7 +89,7 @@ namespace Assets.Scripts.World
                 .ToArray();
         }
 
-        public void PopulateWorld(PlayerWorld playerWorld)
+        public void PopulateWorld(BaseWorld world)
         {
             var factory = GetComponent<TestUnitFactory>();
 
