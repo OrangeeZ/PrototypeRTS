@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Workplace;
+﻿using Buildings;
 using UnityEngine;
 
 public class ImBuildingDisplayPanel : EntityDisplayPanel

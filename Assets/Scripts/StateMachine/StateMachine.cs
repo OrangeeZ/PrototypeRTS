@@ -28,7 +28,7 @@ namespace Assets.Scripts.StateMachine
         public virtual void Stop()
         {
             if(_activeState != null)
-                _activeState.Stop();
+                _activeState.OnStateExit();
             _activeState = null;
             _behaviour.StopAllCoroutines();
         }
@@ -45,6 +45,7 @@ namespace Assets.Scripts.StateMachine
         protected virtual IEnumerator ExecuteState(IState state)
         {
             _activeState = state;
+            _activeState.OnStateEnter();
             yield return state.Execute();
         }
 

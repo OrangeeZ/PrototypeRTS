@@ -1,29 +1,25 @@
 ﻿using System.Collections;
+using Assets.Scripts.StateMachine;
 
-namespace Assets.Scripts.StateMachine
+namespace StateMachine
 {
     public abstract class State<TState> : IState
     {
-        protected IStateController<TState> _stateController;
+        protected IStateController<TState> StateController;
 
-        #region constructor
-
-        /// <summary>
-        /// single state of statemachine
-        /// </summary>
-        public State(IStateController<TState> stateController)
+        protected State(IStateController<TState> stateController)
         {
-            _stateController = stateController;
+            StateController = stateController;
         }
 
-        #endregion
-
-        #region public methods
+        public virtual void OnStateEnter()
+        {
+        }
 
         public abstract IEnumerator Execute();
 
-        public virtual void Stop(){}
-
-        #endregion
+        public virtual void OnStateExit()
+        {
+        }
     }
 }

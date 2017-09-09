@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Assets.Scripts.Actors;
+using Actors;
 using Assets.Scripts.World;
 using UnityEngine;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using Assets.Scripts.Actors;
+using Actors;
 
-namespace Assets.Scripts.Behaviour
+namespace Behaviour
 {
     public abstract class ActorBehaviour
     {
@@ -41,5 +41,9 @@ namespace Assets.Scripts.Behaviour
         {
             yield return null;
         }
+    }
+
+    public class NullActorBehaviour : ActorBehaviour
+    {
     }
 }

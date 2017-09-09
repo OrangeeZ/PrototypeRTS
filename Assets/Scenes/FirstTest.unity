@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -246,6 +246,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4266708373949428, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b, type: 2}
       propertyPath: m_LocalPosition.x
       value: -0.065564156
@@ -283,6 +288,72 @@ Prefab:
       propertyPath: _fireplace
       value: 
       objectReference: {fileID: 1454002632}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _treeInfo
+      value: 
+      objectReference: {fileID: 11400000, guid: c9dbe2755cd78234ba94d8743bd464b7,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 4ec585792cab6f94387c955b9893b795,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 37eb28794463d394e833c85465233f18,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: bd91975d462378a4688e48990ad9b8e7,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 60149de884b9fea488789ff75daf0057,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _buildingInfos.Array.data[6]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0164dd46bee6abe43a3a6e0fb0da9af3,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _buildingInfos.Array.data[8]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2be8b3770231d05418124bd44e45ebc2,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _buildingInfos.Array.data[9]
+      value: 
+      objectReference: {fileID: 11400000, guid: 2681890a90947944fa0b667ef6dbcef2,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _buildingInfos.Array.data[12]
+      value: 
+      objectReference: {fileID: 11400000, guid: c99cab834ffeaf047ab128816f867943,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _unitInfos.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: c9dbe2755cd78234ba94d8743bd464b7,
+        type: 2}
+    - target: {fileID: 114926365375136622, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b,
+        type: 2}
+      propertyPath: _buildingInfos.Array.data[10]
+      value: 
+      objectReference: {fileID: 11400000, guid: 804185bc89db485449e938b003e4f30b,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d8c52a38a6d4cfe45876e6f9d4be3e1b, type: 2}
   m_IsPrefabParent: 0
@@ -404,20 +475,6 @@ Light:
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_FalloffTable:
-    m_Table[0]: 0
-    m_Table[1]: 0
-    m_Table[2]: 0
-    m_Table[3]: 0
-    m_Table[4]: 0
-    m_Table[5]: 0
-    m_Table[6]: 0
-    m_Table[7]: 0
-    m_Table[8]: 0
-    m_Table[9]: 0
-    m_Table[10]: 0
-    m_Table[11]: 0
-    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0

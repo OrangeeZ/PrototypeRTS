@@ -1,29 +1,27 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Actors
+namespace Actors
 {
     public abstract class Entity : IUpdateBehaviour
     {
-
-        protected ActorView ActorView;
-
-        #region public properties
-
         public Vector3 Position { get; protected set; }
 
         public int Health { get; protected set; }
 
         public BaseWorld World { get; private set; }
 
-        public bool IsEnemy { get; private set; }
+        public byte FactionId { get; private set; }
+
+        #warning IsEnemy is a stub for backwards compatibility; will later be replaced with FactionId things
+        public bool IsEnemy => FactionId != 0;
         
         /// <summary>
         /// is building active
         /// </summary>
         public bool IsActive { get; protected set; }
 
-        #endregion
-
+        protected ActorView ActorView;
+        
         #region public methods
 
         public abstract void Update(float deltaTime);
@@ -33,11 +31,11 @@ namespace Assets.Scripts.Actors
             World = world;
         }
 
-        public void SetIsEnemy(bool isEnemy)
+        public void SetFactionId(byte factionId)
         {
-            IsEnemy = isEnemy;
+            FactionId = factionId;
+            ActorView.SetIsEnemy(IsEnemy);
         }
-
 
         public void SetState(bool active)
         {
@@ -56,6 +54,7 @@ namespace Assets.Scripts.Actors
             
             ActorView = actorView;
             ActorView.transform.position = Position;
+            ActorView.SetIsEnemy(IsEnemy);
         }
 
         public virtual void SetPosition(Vector3 position)
@@ -87,8 +86,6 @@ namespace Assets.Scripts.Actors
 
         public virtual void DealDamage(int amount, Entity damageSource)
         {
-            Debug.Log($"Recieved damage {amount}");
-
             Health -= amount;
 
             if (Health <= 0)
@@ -118,8 +115,6 @@ namespace Assets.Scripts.Actors
 
         #endregion
 
-        #region private methods
-
         protected virtual void Activate()
         {
             
@@ -129,7 +124,5 @@ namespace Assets.Scripts.Actors
         {
             
         }
-
-        #endregion
     }
 }

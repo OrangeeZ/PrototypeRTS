@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assets.Scripts.Actors;
+using Actors;
 using csv;
 using UnityEngine;
 

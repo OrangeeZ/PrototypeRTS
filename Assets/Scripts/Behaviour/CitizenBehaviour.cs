@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using Behaviour;
 
-namespace Assets.Scripts.Behaviour
+namespace Behaviour
 {
     public class CitizenBehaviour : ActorBehaviour
     {

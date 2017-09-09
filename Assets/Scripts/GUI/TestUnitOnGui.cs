@@ -14,8 +14,20 @@ namespace Assets.Scripts.World
         public override void Draw()
         {
             GUILayout.Space(10);
-            _unitFactory.IsEnemy = 
-                GUILayout.Toggle(_unitFactory.IsEnemy, "Is Enemy");
+
+            using (new GUILayout.HorizontalScope())
+            {
+                GUILayout.Label("Faction Id");
+                
+                var factionId = (int)_unitFactory.FactionId;
+                var factionIdString = GUILayout.TextField(_unitFactory.FactionId.ToString());
+            
+                if (int.TryParse(factionIdString, out factionId))
+                {
+                    _unitFactory.FactionId = (byte)factionId;
+                }
+            }
+            
             foreach (var each in _unitFactory.UnitInfos)
             {
                 if (GUILayout.Button("Create " + each.Name))
@@ -23,6 +35,7 @@ namespace Assets.Scripts.World
                     _unitFactory.CreateUnit(each);
                 }
             }
+            
             GUILayout.Space(10);
             foreach (var each in _unitFactory.BuildingInfos)
             {
@@ -32,7 +45,5 @@ namespace Assets.Scripts.World
                 }
             }
         }
-
-
     }
 }

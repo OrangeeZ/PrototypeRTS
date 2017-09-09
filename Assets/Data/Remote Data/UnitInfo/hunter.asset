@@ -19,7 +19,7 @@ MonoBehaviour:
   AttackRange: 5
   AttackStrength: 1
   AttackSpeed: 1
-  BehaviourId: GetterBehaviour
+  BehaviourId: CitizenBehaviour
   Prefab: {fileID: 114423853591967152, guid: c9a811203192da74794e1184a86b5eb7, type: 2}
   DisplayPanelPrefab: {fileID: 114989558808342114, guid: f3b3bdec68879dd45901541419d719d3,
     type: 2}

@@ -1,6 +1,6 @@
 ﻿using System;
-using Assets.Scripts.StateMachine.States;
 using Assets.Scripts.World;
+using StateMachine.States;
 using Object = UnityEngine.Object;
 
 namespace Assets.Scripts.StateMachine

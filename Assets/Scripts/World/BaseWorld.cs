@@ -1,46 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Actors;
-using Assets.Scripts.World.SocialModule;
+using Actors;
 using UnityEngine;
+using World.SocialModule;
 
 public class BaseWorld : IUpdateBehaviour
 {
-    protected Vector3 _firePlace;
-    protected Queue<Actor> _freeCitizens;
-    protected RelationshipMap _relationshipMap;
-
-    #region constructor
-
-    public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
-    {
-        _freeCitizens = new Queue<Actor>();
-        _relationshipMap = relationshipMap;
-        _firePlace = firePlace;
-        
-        Stockpile = new Stockpile();
-        Entities = new EntitiesController();
-        Events = new WorldEventsController();
-        Children = new WorldsController();
-    }
-
-    #endregion
-
-    public int FreeCitizensCount => _freeCitizens.Count;
+    public int FreeCitizensCount => FreeCitizens.Count;
 
     public EntitiesController Entities { get; private set; }
     public WorldEventsController Events { get; private set; }
-    public WorldsController Children { get; private set; }
-    public BaseWorld Parent { get; set; }
     public Stockpile Stockpile { get; private set; }
-
-    /// <summary>
-    /// World faction type
-    /// </summary>
-    public int Faction
-    {
-        get { return _relationshipMap.Faction; }
-    }
+    public readonly EntityMapping EntityMapping;
 
     /// <summary>
     /// current population
@@ -61,25 +32,37 @@ public class BaseWorld : IUpdateBehaviour
     /// world coins
     /// </summary>
     public int Gold { get; protected set; }
+    
+    protected Vector3 FirePlace;
+    protected Queue<Actor> FreeCitizens;
+    protected RelationshipMap RelationshipMap;
 
-    #region public methods
-
-    public int GetRelationship(int faction)
+    public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
     {
-        return _relationshipMap.GetRelation(faction);
+        EntityMapping = new EntityMapping(relationshipMap);
+        Entities = new EntitiesController(EntityMapping);
+        
+        FreeCitizens = new Queue<Actor>();
+        RelationshipMap = relationshipMap;
+        FirePlace = firePlace;
+
+        Stockpile = new Stockpile();
+        Events = new WorldEventsController();
     }
+    
+    #region public methods
 
     public virtual void Update(float deltaTime)
     {
         Events.Update(deltaTime);
         Entities.Update(deltaTime);
-        Children.Update(deltaTime);
+        
         UpdatePopulation();
     }
 
     public void RegisterFreeCitizen(Actor actor)
     {
-        _freeCitizens.Enqueue(actor);
+        FreeCitizens.Enqueue(actor);
     }
 
     public void SetGold(int amount)
@@ -89,12 +72,12 @@ public class BaseWorld : IUpdateBehaviour
 
     public Actor HireCitizen()
     {
-        return _freeCitizens.Count > 0 ? _freeCitizens.Dequeue() : null;
+        return FreeCitizens.Count > 0 ? FreeCitizens.Dequeue() : null;
     }
 
     public virtual Vector3 GetFireplace()
     {
-        return _firePlace;
+        return FirePlace;
     }
 
     #endregion

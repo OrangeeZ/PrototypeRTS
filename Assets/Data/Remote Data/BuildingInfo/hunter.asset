@@ -9,13 +9,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d80225c0590381448240c7abdb4e81c, type: 3}
-  m_Name: meat-farm
+  m_Name: hunter
   m_EditorClassIdentifier: 
-  Name: Pig Farm
-  Id: MeatFarm
+  Name: Hunter
+  Id: Hunter
   Hp: 10
   Prefab: {fileID: 114441646117180520, guid: 89ebe1e4caab40f4dbe2eb064ac1f067, type: 2}
   DisplayPanelPrefab: {fileID: 114430292296469734, guid: 22aa66d951295f94eb854d919d5f2aa3,
     type: 2}
-  ProductionCycles:
-  - {fileID: 11400000, guid: ef480f9be85c512459a966de5494b72d, type: 2}
+  ProductionCycles: []

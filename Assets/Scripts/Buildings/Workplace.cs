@@ -1,8 +1,8 @@
-﻿using Assets.Scripts.Actors;
-using Assets.Scripts.Behaviour;
+﻿using Actors;
+using Behaviour;
 using UnityEngine;
 
-namespace Assets.Scripts.Workplace
+namespace Buildings
 {
     public class WorkplaceSelectionEventHandler : SelectionEventHandler
     {
@@ -47,7 +47,8 @@ namespace Assets.Scripts.Workplace
 
         public void PutResourcesToStockpile(StockpileBlock stockpileBlock)
         {
-            stockpileBlock.ChangeResource(ActiveProductionCycle.OutputResource.Id, ActiveProductionCycle.OutputResourceQuantity);
+            stockpileBlock.ChangeResource(ActiveProductionCycle.OutputResource.Id,
+                ActiveProductionCycle.OutputResourceQuantity);
         }
 
         public override void Update(float deltaTime)
@@ -79,6 +80,5 @@ namespace Assets.Scripts.Workplace
         }
 
         #endregion
-
     }
 }

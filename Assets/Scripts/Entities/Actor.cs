@@ -1,10 +1,8 @@
-﻿using System.Runtime.InteropServices;
-using Assets.Scripts.Behaviour;
-using Assets.Scripts.World;
+using Behaviour;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Assets.Scripts.Actors
+namespace Actors
 {
     public class ActorSelectionEventHandler : SelectionEventHandler
     {
@@ -105,7 +103,7 @@ namespace Assets.Scripts.Actors
         {
             base.DealDamage(amount, damageSource);
             
-            Behaviour.OnActorDamageReceiveDamage(damageSource);
+            Behaviour?.OnActorDamageReceiveDamage(damageSource);
 
             if (Health <= 0 && Behaviour != null)
             {

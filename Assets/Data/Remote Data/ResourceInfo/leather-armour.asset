@@ -15,3 +15,4 @@ MonoBehaviour:
   Name: LeatherArmour
   MaxCountPerStockpileTile: 10
   ResourceType: 2
+  AssociatedUnitInfo: {fileID: 0}

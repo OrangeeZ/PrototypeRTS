@@ -23,12 +23,12 @@ public class AssetHelper {
 	public static IEnumerable<T> GetAllAssetsOfType<T>() where T : Object {
 
 		var guids = AssetDatabase.FindAssets( "t: " + typeof ( T ).Name );
-		var paths = guids.Select( _ => AssetDatabase.GUIDToAssetPath( _ ) );
+		var paths = guids.Select( AssetDatabase.GUIDToAssetPath );
 
-		return paths.Select( _ => AssetDatabase.LoadAssetAtPath<T>( _ ) );
+		return paths.Select( AssetDatabase.LoadAssetAtPath<T> );
 	}
 
-	public static IEnumerable<T> GetAllPrefabsWithBehaviour<T>() where T : Behaviour {
+	public static IEnumerable<T> GetAllPrefabsWithBehaviour<T>() where T : UnityEngine.Behaviour {
 
 		return AssetDatabase.GetAllAssetPaths()
 			.Where( _ => _.Contains( ".prefab" ) )
@@ -38,12 +38,12 @@ public class AssetHelper {
 			.Where( _ => _ != null );
 	}
 
-	public static IEnumerable<T> GetAllPrefabsWithBehaviours<T>() where T : Behaviour {
+	public static IEnumerable<T> GetAllPrefabsWithBehaviours<T>() where T : UnityEngine.Behaviour {
 
 		return AssetDatabase.GetAllAssetPaths()
 			.Where( _ => _.Contains( ".prefab" ) )
 			.Select( _ => AssetDatabase.LoadAssetAtPath( _, typeof( Transform ) ) )
-			.OfType<Behaviour>()
+			.OfType<UnityEngine.Behaviour>()
 			.SelectMany( _ => _.GetComponentsInChildren<T>( includeInactive: true ) )
 			.Where( _ => _ != null );
 	}

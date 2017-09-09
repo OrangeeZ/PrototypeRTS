@@ -1,41 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Assets.Scripts.World.SocialModule
+namespace World.SocialModule
 {
-
     public class RelationshipMap
     {
-        #region private properties
-
-        private Dictionary<int, int> _relationshipDictionary;
-
-        #endregion
-
-        public RelationshipMap(int faction)
+        public enum RelationshipType
         {
-            _relationshipDictionary = new Dictionary<int, int>();
-            SetRelationship(faction,20);
+            Neutral,
+            Hostile,
+            Friendly
+        }
+        
+        private const int MaxFactionCount = 3;
+
+        private readonly RelationshipType[,] _relationshipMapping;
+
+        public RelationshipMap()
+        {
+            _relationshipMapping = new RelationshipType[MaxFactionCount, MaxFactionCount];
         }
 
-        #region public properties
-
-        public int Faction { get; protected set; }
-
-        #endregion
-
-        #region public methods
-
-        public int GetRelation(int faction)
+        public RelationshipType GetRelationshipType(byte factionIdA, byte factionIdB)
         {
-            return _relationshipDictionary.ContainsKey(faction) ? 
-                _relationshipDictionary[faction] : 0;
+            return _relationshipMapping[factionIdA, factionIdB];
         }
 
-        public void SetRelationship(int faction, int relationship)
+        public void SetRelationship(byte factionIdA, byte factionIdB, RelationshipType relationshipType)
         {
-            _relationshipDictionary[faction] = relationship;
+            _relationshipMapping[factionIdA, factionIdB] = relationshipType;
+            _relationshipMapping[factionIdB, factionIdA] = relationshipType;
         }
 
-        #endregion
+        public IEnumerable<byte> GetFactionsWithRelationship(byte factionId, RelationshipType relationshipType)
+        {
+            for (var i = 0; i < MaxFactionCount; ++i)
+            {
+                if (_relationshipMapping[factionId, i] == relationshipType)
+                {
+                    yield return (byte) i;
+                }
+            }
+        }
     }
 }

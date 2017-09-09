@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Actors;
+using Actors;
 using UnityEngine;
 
 public class ImSoldierDisplayPanel : EntityDisplayPanel

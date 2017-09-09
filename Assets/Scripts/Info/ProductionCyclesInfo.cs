@@ -1,7 +1,7 @@
 ﻿using csv;
 using UnityEngine;
 
-public class ProductionCyclesInfo : ScriptableObject, ICsvConfigurable//production circle
+public class ProductionCyclesInfo : ScriptableObject, ICsvConfigurable
 {
     [RemoteProperty]
     public string Id;
@@ -23,7 +23,6 @@ public class ProductionCyclesInfo : ScriptableObject, ICsvConfigurable//producti
 
     [RemoteProperty]
     public int OutputResourceQuantity;
-    
 
     public void Configure(Values values)
     {

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Assets.Scripts.Actors;
-using Assets.Scripts.Behaviour;
-using Assets.Scripts.Workplace;
+using Actors;
 using Assets.Scripts.World;
+using Behaviour;
+using Buildings;
 using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
-    public bool IsEnemy { get; set; } = false;
+    public byte FactionId;
 
     public UnitInfo[] UnitInfos => _worldInfo.UnitInfos;
 
@@ -38,13 +38,15 @@ public class TestUnitFactory : MonoBehaviour
         }
 
         var unit = new Actor(_world);
-        _world.Entities.Add(unit);
+        var result = CreateUnit(unitInfo, unit);
 
         var randomPosition = UnityEngine.Random.onUnitSphere * UnityEngine.Random.Range(5, 10f);
         randomPosition.y = 0;
         unit.SetPosition(_world.GetFireplace() + randomPosition);
 
-        return CreateUnit(unitInfo, unit);
+        _world.Entities.Add(result);
+
+        return result;
     }
 
     public Entity CreateUnit(UnitInfo unitInfo, Actor existingUnit)
@@ -52,13 +54,12 @@ public class TestUnitFactory : MonoBehaviour
         var unit = existingUnit;
         var unitView = Instantiate(unitInfo.Prefab);
 
-        unitView.SetIsEnemy(IsEnemy);
         unit.SetView(unitView);
         unit.SetBehaviour(CreateBehaviour(unitInfo.BehaviourId));
 
         unit.SetInfo(unitInfo);
         unit.SetHealth(unitInfo.Hp);
-        unit.SetIsEnemy(IsEnemy);
+        unit.SetFactionId(FactionId);
 
         return unit;
     }
