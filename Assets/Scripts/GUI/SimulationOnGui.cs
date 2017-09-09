@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class OnGuiController : MonoBehaviour
+public class SimulationOnGui : MonoBehaviour
 {
     private List<IGuiDrawer> _drawers = new List<IGuiDrawer>();
     private List<bool> _visibility = new List<bool>();

@@ -27,7 +27,7 @@ public class BuildingInfo : ScriptableObject, ICsvConfigurable
     {
     }
 
-    public void PostLoad()
+    public void OnPostLoad()
     {
         
     }

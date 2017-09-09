@@ -32,7 +32,7 @@ public class StorageInfo : ScriptableObject, ICsvConfigurable
         AllowedTypes = new [] {type};
     }
 
-    public void PostLoad()
+    public void OnPostLoad()
     {
         
     }

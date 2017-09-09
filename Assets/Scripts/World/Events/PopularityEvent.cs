@@ -5,7 +5,6 @@ using Assets.Scripts.World;
 public class PopularityEvent : WorldEvent
 {
     private readonly Player _player;
-    private readonly TestUnitFactory _unitFactory;
     private readonly WorldData _worldData;
     private float _updatePeriod = 3f;
     private int _inscreasePopularityStep = 1;
@@ -15,16 +14,14 @@ public class PopularityEvent : WorldEvent
 
     #region constructors
 
-    public PopularityEvent(BaseWorld gameWorld,
+    public PopularityEvent(BaseWorld world,
         WorldData worldData,
-        Player player,
-        TestUnitFactory unitFactory, float period) :
-        base(gameWorld)
+        Player player, float period) :
+        base(world)
     {
         _worldData = worldData;
         _updatePeriod = period;
         _player = player;
-        _unitFactory = unitFactory;
         _foodInfos = new List<ResourceInfo>(_worldData.ResourceInfos.
             Where(x => x.ResourceType == ResourceType.Food));
     }
@@ -47,30 +44,9 @@ public class PopularityEvent : WorldEvent
 
     private void UpdatePopularity()
     {
-        var citizensCount = _gameWorld.FreeCitizensCount;
+        var citizensCount = _world.FreeCitizensCount;
         UpdatePopularity(citizensCount);
-        HireCitizen();
         ConsumeFood(citizensCount);
-    }
-
-    private void RemoveCitizen(BaseWorld world)
-    {
-        var citizen = world.HireCitizen();
-        if (citizen == null) return;
-        _gameWorld.Entities.Remove(citizen);
-    }
-
-    private void HireCitizen()
-    {
-        if (_player.World.Popularity <= 0)
-        {
-            RemoveCitizen(_gameWorld);
-        }
-        else if (_player.World.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
-        {
-            _unitFactory.CreateUnit(_worldData.UnitInfos.First(x => x.Name == "Peasant"));
-        }
-
     }
 
     private void UpdatePopularity(int citizensCount)
@@ -78,7 +54,7 @@ public class PopularityEvent : WorldEvent
         var foodVariety = 0;
         var foodAmount = _foodInfos.Sum(x =>
         {
-            var amount = _gameWorld.Stockpile.GetTotalResourceAmount(x.Id);
+            var amount = _world.Stockpile.GetTotalResourceAmount(x.Id);
             if (amount > 0)
                 foodVariety++;
             return amount;
@@ -99,10 +75,10 @@ public class PopularityEvent : WorldEvent
         for (int i = 0; i < _foodInfos.Count; i++)
         {
             var food = _foodInfos[i];
-            var foodCount = _gameWorld.Stockpile.GetTotalResourceAmount(food.Id);
+            var foodCount = _world.Stockpile.GetTotalResourceAmount(food.Id);
             var foodTaken = foodCount + consumedFood > requiredFood ? requiredFood - foodCount : foodCount;
             consumedFood += foodTaken;
-            _gameWorld.Stockpile.ChangeTotalResourceAmount(food.Id, -foodTaken);
+            _world.Stockpile.ChangeTotalResourceAmount(food.Id, -foodTaken);
         }
 
     }

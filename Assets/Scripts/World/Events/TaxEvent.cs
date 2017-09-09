@@ -1,14 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class DebtEvent : WorldEvent
+﻿public class TaxEvent : WorldEvent
 {
     private readonly Player _player;
     private float _timeLeft;
 
-    public DebtEvent(BaseWorld gameWorld,Player player, float updatePeriod) :
-        base(gameWorld)
+    public TaxEvent(BaseWorld world,Player player, float updatePeriod) :
+        base(world)
     {
         _player = player;
         Period = updatePeriod;
@@ -37,9 +33,9 @@ public class DebtEvent : WorldEvent
 
     private void ApplyDebt()
     {
-        var income = _gameWorld.PopulationLimit * _gameWorld.Tax;
-        _player.World.ChangePopularity(-_gameWorld.Tax);
-        _gameWorld.SetGold(_gameWorld.Gold + income);
+        var income = _world.MaxPopulation * _world.Tax;
+        _player.World.ChangePopularity(-_world.Tax);
+        _world.SetGold(_world.Gold + income);
     }
 
     #endregion

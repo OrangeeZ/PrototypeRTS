@@ -27,13 +27,14 @@ public class BaseWorld : IUpdateBehaviour
     /// <summary>
     /// max citizen count
     /// </summary>
-    public int PopulationLimit { get; set; }
-
+    public int MaxPopulation { get; set; }
 
     public int Popularity { get; protected set; }
 
+    public int MinPopulation { get; protected set; }
+
     /// <summary>
-    /// debt for related to PopulationLimit
+    /// debt for related to MaxPopulation
     /// </summary>
     public int Tax { get; set; }
 
@@ -45,17 +46,19 @@ public class BaseWorld : IUpdateBehaviour
 
     public BaseWorld(WorldInfo worldInfo,RelationshipMap relationshipMap, Vector3 firePlace)
     {
+        _worldInfo = worldInfo;
         EntityMapping = new EntityMapping(relationshipMap);
         Entities = new EntitiesController(EntityMapping);
-        
         FreeCitizens = new Queue<Actor>();
-        _worldInfo = worldInfo;
+        Stockpile = new Stockpile();
+        Events = new WorldEventsController();
+
+        MaxPopulation = _worldInfo.MaxPopulation;
         RelationshipMap = relationshipMap;
+        MinPopulation = _worldInfo.MinPopulation;
         FirePlace = firePlace;
         Popularity = _worldInfo.MaxPopularity;
 
-        Stockpile = new Stockpile();
-        Events = new WorldEventsController();
     }
     
     #region public methods

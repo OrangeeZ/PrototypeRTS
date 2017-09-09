@@ -92,7 +92,7 @@ public class GoogleDocsCsvParser
 
             Debug.Log($"Data object {instance.name} saved to {AssetDatabase.GetAssetPath(instance)}", instance);
         }
-        items.ForEach(x=> x.PostLoad());
+        items.ForEach(x=> x.OnPostLoad());
         AssetDatabase.StopAssetEditing();
     }
 

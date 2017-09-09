@@ -10,13 +10,13 @@
     public override void SetInfo(BuildingInfo info)
     {
         base.SetInfo(info);
-        World.PopulationLimit += ActiveProductionCycle.OutputResourceQuantity;
+        World.MaxPopulation += ActiveProductionCycle.OutputResourceQuantity;
     }
 
     public override void Kill()
     {
         base.Kill();
-        World.PopulationLimit -= ActiveProductionCycle.OutputResourceQuantity;
+        World.MaxPopulation -= ActiveProductionCycle.OutputResourceQuantity;
     }
 
     #endregion

@@ -10,29 +10,26 @@ using UnityEngine;
 
 public class TestUnitFactory : MonoBehaviour
 {
-    public byte FactionId;
-
-    public UnitInfo[] UnitInfos => _worldData.UnitInfos;
-
-    public BuildingInfo[] BuildingInfos => _worldData.BuildingInfos;
-
     private BaseWorld _world;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
     private WorldData _worldData;
 
+    public byte FactionId;
+    public UnitInfo[] UnitInfos => _worldData.UnitInfos;
+    public BuildingInfo[] BuildingInfos => _worldData.BuildingInfos;
 
-    public void SetWorld(BaseWorld world, WorldData worldData)
+    public void Initialize(BaseWorld world, WorldData worldData)
     {
         _world = world;
         _worldData = worldData;
         BuildTypeMap();
     }
 
-    public Entity CreateUnit(UnitInfo unitInfo)
+    public Entity CreateUnit(UnitInfo unitInfo,bool ignoreLimit = false)
     {
         //no free citizen or population limit reached
-        if (_world.Population >= _world.PopulationLimit)
+        if (_world.Population >= _world.MaxPopulation && !ignoreLimit)
         {
             return null;
         }

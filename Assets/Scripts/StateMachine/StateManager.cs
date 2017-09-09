@@ -6,7 +6,7 @@ using Debug = UnityEngine.Debug;
 
 namespace BehaviourStateMachine
 {
-    public class StateManager<TStateType>
+    public class StateManager<TStateType> : IStateManager<TStateType>
     {
         private readonly Stopwatch _stopwatch;
         protected IStateTransitionValidator<TStateType> _validator;
@@ -28,7 +28,8 @@ namespace BehaviourStateMachine
             _validator = validator;
             _stopwatch = new Stopwatch();
             _controllerDisposable = 
-                _stateController.StateObservable.Subscribe(ExecuteState);
+                _stateController.StateObservable.Skip(1)
+                .Subscribe(ExecuteState);
         }
 
         #endregion

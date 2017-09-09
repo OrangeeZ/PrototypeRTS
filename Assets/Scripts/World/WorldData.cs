@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Packages.EventSystem;
+﻿using Packages.EventSystem;
 using UnityEngine;
 
 namespace Assets.Scripts.World
@@ -38,6 +37,8 @@ namespace Assets.Scripts.World
 
         public WorldInfo WorldInfo => _worldInfo;
 
+        public UnitInfo TreeInfo => _treeInfo;
+
         #endregion
 
         void Start()
@@ -48,20 +49,5 @@ namespace Assets.Scripts.World
             }
         }
 
-
-
-        public void PopulateWorld(BaseWorld world)
-        {
-            var factory = GetComponent<TestUnitFactory>();
-
-            for (var i = 0; i < 5; ++i)
-            {
-                var unit = factory.CreateUnit(_treeInfo);
-                var randomDirection = Random.onUnitSphere.Set(y: 0).normalized;
-                var randomPosition = randomDirection * 10 + randomDirection * Random.Range(5, 10);
-                unit.SetPosition(randomPosition);
-                unit.SetFactionId(2); // Neutral, otherwise trees will be hostile to enemies
-            }
-        }
     }
 }
