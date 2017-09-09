@@ -22,14 +22,14 @@ public class WorldDataPanelOnGui : IGuiDrawer {
 
         GUILayout.BeginHorizontal();
 
-        GUILayout.Label(string.Format("PublicDebt : {0}", _world.PublicDebt));
+        GUILayout.Label(string.Format("Tax : {0}", _world.Tax));
         _debt = GUILayout.TextField(_debt);
         if (GUILayout.Button("SET"))
         {
             int value;
             if (int.TryParse(_debt, out value))
             {
-                _world.PublicDebt = value;
+                _world.Tax = value;
             }
         }
         GUILayout.EndHorizontal();

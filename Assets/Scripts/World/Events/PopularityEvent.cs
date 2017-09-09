@@ -6,7 +6,7 @@ public class PopularityEvent : WorldEvent
 {
     private readonly Player _player;
     private readonly TestUnitFactory _unitFactory;
-    private readonly WorldInfo _worldInfo;
+    private readonly WorldData _worldData;
     private float _updatePeriod = 3f;
     private int _inscreasePopularityStep = 1;
     private int _decreasePopularityStep = 2;
@@ -16,16 +16,16 @@ public class PopularityEvent : WorldEvent
     #region constructors
 
     public PopularityEvent(BaseWorld gameWorld,
-        WorldInfo worldInfo,
+        WorldData worldData,
         Player player,
         TestUnitFactory unitFactory, float period) :
         base(gameWorld)
     {
-        _worldInfo = worldInfo;
+        _worldData = worldData;
         _updatePeriod = period;
         _player = player;
         _unitFactory = unitFactory;
-        _foodInfos = new List<ResourceInfo>(_worldInfo.ResourceInfos.
+        _foodInfos = new List<ResourceInfo>(_worldData.ResourceInfos.
             Where(x => x.ResourceType == ResourceType.Food));
     }
 
@@ -68,7 +68,7 @@ public class PopularityEvent : WorldEvent
         }
         else if (_player.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
         {
-            _unitFactory.CreateUnit(_worldInfo.UnitInfos.First(x => x.Name == "Peasant"));
+            _unitFactory.CreateUnit(_worldData.UnitInfos.First(x => x.Name == "Peasant"));
         }
 
     }

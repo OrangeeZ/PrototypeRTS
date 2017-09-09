@@ -10,9 +10,9 @@ public class ImUiController : IGuiDrawer
     private EntityDisplayPanel _currentDisplayPanel;
     private readonly SelectionManager _selectionManager;
 
-    public ImUiController(SelectionManager selectionManager, WorldInfo worldInfo)
+    public ImUiController(SelectionManager selectionManager, WorldData worldData)
     {
-        _defaultDisplayPanel = Object.Instantiate(worldInfo.DefaultDisplayPanel);
+        _defaultDisplayPanel = Object.Instantiate(worldData.DefaultDisplayPanel);
         _defaultDisplayPanel.Initialize(selectionManager, null);
 
         _selectionManager = selectionManager;

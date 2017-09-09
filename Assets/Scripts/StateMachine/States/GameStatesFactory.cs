@@ -22,7 +22,7 @@ namespace Assets.Scripts.StateMachine
             switch (gameState)
             {
                 case GameState.Simulate:
-                    return new GameSimulationState(_stateController, Object.FindObjectOfType<WorldInfo>());
+                    return new GameSimulationState(_stateController, Object.FindObjectOfType<WorldData>());
                 case GameState.Initialize:
                     return new GameInitializeState(_stateController);
                 default:

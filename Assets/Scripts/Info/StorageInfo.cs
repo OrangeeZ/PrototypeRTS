@@ -32,6 +32,11 @@ public class StorageInfo : ScriptableObject, ICsvConfigurable
         AllowedTypes = new [] {type};
     }
 
+    public void PostLoad()
+    {
+        
+    }
+
     public void Init(IEnumerable<ResourceInfo> resources)
     {
         var resourceInfos = resources.Where(info => AllowedTypes.Contains(info.ResourceType)).ToArray();

@@ -10,4 +10,8 @@ public class PlayerInfo : ScriptableObject, ICsvConfigurable
     {
     }
 
+    public void PostLoad()
+    {
+        
+    }
 }

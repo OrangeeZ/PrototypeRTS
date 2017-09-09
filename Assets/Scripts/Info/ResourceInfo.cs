@@ -29,4 +29,9 @@ public class ResourceInfo : ScriptableObject, ICsvConfigurable
     public void Configure(Values values)
     {
     }
+
+    public void PostLoad()
+    {
+        
+    }
 }

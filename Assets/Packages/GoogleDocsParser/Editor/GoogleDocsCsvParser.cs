@@ -75,6 +75,7 @@ public class GoogleDocsCsvParser
     {
         AssetDatabase.StartAssetEditing();
 
+        var items = new List<ICsvConfigurable>();
         foreach (var each in _loadedObjects)
         {
             var instance = GetOrCreate(_type, each.Key);
@@ -85,13 +86,13 @@ public class GoogleDocsCsvParser
             }
 
             var csvConfigurable = instance as ICsvConfigurable;
-
+            items.Add(csvConfigurable);
             ParseObjectFieldsAndProperties(csvConfigurable, each.Value);
             ProcessObject(csvConfigurable, each.Value);
 
             Debug.Log($"Data object {instance.name} saved to {AssetDatabase.GetAssetPath(instance)}", instance);
         }
-
+        items.ForEach(x=> x.PostLoad());
         AssetDatabase.StopAssetEditing();
     }
 

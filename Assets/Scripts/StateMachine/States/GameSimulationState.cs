@@ -11,16 +11,16 @@ namespace StateMachine.States
     public class GameSimulationState : GameStateBehaviour
     {
         private OnGuiController _guiController;
-        private readonly WorldInfo _worldInfo;
+        private readonly WorldData _worldData;
 
         private BaseWorld _gameWorld;
         private RelationshipMap _relationshipMap;
 
         public GameSimulationState(IStateController<GameState> stateController, 
-            WorldInfo worldInfo) :
+            WorldData worldData) :
             base(stateController)
         {
-            _worldInfo = worldInfo;
+            _worldData = worldData;
         }
 
         public override IEnumerator Execute()
@@ -52,11 +52,11 @@ namespace StateMachine.States
 
         private void CreatePlayerAndWorld()
         {
-            var world = new BaseWorld(_relationshipMap, _worldInfo.Fireplace.position);
+            var world = new BaseWorld(_relationshipMap, _worldData.Fireplace.position);
 
             //init unit factory
-            var unitFactory = _worldInfo.GetComponent<TestUnitFactory>();
-            unitFactory.SetWorld(world, _worldInfo);
+            var unitFactory = _worldData.GetComponent<TestUnitFactory>();
+            unitFactory.SetWorld(world, _worldData);
 
             // create dummy stockpile
             var stockpile =
@@ -65,7 +65,7 @@ namespace StateMachine.States
             world.Stockpile.AddStockpileBlock(stockpile as StockpileBlock);
             world.PopulationLimit = 15;
 
-            _worldInfo.PopulateWorld(world);
+            _worldData.PopulateWorld(world);
 
             var player = CreatePlayer(world);
             CreateWorldEvents(world, player, unitFactory);
@@ -77,7 +77,7 @@ namespace StateMachine.States
 
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)
         {
-            var popularityEventsBehaviour = new PopularityEvent(world, _worldInfo, player, unitFactory, 4f);
+            var popularityEventsBehaviour = new PopularityEvent(world, _worldData, player, unitFactory, 4f);
             var debtEvent = new DebtEvent(world, player, 10f);
 
             var constructionModule = new ConstructionModule(world, unitFactory);
@@ -100,7 +100,7 @@ namespace StateMachine.States
         {
             //initialize additional events
             var selectionManager = new SelectionManager(world);
-            var uiController = new ImUiController(selectionManager, _worldInfo);
+            var uiController = new ImUiController(selectionManager, _worldData);
             var worldPanel = new WorldDataPanelOnGui(world);
 
             _guiController.Add(new ResourcesDrawer(world));

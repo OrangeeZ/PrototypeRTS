@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Actors;
+﻿using Actors;
 using csv;
 using UnityEngine;
 
@@ -48,5 +45,10 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
     
     public void Configure(Values values)
     {
+    }
+
+    public void PostLoad()
+    {
+        
     }
 }

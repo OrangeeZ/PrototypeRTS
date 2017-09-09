@@ -222,4 +222,5 @@ namespace csv
 public interface ICsvConfigurable
 {
     void Configure(csv.Values values);
+    void PostLoad();
 }

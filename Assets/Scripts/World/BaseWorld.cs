@@ -26,7 +26,7 @@ public class BaseWorld : IUpdateBehaviour
     /// <summary>
     /// debt for related to PopulationLimit
     /// </summary>
-    public int PublicDebt { get; set; }
+    public int Tax { get; set; }
 
     /// <summary>
     /// world coins

@@ -27,4 +27,9 @@ public class ProductionCyclesInfo : ScriptableObject, ICsvConfigurable
     public void Configure(Values values)
     {
     }
+
+    public void PostLoad()
+    {
+        
+    }
 }

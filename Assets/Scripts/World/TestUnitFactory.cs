@@ -12,20 +12,20 @@ public class TestUnitFactory : MonoBehaviour
 {
     public byte FactionId;
 
-    public UnitInfo[] UnitInfos => _worldInfo.UnitInfos;
+    public UnitInfo[] UnitInfos => _worldData.UnitInfos;
 
-    public BuildingInfo[] BuildingInfos => _worldInfo.BuildingInfos;
+    public BuildingInfo[] BuildingInfos => _worldData.BuildingInfos;
 
     private BaseWorld _world;
     private Dictionary<string, Type> _behaviourMap;
     private List<UnitInfo> _armyUnitsInfos = new List<UnitInfo>();
-    private WorldInfo _worldInfo;
+    private WorldData _worldData;
 
 
-    public void SetWorld(BaseWorld world, WorldInfo worldInfo)
+    public void SetWorld(BaseWorld world, WorldData worldData)
     {
         _world = world;
-        _worldInfo = worldInfo;
+        _worldData = worldData;
         BuildTypeMap();
     }
 
@@ -100,7 +100,7 @@ public class TestUnitFactory : MonoBehaviour
 
     private StorageInfo GetStorageInfo(BuildingInfo buildingInfo)
     {
-        return _worldInfo.StorageInfos.First(info => info.BuildingId == buildingInfo.Id);
+        return _worldData.StorageInfos.First(info => info.BuildingId == buildingInfo.Id);
     }
 
     private ActorBehaviour CreateBehaviour(string behaviourId)
