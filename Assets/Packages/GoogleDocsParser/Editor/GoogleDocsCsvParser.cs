@@ -306,14 +306,19 @@ public class GoogleDocsCsvParser
         var value = values.Get(propertyName, string.Empty);
 
         var fieldValue = default(object);
+        var type = fieldInfo.FieldType;
 
-        if (value == string.Empty && fieldInfo.FieldType.IsValueType)
+        if (value == string.Empty && type.IsValueType)
         {
-            fieldValue = Activator.CreateInstance(fieldInfo.FieldType);
+            fieldValue = Activator.CreateInstance(type);
+        }
+        else if (type.IsEnum)
+        {
+            fieldValue = Enum.Parse(type, value, true);
         }
         else
         {
-            fieldValue = Convert.ChangeType(value, fieldInfo.FieldType, CultureInfo.InvariantCulture);
+            fieldValue = Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
         }
 
         fieldInfo.SetValue(target, fieldValue);
