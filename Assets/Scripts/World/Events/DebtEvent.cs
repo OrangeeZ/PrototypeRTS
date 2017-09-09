@@ -38,7 +38,7 @@ public class DebtEvent : WorldEvent
     private void ApplyDebt()
     {
         var income = _gameWorld.PopulationLimit * _gameWorld.Tax;
-        _player.ChangePopularity(-_gameWorld.Tax);
+        _player.World.ChangePopularity(-_gameWorld.Tax);
         _gameWorld.SetGold(_gameWorld.Gold + income);
     }
 

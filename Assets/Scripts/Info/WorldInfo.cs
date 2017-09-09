@@ -26,10 +26,16 @@ public class WorldInfo : ScriptableObject, ICsvConfigurable
     public int MaxPopulation;
 
     [RemoteProperty]
-    public float Tax;
+    public int Tax;
 
     [RemoteProperty]
     public int StartGold;
+
+    [RemoteProperty]
+    public int MaxPopularity = 100;
+
+    [RemoteProperty]
+    public int MinPopularity = 0;
 
     public void Configure(Values values)
     {

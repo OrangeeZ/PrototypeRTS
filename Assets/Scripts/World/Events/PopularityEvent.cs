@@ -62,11 +62,11 @@ public class PopularityEvent : WorldEvent
 
     private void HireCitizen()
     {
-        if (_player.Popularity <= 0)
+        if (_player.World.Popularity <= 0)
         {
             RemoveCitizen(_gameWorld);
         }
-        else if (_player.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
+        else if (_player.World.Popularity > 50 && _gameWorld.Population < _gameWorld.PopulationLimit)
         {
             _unitFactory.CreateUnit(_worldData.UnitInfos.First(x => x.Name == "Peasant"));
         }
@@ -85,11 +85,11 @@ public class PopularityEvent : WorldEvent
         });
         if (foodAmount < citizensCount)
         {
-            _player.ChangePopularity(-_decreasePopularityStep);
+            _player.World.ChangePopularity(-_decreasePopularityStep);
         }
         else
         {
-            _player.ChangePopularity(_inscreasePopularityStep + foodVariety);
+            _player.World.ChangePopularity(_inscreasePopularityStep + foodVariety);
         }
     }
 

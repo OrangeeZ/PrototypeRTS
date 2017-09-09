@@ -15,6 +15,6 @@ public class PlayerDrawer : GuiDrawer {
     {
         GUILayout.Space(10);
         var rect = GUILayoutUtility.GetRect(40, 20);
-        GUI.Label(rect,string.Format("Player Popularity : {0}",_player.Popularity));
+        GUI.Label(rect,string.Format("Player Popularity : {0}",_player.World.Popularity));
     }
 }

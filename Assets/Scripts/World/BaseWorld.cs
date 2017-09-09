@@ -6,12 +6,18 @@ using World.SocialModule;
 
 public class BaseWorld : IUpdateBehaviour
 {
+    protected Vector3 FirePlace;
+    protected Queue<Actor> FreeCitizens;
+    private WorldInfo _worldInfo;
+    protected RelationshipMap RelationshipMap;
+    
+    public readonly EntityMapping EntityMapping;
+
     public int FreeCitizensCount => FreeCitizens.Count;
 
     public EntitiesController Entities { get; private set; }
     public WorldEventsController Events { get; private set; }
     public Stockpile Stockpile { get; private set; }
-    public readonly EntityMapping EntityMapping;
 
     /// <summary>
     /// current population
@@ -23,6 +29,9 @@ public class BaseWorld : IUpdateBehaviour
     /// </summary>
     public int PopulationLimit { get; set; }
 
+
+    public int Popularity { get; protected set; }
+
     /// <summary>
     /// debt for related to PopulationLimit
     /// </summary>
@@ -33,18 +42,17 @@ public class BaseWorld : IUpdateBehaviour
     /// </summary>
     public int Gold { get; protected set; }
     
-    protected Vector3 FirePlace;
-    protected Queue<Actor> FreeCitizens;
-    protected RelationshipMap RelationshipMap;
 
-    public BaseWorld(RelationshipMap relationshipMap, Vector3 firePlace)
+    public BaseWorld(WorldInfo worldInfo,RelationshipMap relationshipMap, Vector3 firePlace)
     {
         EntityMapping = new EntityMapping(relationshipMap);
         Entities = new EntitiesController(EntityMapping);
         
         FreeCitizens = new Queue<Actor>();
+        _worldInfo = worldInfo;
         RelationshipMap = relationshipMap;
         FirePlace = firePlace;
+        Popularity = _worldInfo.MaxPopularity;
 
         Stockpile = new Stockpile();
         Events = new WorldEventsController();
@@ -78,6 +86,13 @@ public class BaseWorld : IUpdateBehaviour
     public virtual Vector3 GetFireplace()
     {
         return FirePlace;
+    }
+
+    public int ChangePopularity(int popularity)
+    {
+        var result = Popularity + popularity;
+        Popularity = Mathf.Clamp(result, _worldInfo.MinPopularity, _worldInfo.MaxPopularity);
+        return Popularity;
     }
 
     #endregion

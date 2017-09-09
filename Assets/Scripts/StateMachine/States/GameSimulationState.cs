@@ -52,7 +52,8 @@ namespace StateMachine.States
 
         private void CreatePlayerAndWorld()
         {
-            var world = new BaseWorld(_relationshipMap, _worldData.Fireplace.position);
+            var world = new BaseWorld(_worldData.WorldInfo,_relationshipMap, 
+                _worldData.Fireplace.position);
 
             //init unit factory
             var unitFactory = _worldData.GetComponent<TestUnitFactory>();
@@ -91,8 +92,7 @@ namespace StateMachine.States
 
         private Player CreatePlayer(BaseWorld world)
         {
-            var playerInfo = ScriptableObject.CreateInstance<PlayerInfo>();
-            var player = new Player(playerInfo, world);
+            var player = new Player(world);
             return player;
         }
 
