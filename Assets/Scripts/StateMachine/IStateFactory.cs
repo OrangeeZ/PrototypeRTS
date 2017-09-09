@@ -1,7 +1,7 @@
-﻿namespace Assets.Scripts.StateMachine
+﻿namespace BehaviourStateMachine
 {
     public interface IStateFactory<TStateType>
     {
-        IState Create(IStateController<TStateType> stateController,TStateType state);
+        IStateBehaviour Create(TStateType state);
     }
 }

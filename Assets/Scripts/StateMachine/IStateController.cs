@@ -1,19 +1,13 @@
 ﻿using System;
 
-namespace Assets.Scripts.StateMachine
+namespace BehaviourStateMachine
 {
-    /// <summary>
-    /// proxy interaction with gameState machine
-    /// </summary>
     public interface IStateController<TStateType> : IDisposable
     {
-        /// <summary>
-        /// active gameState of machine
-        /// </summary>
         TStateType CurrentState { get; }
-        /// <summary>
-        /// launch new gameState
-        /// </summary>
+        TStateType PreviousState { get; }
+        UniRx.IObservable<TStateType> StateObservable { get; }
+
         void SetState(TStateType state);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.World;
+using BehaviourStateMachine;
 using StateMachine.States;
 using Object = UnityEngine.Object;
 
@@ -7,16 +8,23 @@ namespace Assets.Scripts.StateMachine
 {
     public class GameStatesFactory : IStateFactory<GameState>
     {
+        private readonly IStateController<GameState> _stateController;
+
+        public GameStatesFactory(IStateController<GameState> stateController)
+        {
+            _stateController = stateController;
+        }
+
         #region public methods
 
-        public IState Create(IStateController<GameState> stateController,GameState gameState)
+        public IStateBehaviour Create(GameState gameState)
         {
             switch (gameState)
             {
                 case GameState.Simulate:
-                    return new GameSimulationState(stateController, Object.FindObjectOfType<WorldInfo>());
+                    return new GameSimulationState(_stateController, Object.FindObjectOfType<WorldInfo>());
                 case GameState.Initialize:
-                    return new GameInitializeState(stateController);
+                    return new GameInitializeState(_stateController);
                 default:
                     throw new ArgumentOutOfRangeException("gameState", gameState, null);
             }

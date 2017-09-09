@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.StateMachine;
+using BehaviourStateMachine;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -16,11 +17,14 @@ namespace Assets.Scripts
         /// <summary>
         /// start game states execution
         /// </summary>
-        private IStateController<GameState> InitializeGameStateMachine()
+        private StateManager<GameState> InitializeGameStateMachine()
         {
-            var gameStateFactory = new GameStatesFactory();
-            var stateMachine = new StateMachine.StateMachine(this);
-            return new StateController<GameState>(stateMachine, gameStateFactory);
+            var executor = new BehaviourExecutor(true,null,"GameStateExecutor");
+            var stateMachine = new FiniteStateMachine(executor);
+            var controller = new StateController<GameState>();
+            var gameStateFactory = new GameStatesFactory(controller);
+            var stateManager = new StateManager<GameState>(controller, stateMachine,gameStateFactory,null);
+            return stateManager;
         }
     }
 }

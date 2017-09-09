@@ -1,78 +1,34 @@
-﻿using System.Diagnostics;
-using Debug = UnityEngine.Debug;
+﻿using UniRx;
 
-namespace Assets.Scripts.StateMachine
+namespace BehaviourStateMachine
 {
-    public class StateController<TStateType>:
-        IStateController<TStateType>
+    public class StateController<TState> : IStateController<TState>
     {
-        protected IStateMachine _stateMachine;
-        private readonly IStateFactory<TStateType> _stateFactory;
-        private Stopwatch _stopwatch;
+        private ReactiveProperty<TState> _stateValue;
+
+        public StateController()
+        {
+            _stateValue = new ReactiveProperty<TState>();
+        }
 
         #region public properties
-
-        public TStateType CurrentState { get; protected set; }
-
-        #endregion
-
-        #region constructor
-
-        public StateController(IStateMachine stateMachine, 
-            IStateFactory<TStateType> stateFactory)
-        {
-            _stopwatch = new Stopwatch();
-            _stateMachine = stateMachine;
-            _stateFactory = stateFactory;
-        }
+        
+        public TState CurrentState { get; private set; }
+        public TState PreviousState { get; private set; }
+        public IObservable<TState> StateObservable { get { return _stateValue; } }
 
         #endregion
 
-        #region public methods
-
-        public virtual void SetState(TStateType state)
-        {
-            if (!ValidateTransition(state))
-            {
-                Debug.LogError(string.Format("State transition validation failed, to state {0}",state));
-                return;
-            }
-            OnStateChanged(CurrentState,state);
+        public void SetState(TState state)
+        { 
+            PreviousState = CurrentState;
             CurrentState = state;
-            var stateBehavior = _stateFactory.Create(this, state);
-            if (stateBehavior == null)
-            {
-                Debug.LogError(string.Format("ERROR: StateBehaviour of type {0} is NULL", state));
-                return;
-            }
-            Debug.Log(string.Format("<color=blue>Start new State {0}</color>",state));
-            _stateMachine.StartState(stateBehavior);
+            _stateValue.SetValueAndForceNotify(state);
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            _stateMachine.Dispose();
+            _stateValue.Dispose();
         }
-
-        #endregion
-
-        #region private methods
-
-        protected virtual bool ValidateTransition(TStateType nextState)
-        {
-            return true;
-        }
-
-        private void OnStateChanged(TStateType fromGameState, TStateType toGameState)
-        {
-            _stopwatch.Stop();
-            Debug.Log(string.Format("<color=green>From State {0} To State {1} execution finished. RESULT TIME {2}</color>",
-                fromGameState, toGameState, _stopwatch.ElapsedMilliseconds));
-            _stopwatch.Reset();
-            _stopwatch.Start();
-        }
-
-        #endregion
-
     }
 }

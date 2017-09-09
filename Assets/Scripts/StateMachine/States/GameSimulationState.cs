@@ -1,14 +1,14 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.StateMachine;
 using Assets.Scripts.World;
+using BehaviourStateMachine;
 using UnityEngine;
 using World.SocialModule;
 
 namespace StateMachine.States
 {
-    public class GameSimulationState : State<GameState>
+    public class GameSimulationState : GameStateBehaviour
     {
         private OnGuiController _guiController;
         private readonly WorldInfo _worldInfo;
@@ -16,19 +16,16 @@ namespace StateMachine.States
         private BaseWorld _gameWorld;
         private RelationshipMap _relationshipMap;
 
-        public GameSimulationState(IStateController<GameState> stateController, WorldInfo worldInfo) :
+        public GameSimulationState(IStateController<GameState> stateController, 
+            WorldInfo worldInfo) :
             base(stateController)
         {
             _worldInfo = worldInfo;
         }
 
-        public override void OnStateEnter()
-        {
-            InitializeSimulationWorlds();
-        }
-
         public override IEnumerator Execute()
         {
+            InitializeSimulationWorlds();
             while (true)
             {
                 _gameWorld.Update(Time.unscaledDeltaTime);
@@ -37,7 +34,7 @@ namespace StateMachine.States
             }
         }
 
-        public override void OnStateExit()
+        public override void Stop()
         {
             Object.DestroyImmediate(_guiController);
         }

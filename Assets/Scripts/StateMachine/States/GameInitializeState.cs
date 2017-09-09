@@ -1,22 +1,22 @@
 ﻿using System.Collections;
 using Assets.Scripts.StateMachine;
-using StateMachine;
+using BehaviourStateMachine;
 
 namespace StateMachine.States
 {
-    public class GameInitializeState : State<GameState>
+    public class GameInitializeState : GameStateBehaviour
     {
-        public GameInitializeState(IStateController<GameState> stateController)
-            :base(stateController)
+
+        public GameInitializeState(IStateController<GameState> stateController) : 
+            base(stateController)
         {
-            
         }
 
         public override IEnumerator Execute()
         {
             //todo do somethink
             yield return null;
-            StateController.SetState(GameState.Simulate);
+            _stateController.SetState(GameState.Simulate);
         }
 
     }
