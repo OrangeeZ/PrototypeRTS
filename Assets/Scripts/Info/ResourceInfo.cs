@@ -30,7 +30,7 @@ public class ResourceInfo : ScriptableObject, ICsvConfigurable
     {
     }
 
-    public void PostLoad()
+    public void OnPostLoad()
     {
         
     }

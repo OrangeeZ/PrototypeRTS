@@ -47,7 +47,7 @@ public class UnitInfo : ScriptableObject, ICsvConfigurable
     {
     }
 
-    public void PostLoad()
+    public void OnPostLoad()
     {
         
     }

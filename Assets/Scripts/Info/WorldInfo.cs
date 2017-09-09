@@ -42,7 +42,7 @@ public class WorldInfo : ScriptableObject, ICsvConfigurable
         
     }
 
-    public void PostLoad()
+    public void OnPostLoad()
     {
         HookData();
     }
