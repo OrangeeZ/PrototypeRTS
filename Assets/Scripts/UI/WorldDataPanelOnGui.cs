@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldDataPanelOnGui : IGuiDrawer {
-
+public class WorldDataPanelOnGui : IGuiDrawer
+{
     private readonly BaseWorld _world;
-    private string _debt = String.Empty;
 
     public WorldDataPanelOnGui(BaseWorld world)
     {
@@ -16,26 +15,27 @@ public class WorldDataPanelOnGui : IGuiDrawer {
     public void Draw()
     {
         GUILayout.BeginVertical();
-        GUILayout.Label(string.Format("MaxPopulation : {0}", _world.MaxPopulation));
-        GUILayout.Label(string.Format("Population : {0}", _world.Population));
-        GUILayout.Label(string.Format("Gold : {0}", _world.Gold));
+        GUILayout.Label($"MaxPopulation : {_world.MaxPopulation}");
+        GUILayout.Label($"Population : {_world.Population}");
+        GUILayout.Label($"Gold : {_world.Gold}");
 
-        GUILayout.BeginHorizontal();
-
-        GUILayout.Label(string.Format("Tax : {0}", _world.Tax));
-        _debt = GUILayout.TextField(_debt);
-        if (GUILayout.Button("SET"))
+        using (new GUILayout.HorizontalScope())
         {
-            int value;
-            if (int.TryParse(_debt, out value))
+            var taxOffset = 0;
+            if (GUILayout.Button("-"))
             {
-                _world.Tax = value;
+                taxOffset = -1;
             }
-        }
-        GUILayout.EndHorizontal();
+            GUILayout.Label($"Tax : {_world.TaxController.Amount}");
 
-        GUILayout.Label(string.Format("FreeCitizensCount : {0}", _world.FreeCitizensCount));
+            if (GUILayout.Button("+"))
+            {
+                taxOffset = 1;
+            }
+            _world.TaxController.OffsetValueIndex(taxOffset);
+        }
+
+        GUILayout.Label($"FreeCitizensCount : {_world.FreeCitizensCount}");
         GUILayout.EndVertical();
     }
-    
 }

@@ -29,6 +29,11 @@ public class PerCitizenResourceController
     {
         _valueIndex = index.Clamped(0, _values.Length - 1);
     }
+
+    public void OffsetValueIndex(int offset)
+    {
+        SetValueIndex(_valueIndex + offset);
+    }
 }
 
 public class BaseWorld : IUpdateBehaviour
@@ -49,8 +54,6 @@ public class BaseWorld : IUpdateBehaviour
 
     public int MinPopulation { get; protected set; }
 
-    public int Tax { get; set; }
-
     public int Gold { get; protected set; }
 
     public readonly PerCitizenResourceController TaxController;
@@ -62,6 +65,8 @@ public class BaseWorld : IUpdateBehaviour
 
     private readonly WorldInfo _worldInfo;
     private float _popularityInternal;
+
+    private float _updateTimer = 0;
 
     public BaseWorld(WorldInfo worldInfo, RelationshipMap relationshipMap, Vector3 firePlace)
     {
@@ -80,7 +85,7 @@ public class BaseWorld : IUpdateBehaviour
 
         TaxController = new PerCitizenResourceController(new[] {-2, -1, 0, 1, 2}, new[] {-2, -1, 0, 1, 2});
         FoodController = new PerCitizenResourceController(new[] {0, 1, 2, 3}, new[] {-1, 0, 1, 2});
-        
+
         _popularityInternal = _worldInfo.MaxPopularity;
     }
 
@@ -93,17 +98,19 @@ public class BaseWorld : IUpdateBehaviour
         _popularityInternal += popularity * Time.deltaTime;
         _popularityInternal = _popularityInternal.Clamped(_worldInfo.MinPopularity, _worldInfo.MaxPopularity);
 
+        if (_updateTimer.FloorToInt() != (_updateTimer + deltaTime).FloorToInt())
+        {
+            Gold += TaxController.Amount * Population;
+        }
+
+        _updateTimer += deltaTime;
+
         UpdatePopulation();
     }
 
     public void RegisterFreeCitizen(Actor actor)
     {
         FreeCitizens.Enqueue(actor);
-    }
-
-    public void SetGold(int amount)
-    {
-        Gold = amount;
     }
 
     public Actor HireCitizen()
