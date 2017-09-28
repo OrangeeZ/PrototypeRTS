@@ -58,17 +58,15 @@ namespace Assets.Scripts.StateMachine.States.SimulationStates
         private void CreateWorldEvents(BaseWorld world, Player player, TestUnitFactory unitFactory)
         {
             var socialUpdatePeriod = 4;
-            var popularityEventsBehaviour = new PopularityEvent(world, _worldData, player, socialUpdatePeriod);
             var hireCitizen = new HireCitizenEvent(world, _worldData, player, unitFactory,socialUpdatePeriod);
             var foodEvent = new CityFoodConsumptionEvent(world,_worldData,socialUpdatePeriod);
-            var taxEvent = new TaxEvent(world, player, 10f);
             var constructionModule = new ConstructionModule(world, unitFactory);
             var constructionOnGui = new ConstructionOnGui(unitFactory, constructionModule);
+
             _onGui.Add(constructionOnGui);
+            
             world.Events.Add(constructionModule);
-            world.Events.Add(popularityEventsBehaviour);
             world.Events.Add(foodEvent);
-            world.Events.Add(taxEvent);
             world.Events.Add(hireCitizen);
         }
 

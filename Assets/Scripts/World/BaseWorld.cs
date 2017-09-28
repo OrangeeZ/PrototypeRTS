@@ -4,6 +4,33 @@ using Actors;
 using UnityEngine;
 using World.SocialModule;
 
+public class PerCitizenResourceController
+{
+    public int Amount => _values[_valueIndex];
+    public int Popularity => _popularityValues[_valueIndex];
+
+    private readonly int[] _values;
+    private readonly int[] _popularityValues;
+
+    private int _valueIndex;
+
+    public PerCitizenResourceController(int[] values, int[] popularityValues)
+    {
+        _values = values;
+        _popularityValues = popularityValues;
+    }
+
+    public int GetValuesCount()
+    {
+        return _values.Length;
+    }
+
+    public void SetValueIndex(int index)
+    {
+        _valueIndex = index.Clamped(0, _values.Length - 1);
+    }
+}
+
 public class BaseWorld : IUpdateBehaviour
 {
     public readonly EntityMapping EntityMapping;
@@ -18,24 +45,28 @@ public class BaseWorld : IUpdateBehaviour
 
     public int MaxPopulation { get; set; }
 
-    public int Popularity { get; protected set; }
+    public int Popularity => _popularityInternal.FloorToInt();
 
     public int MinPopulation { get; protected set; }
 
     public int Tax { get; set; }
 
     public int Gold { get; protected set; }
-    
+
+    public readonly PerCitizenResourceController TaxController;
+    public readonly PerCitizenResourceController FoodController;
+
     protected Vector3 FirePlace;
     protected Queue<Actor> FreeCitizens;
     protected RelationshipMap RelationshipMap;
-    
-    private readonly WorldInfo _worldInfo;
 
-    public BaseWorld(WorldInfo worldInfo,RelationshipMap relationshipMap, Vector3 firePlace)
+    private readonly WorldInfo _worldInfo;
+    private float _popularityInternal;
+
+    public BaseWorld(WorldInfo worldInfo, RelationshipMap relationshipMap, Vector3 firePlace)
     {
         _worldInfo = worldInfo;
-        
+
         EntityMapping = new EntityMapping(relationshipMap);
         Entities = new EntitiesController(EntityMapping);
         FreeCitizens = new Queue<Actor>();
@@ -46,7 +77,11 @@ public class BaseWorld : IUpdateBehaviour
         RelationshipMap = relationshipMap;
         MinPopulation = _worldInfo.MinPopulation;
         FirePlace = firePlace;
-        Popularity = _worldInfo.MaxPopularity;
+
+        TaxController = new PerCitizenResourceController(new[] {-2, -1, 0, 1, 2}, new[] {-2, -1, 0, 1, 2});
+        FoodController = new PerCitizenResourceController(new[] {0, 1, 2, 3}, new[] {-1, 0, 1, 2});
+        
+        _popularityInternal = _worldInfo.MaxPopularity;
     }
 
     public virtual void Update(float deltaTime)
@@ -54,6 +89,10 @@ public class BaseWorld : IUpdateBehaviour
         Events.Update(deltaTime);
         Entities.Update(deltaTime);
         
+        var popularity = TaxController.Popularity + FoodController.Popularity;
+        _popularityInternal += popularity * Time.deltaTime;
+        _popularityInternal = _popularityInternal.Clamped(_worldInfo.MinPopularity, _worldInfo.MaxPopularity);
+
         UpdatePopulation();
     }
 
@@ -75,13 +114,6 @@ public class BaseWorld : IUpdateBehaviour
     public virtual Vector3 GetFireplace()
     {
         return FirePlace;
-    }
-
-    public int ChangePopularity(int popularity)
-    {
-        var result = Popularity + popularity;
-        Popularity = Mathf.Clamp(result, _worldInfo.MinPopularity, _worldInfo.MaxPopularity);
-        return Popularity;
     }
 
     private void UpdatePopulation()
