@@ -59,3 +59,5 @@ MonoBehaviour:
   MaxPopulation: 1000
   Tax: 1
   StartGold: 100
+  MaxPopularity: 100
+  MinPopularity: 0
