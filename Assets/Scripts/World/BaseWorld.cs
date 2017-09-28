@@ -83,8 +83,11 @@ public class BaseWorld : IUpdateBehaviour
         MinPopulation = _worldInfo.MinPopulation;
         FirePlace = firePlace;
 
-        TaxController = new PerCitizenResourceController(new[] {-2, -1, 0, 1, 2}, new[] {-2, -1, 0, 1, 2});
+        TaxController = new PerCitizenResourceController(new[] {-2, -1, 0, 1, 2}, new[] {2, 1, 0, -1, -2});
         FoodController = new PerCitizenResourceController(new[] {0, 1, 2, 3}, new[] {-1, 0, 1, 2});
+        
+        TaxController.SetValueIndex(2);
+        FoodController.SetValueIndex(1);
 
         _popularityInternal = _worldInfo.MaxPopularity;
     }
