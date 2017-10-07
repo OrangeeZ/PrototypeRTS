@@ -73,7 +73,7 @@ namespace Behaviour
 
         private IEnumerable FetchResources()
         {
-            var associatedUnitInfo = _workplace.ActiveProductionCycle.InputResource.AssociatedUnitInfo;
+            var associatedUnitInfo = _workplace.ActiveProductionCycle.InputResource?.AssociatedUnitInfo;
             return associatedUnitInfo == null ? FetchResourcesFromStockpile() : FetchResourcesFromUnit();
         }
 

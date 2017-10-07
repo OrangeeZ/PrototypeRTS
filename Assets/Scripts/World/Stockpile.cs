@@ -21,7 +21,10 @@ public class Stockpile
     {
         var filterByResource = _stockpileBlocks.Where(block => block.CanStore(resourceToStore, 1)).ToArray();
         if (!filterByResource.Any())
+        {
             return null;
+        }
+        
         return filterByResource.MinBy(block => Vector3.Distance(block.Position, position));
     }
 
@@ -35,20 +38,30 @@ public class Stockpile
         return _stockpileBlocks.Any(_ => _.HasResource(resourceInfo.Id));
     }
 
-    //Stub method until later
+    // Stub method until later
     public int GetTotalResourceAmount(string resourceId)
     {
         return _stockpileBlocks.Sum(_ => _[resourceId]);
     }
 
-    //Yes, this is a miraculous stub as well
-    //This is fast
+    // Yes, this is a miraculous stub as well
+    // This is fast
     public void ChangeTotalResourceAmount(string resourceId, int amount)
     {
         while (GetTotalResourceAmount(resourceId) > 0)
         {
             var firstStockpileWithResource = _stockpileBlocks.First(_ => _.HasResource(resourceId));
             firstStockpileWithResource.ChangeResource(resourceId, -1);
+        }
+    }
+    
+    // Could later change these hoops with some kind of resource handle that tracks all resource blocks, for example
+    public void ChangeTotalResourceTypeAmount(ResourceType resourceType, int amount)
+    {
+        while (HasResourceType(resourceType))
+        {
+            var firstStockpileWithResource = _stockpileBlocks.First(_ => _.HasResourceType(resourceType));
+            firstStockpileWithResource.ChangeResourceType(resourceType, -1);
         }
     }
 
@@ -69,5 +82,15 @@ public class Stockpile
         }
 
         return null;
+    }
+
+    private IEnumerable<StockpileBlock> GetAllBlocksWithResourceType(ResourceType resourceType)
+    {
+        return _stockpileBlocks.Where(_ => _.HasResourceType(resourceType));
+    }
+
+    private bool HasResourceType(ResourceType resourceType)
+    {
+        return _stockpileBlocks.Any(_ => _.HasResourceType(resourceType));
     }
 }

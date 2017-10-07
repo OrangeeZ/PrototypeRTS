@@ -106,8 +106,9 @@ public class BaseWorld : IUpdateBehaviour
         if (_updateTimer.FloorToInt() != (_updateTimer + deltaTime).FloorToInt())
         {
             Gold += TaxController.Amount * Population;
+            Stockpile.ChangeTotalResourceTypeAmount(ResourceType.Food, FoodController.Amount * Population);
         }
-
+        
         _updateTimer += deltaTime;
 
         UpdatePopulation();

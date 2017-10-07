@@ -86,6 +86,26 @@ public class StockpileBlock : Building
     {
         return GetResourceAmount(resource) > 0;
     }
+    
+    public bool HasResourceType(ResourceType resourceType)
+    {
+        return _storageSlots.Where(_ => _.Resource != null && _.Amount > 0)
+                            .Any(_ => _.Resource.ResourceType == resourceType);
+    }
+    
+    public bool ChangeResourceType(ResourceType resourceType, int amount)
+    {
+        var resourceItem = GetResourceByType(resourceType);
+        if (resourceItem == null) return false;
+        var result = StoreResource(resourceItem, amount);
+        if (!result)
+        {
+            Debug.LogError($"Can't store resource {resourceType} ({amount})");
+            return false;
+        }
+        Debug.Log($"Change resource {resourceType}, amount {amount}");
+        return true;
+    }
 
     public bool ChangeResource(string resource, int amount)
     {
@@ -109,8 +129,6 @@ public class StockpileBlock : Building
             .DefaultIfEmpty(StorageSlot.Empty)
             .Sum(slot => slot.Amount);
     }
-
-    #region private methods
 
     private StorageSlot GetFreeSlot()
     {
@@ -186,7 +204,9 @@ public class StockpileBlock : Building
         var resource = _resourcesIds[id];
         return resource;
     }
-
-    #endregion
-
+    
+    private ResourceInfo GetResourceByType(ResourceType resourceType)
+    {
+        return _resourcesIds.Values.FirstOrDefault(_ => _.ResourceType == resourceType);
+    }
 }
