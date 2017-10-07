@@ -84,6 +84,8 @@ public class BaseWorld : IUpdateBehaviour
         FirePlace = firePlace;
 
         TaxController = new PerCitizenResourceController(new[] {-2, -1, 0, 1, 2}, new[] {2, 1, 0, -1, -2});
+        
+        // TODO: Flawed logic, food can be 1/8 at least. Might need to redesign food amounts and shieeet
         FoodController = new PerCitizenResourceController(new[] {0, 1, 2, 3}, new[] {-1, 0, 1, 2});
         
         TaxController.SetValueIndex(2);
